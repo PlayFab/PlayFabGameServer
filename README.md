@@ -17,8 +17,8 @@ Out of the Box Game Server for PlayFab.com
  This repository contains the source code for a Customizable Game Server made with Unity3D.  It runs in server mode (headless) and it's purpose is to provide server authoritive logic and / or Multiplayer networking functionality that can be uploaded to the PlayFab Game Servers tab.  This is an Out of the Box solution, that is super easy to customize.
  
 #### Features
-* Accepts and stores configuration params that are passed in to the commandline of the server
-* Sets up Unity Networking and waits for incomming connections
+* Accepts and stores configuration params that are passed into the commandline of the server
+* Sets up Unity Networking and waits for incoming connections
 * Manages connections and disconnections
 * Provides PlayFab Session authorization
 * Logger
@@ -41,7 +41,7 @@ Once you've downloaded the project and opened up the code editor (whether it be 
   * *UnityNetworkingContext* - This context sets up a Unity Networking Server and listens on the port that is passed into the PlayFab Server when the instance is generated.  This all happens at startup of the server.  It then stores the NetworkManager & the NetworkClient along with other important information about who is connected to the server.  It stores all its data in UnityNetworkingData object that you also Inject into your mediators.  We will get more into the details of this later.  
 
 #### A quick setup step before I forget to tell you!
-Because the server needs to authenticate your users, it needs to know what Title to do this against. The server won't know this so you will need to set this manually.  To do this, open up the StartUp scene in the StartUpScene folder.  This is the main scene for the application and the only scene needed.  There are some advanced features of unity networking, which we won't cover in this documentation that allows scene switching and sync that to all clients. But for now lets keep thing simple.   
+Because the server needs to authenticate your users, it needs to know what Title to do this against. The server won't know this so you will need to set this manually.  To do this, open up the StartUp scene in the StartUpScene folder.  This is the main scene for the application and the only scene needed.  There are some advanced features of unity networking, which we won't cover in this documentation that allows scene switching and sync that to all clients. But for now lets keep things simple.   
 
 Now that you have the scene open,  Locate the MainGameServerContext and expand it down.  Then Click on PlayFabServerContext.  You'll notice in the inspector that there is a ServerSettingsData component.  Put your TitleId in the Title Id meta field.
 
