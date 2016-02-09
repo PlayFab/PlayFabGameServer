@@ -170,7 +170,7 @@ however let's say you had the users Playfab Id because they were in your friends
 
 Well I think you now have the basics of how the custom game server works.  This document gave you the barebone basics of working with the game server, Getting data from the PlayFab Server API and and how to overall get started with the Custom Game Server.  Keep an eye out on the documentation site for new tutorials on advanced topics realated to the game server at  https://api.playfab.com  and if you have questions please feel free to post in our forums at  https://api.playfab.com/community
 
-
+Also be sure to check out the Client sample and the sample mediators that is included in the game server.
 
 
 
