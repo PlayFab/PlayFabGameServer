@@ -20,7 +20,7 @@ Out of the Box Game Server for PlayFab.com
 * Accepts and stores configuration params that are passed in to the commandline of the server
 * Sets up Unity Networking and waits for incomming connections
 * Manages connections and disconnections
-* Provides PlayFab Session authroization
+* Provides PlayFab Session authorization
 * Local Debug Mode
 * Logger
 
