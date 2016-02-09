@@ -35,7 +35,9 @@ public class PlayFabServerStartupCommand : Command {
             switch (key.ToLower())
             {
                 case "game_id":
-                    ServerSettingsData.GameId = long.Parse(value);
+                    ulong gameId;
+                    ulong.TryParse(value,out gameId);
+                    ServerSettingsData.GameId = gameId;
                     break;
                 case "game_build_version":
                     ServerSettingsData.GameBuildVersion = value;
@@ -47,7 +49,10 @@ public class PlayFabServerStartupCommand : Command {
                     ServerSettingsData.ServerHostDomain = value;
                     break;
                 case "server_host_port":
-                    ServerSettingsData.ServerHostPort = int.Parse(value) != 0 ? int.Parse(value) : 7777; //this is unity networkings default port.
+                    var hostPort = 0;//this is unity networkings default port.
+                    int.TryParse(value, out hostPort);
+                    hostPort = hostPort > 0 ? hostPort : 7777;
+                    ServerSettingsData.ServerHostPort = hostPort; 
                     break;
                 case "server_host_region":
                     ServerSettingsData.ServerHostRegion = value;

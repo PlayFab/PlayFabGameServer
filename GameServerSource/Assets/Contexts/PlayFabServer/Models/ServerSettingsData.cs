@@ -4,7 +4,7 @@ using strange.extensions.mediation.impl;
 public class ServerSettingsData : View
 {
     public string TitleId;
-    public long GameId;
+    public ulong GameId;
     public string GameBuildVersion;
     public string GameMode;
     public string ServerHostDomain="localhost";
@@ -13,8 +13,10 @@ public class ServerSettingsData : View
     public string PlayFabApiEndpoint;
     public string TitleSecretKey;
     public string CustomData;
+    public bool IsCustomLogFile;
     public string LogFilePath;
     public string OutputFilesDirectory;
     public string BatchMode;
     public List<string> LogEntries;
+    public bool CopyLogFiles;
 }

@@ -40,13 +40,27 @@ public class LogSignalCommand : Command
                 break;
         }
 
-        var logFilePath = ServerSettingsData.LogFilePath;
-        var outputDirectory = ServerSettingsData.OutputFilesDirectory;
-        if (string.IsNullOrEmpty(logFilePath))
-        {
-            return;
+        if (ServerSettingsData.IsCustomLogFile)
+        { 
+            var logFilePath = ServerSettingsData.LogFilePath;
+            var outputDirectory = ServerSettingsData.OutputFilesDirectory;
+            if (string.IsNullOrEmpty(logFilePath))
+            {
+                return;
+            }
+
+            if (!File.Exists(logFilePath))
+            {
+                File.WriteAllLines(logFilePath, ServerSettingsData.LogEntries.ToArray());
+            }
+            else
+            {
+                foreach (var strOut in ServerSettingsData.LogEntries)
+                {
+                    File.AppendAllText(logFilePath, strOut);
+                }
+            }
         }
-        File.WriteAllLines(logFilePath, ServerSettingsData.LogEntries.ToArray());
         ServerSettingsData.LogEntries.Clear();
     }
 }

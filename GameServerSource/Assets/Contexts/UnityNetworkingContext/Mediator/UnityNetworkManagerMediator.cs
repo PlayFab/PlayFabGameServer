@@ -40,8 +40,6 @@ public class UnityNetworkManagerMediator : EventMediator {
         if (UnityNetworkingData.ConnectedClients == 0)
         {
             Logger.Dispatch(LoggerTypes.Info, "No Connections were made, shutting down.");
-            //TODO: Do this in a better way other than Quitting,  maybe call a signal that shuts down the server.
-            UnityNetworkingData.Manager.StopServer();
             ShutDownSignal.Dispatch();
         }
     }
@@ -68,7 +66,7 @@ public class UnityNetworkManagerMediator : EventMediator {
             var message = netMsg.ReadMessage<AuthTicketMessage>();
             uconn.PlayFabId = message.PlayFabId;
             Logger.Dispatch(LoggerTypes.Info, string.Format("Auth Received: PlayFabId:{0} AuthTicket:{1}", message.PlayFabId,message.AuthTicket));
-            AuthUserResponseSignal.AddListener(OnAuthUserResponse);
+            AuthUserResponseSignal.AddOnce(OnAuthUserResponse);
             AuthUserSignal.Dispatch(new AuthUserRequest()
             {
                 AuthorizationTicket = message.AuthTicket
@@ -146,7 +144,7 @@ public class UnityNetworkManagerMediator : EventMediator {
             }
         }
 
-        Logger.Dispatch(LoggerTypes.Info, "A Unity Disconnected Connected");
+        Logger.Dispatch(LoggerTypes.Info, "A Unity Client Disconnected");
     }
 
     // called when a network error occurs
