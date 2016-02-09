@@ -17,8 +17,8 @@ Out of the Box Game Server for PlayFab.com
  This repository contains the source code for a Customizable Game Server made with Unity3D.  It runs in server mode (headless) and it's purpose is to provide server authoritive logic and / or Multiplayer networking functionality that can be uploaded to the PlayFab Game Servers tab.  This is an Out of the Box solution, that is super easy to customize.
  
 #### Features
-* Accepts and stores configuration params that are passed in to the commandline of the server
-* Sets up Unity Networking and waits for incomming connections
+* Accepts and stores configuration params that are passed into the commandline of the server
+* Sets up Unity Networking and waits for incoming connections
 * Manages connections and disconnections
 * Provides PlayFab Session authorization
 * Logger
