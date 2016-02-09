@@ -12,6 +12,7 @@ public class PlayFabServerMapFactory  {
         commandBinder.Bind<PlayFabServerStartupSignal>().To<PlayFabServerStartupCommand>();
         commandBinder.Bind<PlayFabServerStartupCompleteSignal>();
         commandBinder.Bind<PlayFabServerShutdownSignal>();
+        commandBinder.Bind<PlayFabServerShutdownSignal>().To<PlayFabServerShutdownCommand>();
         commandBinder.Bind<LogSignal>().To<LogSignalCommand>();
     }
 

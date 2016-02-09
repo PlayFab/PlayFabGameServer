@@ -34,12 +34,12 @@ public class MsgReceiverExampleMediator : Mediator {
         GetTitleDataSignal.Dispatch(new GetTitleDataRequest());
     }
 
-    private void OnGetTitleData(NetworkConnection connectoin, GetTitleDataResult result)
+    private void OnGetTitleData(NetworkConnection connection, GetTitleDataResult result)
     {
         //Do something cool with title data and Return back to the client.
         var output = string.Format("Recieved {0} Title Data Keys", result.Data.Keys.Count);
         Logger.Dispatch(LoggerTypes.Info, output);
-        connectoin.Send(1002, new StringMessage()
+        connection.Send(1002, new StringMessage()
         {
             value = string.Format(output)
         });
