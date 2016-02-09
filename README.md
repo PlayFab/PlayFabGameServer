@@ -22,6 +22,7 @@ Out of the Box Game Server for PlayFab.com
 * Manages connections and disconnections
 * Provides PlayFab Session authroization
 * Local Debug Mode
+* Logger
 
  #### Getting Started Guide
 
@@ -127,6 +128,47 @@ You could use  .AddListener( delegate{} ) and then in your delegate method, you 
 Now you have some data,  hrm.. what should we do with it?  We can send the data to all connected clients.  For now, I'm going to just assume there is one key, and we are going to send it in a StringMessage,  I'll get into custom Messages later.
 
 #### Using Unity Networking to send to clients.
+There is a lot of documentation on how the Unity Networking client works,  so I'll let you read up there beacuse they tell that story the best.  But I'll give you a bit of code that makes it super easy.
+
+First thing is first, whenever want to send to a client from a mediator, you will need to inject the UnityNetworkingData object.
+```
+    [Inject] public UnityNetworkingData UnityNetworkingData { get; set; }
+```
+This object contains a property called Connections which contains a list of all connected clients to this game server instance.  This is very handy for being able to quickly find players and send messages to them.
+
+If we are going to send a message to all players, you can iterate over the connected clients and send a message to each of them like this.
+
+```
+   foreach (var uconn in UnityNetworkingData.Connections)
+   {
+      uconn.Connection.Send(1000, new StringMessage()
+      {
+        Value="Hello everyone!"
+      });        
+   }
+```
+The first param of  .Send is the message identifier or message type of the message.  You can use one of the built in messages using MsgType.[...]  or you can make up a custom one.  But it is important to know that if you specify 1000 like I did then the client must listen for message type 1000
+
+Here are some resources on that topic:
+http://docs.unity3d.com/ScriptReference/Networking.MsgType.html
+http://docs.unity3d.com/ScriptReference/Networking.NetworkConnection.Send.html
+
+however let's say you had the users Playfab Id because they were in your friends list, and you just wanted to send that single person a message.  This is easily done like this.
+
+```
+ var FriendsPlayFabId = "12345";
+ var MessageToSendToFriend = "Hey dude, come play a game with me!";
+ var uconn = UnityNetworkingData.Connections.Find(c=>c.PlayFabId == FriendsPlayFabId);
+ if(uconn != null){
+   uconn.Connection.Send(1001, new StringMessage(){
+     Value=MessageToSendToFriend
+   });
+ }
+```
+
+#### Conclusion
+
+Well I think you now have the basics of how the custom game server works.  This document gave you the barebone basics of working with the game server, Getting data from the PlayFab Server API and and how to overall get started with the Custom Game Server.  Keep an eye out on the documentation site for new tutorials on advanced topics realated to the game server at  https://api.playfab.com  and if you have questions please feel free to post in our forums at  https://api.playfab.com/community
 
 
 
