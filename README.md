@@ -24,7 +24,7 @@ Out of the Box Game Server for PlayFab.com
 * Logger
 * Local Debug Mode
 
- #### Getting Started Guide
+#### Getting Started Guide
 
 When getting started with this custom game server it is good to know or at least understand what StrangeIoC is all about.  So I advise you to visit http://strangeioc.wordpress.com for more information about this framework.  However, it is not required to know as I'll explain the basics that you need to know to modify the game server.
 
