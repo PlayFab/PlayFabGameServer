@@ -21,8 +21,8 @@ Out of the Box Game Server for PlayFab.com
 * Sets up Unity Networking and waits for incomming connections
 * Manages connections and disconnections
 * Provides PlayFab Session authorization
-* Local Debug Mode
 * Logger
+* Local Debug Mode
 
  #### Getting Started Guide
 
