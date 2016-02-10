@@ -72,6 +72,9 @@ public class PlayFabServerStartupCommand : Command {
                 case "output_files_directory_path":
                     ServerSettingsData.OutputFilesDirectory = value;
                     break;
+                case "title_id":
+                    ServerSettingsData.TitleId = value;
+                    break;
             }
         }
 
