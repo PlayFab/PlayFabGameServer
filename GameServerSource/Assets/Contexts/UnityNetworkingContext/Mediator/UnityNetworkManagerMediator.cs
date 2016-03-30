@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using PlayFab.Json.Linq;
 using PlayFab.MatchmakerModels;
 using PlayFab.ServerModels;
 using strange.extensions.mediation.impl;
@@ -62,7 +61,6 @@ public class UnityNetworkManagerMediator : EventMediator {
         var uconn = UnityNetworkingData.Connections.Find(c => c.ConnectionId == netMsg.conn.connectionId);
         if (uconn != null)
         {
-
             var message = netMsg.ReadMessage<AuthTicketMessage>();
             uconn.PlayFabId = message.PlayFabId;
             Logger.Dispatch(LoggerTypes.Info, string.Format("Auth Received: PlayFabId:{0} AuthTicket:{1}", message.PlayFabId,message.AuthTicket));

@@ -45,6 +45,8 @@ public class PlayFabContext : MVCSContext
         #region Account Management
         injectionBinder.Bind<GetPlayFabIDsFromFacebookIDsSignal>().CrossContext();
         injectionBinder.Bind<GetPlayFabIDsFromFacebookIDsResponseSignal>().CrossContext();
+        injectionBinder.Bind<GetPlayFabIDsFromSteamIDsSignal>().CrossContext();
+        injectionBinder.Bind<GetPlayFabIDsFromSteamIDsResponseSignal>().CrossContext();
         injectionBinder.Bind<GetUserAccountInfoSignal>().CrossContext();
         injectionBinder.Bind<GetUserAccountInfoResponseSignal>().CrossContext();
         injectionBinder.Bind<SendPushNotificationSignal>().CrossContext();
@@ -58,6 +60,10 @@ public class PlayFabContext : MVCSContext
         injectionBinder.Bind<GetLeaderboardResponseSignal>().CrossContext();
         injectionBinder.Bind<GetLeaderboardAroundUserSignal>().CrossContext();
         injectionBinder.Bind<GetLeaderboardAroundUserResponseSignal>().CrossContext();
+        injectionBinder.Bind<GetPlayerStatisticsSignal>().CrossContext();
+        injectionBinder.Bind<GetPlayerStatisticsResponseSignal>().CrossContext();
+        injectionBinder.Bind<GetPlayerStatisticVersionsSignal>().CrossContext();
+        injectionBinder.Bind<GetPlayerStatisticVersionsResponseSignal>().CrossContext();
         injectionBinder.Bind<GetUserDataSignal>().CrossContext();
         injectionBinder.Bind<GetUserDataResponseSignal>().CrossContext();
         injectionBinder.Bind<GetUserInternalDataSignal>().CrossContext();
@@ -72,6 +78,8 @@ public class PlayFabContext : MVCSContext
         injectionBinder.Bind<GetUserReadOnlyDataResponseSignal>().CrossContext();
         injectionBinder.Bind<GetUserStatisticsSignal>().CrossContext();
         injectionBinder.Bind<GetUserStatisticsResponseSignal>().CrossContext();
+        injectionBinder.Bind<UpdatePlayerStatisticsSignal>().CrossContext();
+        injectionBinder.Bind<UpdatePlayerStatisticsResponseSignal>().CrossContext();
         injectionBinder.Bind<UpdateUserDataSignal>().CrossContext();
         injectionBinder.Bind<UpdateUserDataResponseSignal>().CrossContext();
         injectionBinder.Bind<UpdateUserInternalDataSignal>().CrossContext();
@@ -138,6 +146,10 @@ public class PlayFabContext : MVCSContext
         injectionBinder.Bind<SubtractCharacterVirtualCurrencyResponseSignal>().CrossContext();
         injectionBinder.Bind<SubtractUserVirtualCurrencySignal>().CrossContext();
         injectionBinder.Bind<SubtractUserVirtualCurrencyResponseSignal>().CrossContext();
+        injectionBinder.Bind<UnlockContainerInstanceSignal>().CrossContext();
+        injectionBinder.Bind<UnlockContainerInstanceResponseSignal>().CrossContext();
+        injectionBinder.Bind<UnlockContainerItemSignal>().CrossContext();
+        injectionBinder.Bind<UnlockContainerItemResponseSignal>().CrossContext();
         injectionBinder.Bind<UpdateUserInventoryItemCustomDataSignal>().CrossContext();
         injectionBinder.Bind<UpdateUserInventoryItemCustomDataResponseSignal>().CrossContext();
         #endregion
@@ -180,6 +192,9 @@ public class PlayFabContext : MVCSContext
         injectionBinder.Bind<UpdateSharedGroupDataSignal>().CrossContext();
         injectionBinder.Bind<UpdateSharedGroupDataResponseSignal>().CrossContext();
         #endregion
+        //Server-Side Cloud Script
+        #region Server-Side Cloud Script
+        #endregion
         //Content
         #region Content
         injectionBinder.Bind<GetContentDownloadUrlSignal>().CrossContext();
@@ -218,6 +233,9 @@ public class PlayFabContext : MVCSContext
         injectionBinder.Bind<UpdateCharacterInternalDataResponseSignal>().CrossContext();
         injectionBinder.Bind<UpdateCharacterReadOnlyDataSignal>().CrossContext();
         injectionBinder.Bind<UpdateCharacterReadOnlyDataResponseSignal>().CrossContext();
+        #endregion
+        //Guilds
+        #region Guilds
         #endregion
     }
 }

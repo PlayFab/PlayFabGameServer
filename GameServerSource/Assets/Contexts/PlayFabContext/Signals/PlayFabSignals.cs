@@ -55,6 +55,11 @@ using strange.extensions.signal.impl;
     public class GetPlayFabIDsFromFacebookIDsSignal : Signal<GetPlayFabIDsFromFacebookIDsRequest> { }
     
     ///<summary>
+    ///Retrieves the unique PlayFab identifiers for the given set of Steam identifiers. The Steam identifiers  are the profile IDs for the user accounts, available as SteamId in the Steamworks Community API calls.
+    ///</summary>
+    public class GetPlayFabIDsFromSteamIDsSignal : Signal<GetPlayFabIDsFromSteamIDsRequest> { }
+    
+    ///<summary>
     ///Retrieves the relevant details for a specified user
     ///</summary>
     public class GetUserAccountInfoSignal : Signal<GetUserAccountInfoRequest> { }
@@ -83,6 +88,16 @@ using strange.extensions.signal.impl;
     ///Retrieves a list of ranked users for the given statistic, centered on the currently signed-in user
     ///</summary>
     public class GetLeaderboardAroundUserSignal : Signal<GetLeaderboardAroundUserRequest> { }
+    
+    ///<summary>
+    ///Retrieves the current version and values for the indicated statistics, for the local player.
+    ///</summary>
+    public class GetPlayerStatisticsSignal : Signal<GetPlayerStatisticsRequest> { }
+    
+    ///<summary>
+    ///Retrieves the information on the available versions of the specified statistic.
+    ///</summary>
+    public class GetPlayerStatisticVersionsSignal : Signal<GetPlayerStatisticVersionsRequest> { }
     
     ///<summary>
     ///Retrieves the title-specific custom data for the user which is readable and writable by the client
@@ -118,6 +133,11 @@ using strange.extensions.signal.impl;
     ///Retrieves the details of all title-specific statistics for the user
     ///</summary>
     public class GetUserStatisticsSignal : Signal<GetUserStatisticsRequest> { }
+    
+    ///<summary>
+    ///Updates the values of the specified title-specific statistics for the user
+    ///</summary>
+    public class UpdatePlayerStatisticsSignal : Signal<UpdatePlayerStatisticsRequest> { }
     
     ///<summary>
     ///Updates the title-specific custom data for the user which is readable and writable by the client
@@ -280,6 +300,16 @@ using strange.extensions.signal.impl;
     public class SubtractUserVirtualCurrencySignal : Signal<SubtractUserVirtualCurrencyRequest> { }
     
     ///<summary>
+    ///Opens a specific container (ContainerItemInstanceId), with a specific key (KeyItemInstanceId, when required), and returns the contents of the opened container. If the container (and key when relevant) are consumable (RemainingUses > 0), their RemainingUses will be decremented, consistent with the operation of ConsumeItem.
+    ///</summary>
+    public class UnlockContainerInstanceSignal : Signal<UnlockContainerInstanceRequest> { }
+    
+    ///<summary>
+    ///Searches Player or Character inventory for any ItemInstance matching the given CatalogItemId, if necessary unlocks it using any appropriate key, and returns the contents of the opened container. If the container (and key when relevant) are consumable (RemainingUses > 0), their RemainingUses will be decremented, consistent with the operation of ConsumeItem.
+    ///</summary>
+    public class UnlockContainerItemSignal : Signal<UnlockContainerItemRequest> { }
+    
+    ///<summary>
     ///Updates the key-value pair data tagged to the specified item, which is read-only from the client.
     ///</summary>
     public class UpdateUserInventoryItemCustomDataSignal : Signal<UpdateUserInventoryItemDataRequest> { }
@@ -371,11 +401,16 @@ using strange.extensions.signal.impl;
     
 #endregion
     
+//Server-Side Cloud Script
+#region Server-Side Cloud Script
+    
+#endregion
+    
 //Content
 #region Content
     
     ///<summary>
-    ///This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded, the query to retrieve the data will fail. See this post for more information:  https://support.playfab.com/support/discussions/topics/1000059929
+    ///This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded, the query to retrieve the data will fail. See this post for more information:  https://community.playfab.com/hc/en-us/community/posts/205469488-How-to-upload-files-to-PlayFab-s-Content-Service
     ///</summary>
     public class GetContentDownloadUrlSignal : Signal<GetContentDownloadUrlRequest> { }
     
@@ -460,6 +495,11 @@ using strange.extensions.signal.impl;
     public class UpdateCharacterReadOnlyDataSignal : Signal<UpdateCharacterDataRequest> { }
     
 #endregion
+    
+//Guilds
+#region Guilds
+    
+#endregion
 #endregion
 
 //Response Signals
@@ -514,6 +554,11 @@ using strange.extensions.signal.impl;
     public class GetPlayFabIDsFromFacebookIDsResponseSignal : Signal<GetPlayFabIDsFromFacebookIDsResult> { }
 
     ///<summary>
+    ///Retrieves the unique PlayFab identifiers for the given set of Steam identifiers. The Steam identifiers  are the profile IDs for the user accounts, available as SteamId in the Steamworks Community API calls.
+    ///</summary>
+    public class GetPlayFabIDsFromSteamIDsResponseSignal : Signal<GetPlayFabIDsFromSteamIDsResult> { }
+
+    ///<summary>
     ///Retrieves the relevant details for a specified user
     ///</summary>
     public class GetUserAccountInfoResponseSignal : Signal<GetUserAccountInfoResult> { }
@@ -542,6 +587,16 @@ using strange.extensions.signal.impl;
     ///Retrieves a list of ranked users for the given statistic, centered on the currently signed-in user
     ///</summary>
     public class GetLeaderboardAroundUserResponseSignal : Signal<GetLeaderboardAroundUserResult> { }
+
+    ///<summary>
+    ///Retrieves the current version and values for the indicated statistics, for the local player.
+    ///</summary>
+    public class GetPlayerStatisticsResponseSignal : Signal<GetPlayerStatisticsResult> { }
+
+    ///<summary>
+    ///Retrieves the information on the available versions of the specified statistic.
+    ///</summary>
+    public class GetPlayerStatisticVersionsResponseSignal : Signal<GetPlayerStatisticVersionsResult> { }
 
     ///<summary>
     ///Retrieves the title-specific custom data for the user which is readable and writable by the client
@@ -577,6 +632,11 @@ using strange.extensions.signal.impl;
     ///Retrieves the details of all title-specific statistics for the user
     ///</summary>
     public class GetUserStatisticsResponseSignal : Signal<GetUserStatisticsResult> { }
+
+    ///<summary>
+    ///Updates the values of the specified title-specific statistics for the user
+    ///</summary>
+    public class UpdatePlayerStatisticsResponseSignal : Signal<UpdatePlayerStatisticsResult> { }
 
     ///<summary>
     ///Updates the title-specific custom data for the user which is readable and writable by the client
@@ -739,9 +799,19 @@ using strange.extensions.signal.impl;
     public class SubtractUserVirtualCurrencyResponseSignal : Signal<ModifyUserVirtualCurrencyResult> { }
 
     ///<summary>
+    ///Opens a specific container (ContainerItemInstanceId), with a specific key (KeyItemInstanceId, when required), and returns the contents of the opened container. If the container (and key when relevant) are consumable (RemainingUses > 0), their RemainingUses will be decremented, consistent with the operation of ConsumeItem.
+    ///</summary>
+    public class UnlockContainerInstanceResponseSignal : Signal<UnlockContainerItemResult> { }
+
+    ///<summary>
+    ///Searches Player or Character inventory for any ItemInstance matching the given CatalogItemId, if necessary unlocks it using any appropriate key, and returns the contents of the opened container. If the container (and key when relevant) are consumable (RemainingUses > 0), their RemainingUses will be decremented, consistent with the operation of ConsumeItem.
+    ///</summary>
+    public class UnlockContainerItemResponseSignal : Signal<UnlockContainerItemResult> { }
+
+    ///<summary>
     ///Updates the key-value pair data tagged to the specified item, which is read-only from the client.
     ///</summary>
-    public class UpdateUserInventoryItemCustomDataResponseSignal : Signal<UpdateUserInventoryItemDataResult> { }
+    public class UpdateUserInventoryItemCustomDataResponseSignal : Signal<EmptyResult> { }
 
 #endregion
 
@@ -830,11 +900,16 @@ using strange.extensions.signal.impl;
 
 #endregion
 
+//Server-Side Cloud Script
+#region Server-Side Cloud Script
+
+#endregion
+
 //Content
 #region Content
 
     ///<summary>
-    ///This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded, the query to retrieve the data will fail. See this post for more information:  https://support.playfab.com/support/discussions/topics/1000059929
+    ///This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded, the query to retrieve the data will fail. See this post for more information:  https://community.playfab.com/hc/en-us/community/posts/205469488-How-to-upload-files-to-PlayFab-s-Content-Service
     ///</summary>
     public class GetContentDownloadUrlResponseSignal : Signal<GetContentDownloadUrlResult> { }
 
@@ -917,6 +992,11 @@ using strange.extensions.signal.impl;
     ///Updates the title-specific custom data for the user's character which can only be read by the client
     ///</summary>
     public class UpdateCharacterReadOnlyDataResponseSignal : Signal<UpdateCharacterDataResult> { }
+
+#endregion
+
+//Guilds
+#region Guilds
 
 #endregion
 

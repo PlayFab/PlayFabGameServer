@@ -28,35 +28,6 @@ namespace PlayFab.ServerModels
         public int Amount { get; set;}
     }
 
-    public class AddFriendRequest
-    {
-
-        /// <summary>
-        /// PlayFab identifier of the player to add a new friend.
-        /// </summary>
-        public string PlayFabId { get; set;}
-
-        /// <summary>
-        /// The PlayFab identifier of the user being added.
-        /// </summary>
-        public string FriendPlayFabId { get; set;}
-
-        /// <summary>
-        /// The PlayFab username of the user being added
-        /// </summary>
-        public string FriendUsername { get; set;}
-
-        /// <summary>
-        /// Email address of the user being added.
-        /// </summary>
-        public string FriendEmail { get; set;}
-
-        /// <summary>
-        /// Title-specific display name of the user to being added.
-        /// </summary>
-        public string FriendTitleDisplayName { get; set;}
-    }
-
     public class AddSharedGroupMembersRequest
     {
 
@@ -782,7 +753,7 @@ namespace PlayFab.ServerModels
     {
 
         /// <summary>
-        /// PlayFab unique identifier of the user whose character inventory is being returned.
+        /// Unique PlayFab assigned ID of the user on whom the operation will be performed.
         /// </summary>
         public string PlayFabId { get; set;}
 
@@ -878,6 +849,29 @@ namespace PlayFab.ServerModels
         public Dictionary<string,int> CharacterStatistics { get; set;}
     }
 
+    public class GetCloudScriptUrlRequest
+    {
+
+        /// <summary>
+        /// Cloud Script Version to use. Defaults to 1.
+        /// </summary>
+        public int? Version { get; set;}
+
+        /// <summary>
+        /// Specifies whether the URL returned should be the one for the most recently uploaded Revision of the Cloud Script (true), or the Revision most recently set to live (false). Defaults to false.
+        /// </summary>
+        public bool? Testing { get; set;}
+    }
+
+    public class GetCloudScriptUrlResult : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// URL of the Cloud Script logic server.
+        /// </summary>
+        public string Url { get; set;}
+    }
+
     public class GetContentDownloadUrlRequest
     {
 
@@ -904,68 +898,6 @@ namespace PlayFab.ServerModels
         /// URL for downloading content via HTTP GET or HEAD method. The URL will expire in 1 hour.
         /// </summary>
         public string URL { get; set;}
-    }
-
-    public class GetFriendLeaderboardRequest
-    {
-
-        /// <summary>
-        /// The player whose friend leaderboard to get
-        /// </summary>
-        public string PlayFabId { get; set;}
-
-        /// <summary>
-        /// Statistic used to rank friends for this leaderboard.
-        /// </summary>
-        public string StatisticName { get; set;}
-
-        /// <summary>
-        /// Position in the leaderboard to start this listing (defaults to the first entry).
-        /// </summary>
-        public int StartPosition { get; set;}
-
-        /// <summary>
-        /// Maximum number of entries to retrieve.
-        /// </summary>
-        public int MaxResultsCount { get; set;}
-
-        /// <summary>
-        /// Indicates whether Steam service friends should be included in the response. Default is true.
-        /// </summary>
-        public bool? IncludeSteamFriends { get; set;}
-
-        /// <summary>
-        /// Indicates whether Facebook friends should be included in the response. Default is true.
-        /// </summary>
-        public bool? IncludeFacebookFriends { get; set;}
-    }
-
-    public class GetFriendsListRequest
-    {
-
-        /// <summary>
-        /// PlayFab identifier of the player whose friend list to get.
-        /// </summary>
-        public string PlayFabId { get; set;}
-
-        /// <summary>
-        /// Indicates whether Steam service friends should be included in the response. Default is true.
-        /// </summary>
-        public bool? IncludeSteamFriends { get; set;}
-
-        /// <summary>
-        /// Indicates whether Facebook friends should be included in the response. Default is true.
-        /// </summary>
-        public bool? IncludeFacebookFriends { get; set;}
-    }
-
-    public class GetFriendsListResult : PlayFabResultCommon
-    {
-
-        /// <summary>
-        /// Array of friends found.
-        /// </summary>
-        public List<FriendInfo> Friends { get; set;}
     }
 
     public class GetLeaderboardAroundCharacterRequest
@@ -1102,6 +1034,11 @@ namespace PlayFab.ServerModels
         /// statistics to return
         /// </summary>
         public List<string> StatisticNames { get; set;}
+
+        /// <summary>
+        /// statistics to return, if StatisticNames is not set (only statistics which have a version matching that provided will be returned)
+        /// </summary>
+        public List<StatisticNameVersion> StatisticNameVersions { get; set;}
     }
 
     public class GetPlayerStatisticsResult : PlayFabResultCommon
@@ -1116,6 +1053,24 @@ namespace PlayFab.ServerModels
         /// User statistics for the requested user.
         /// </summary>
         public List<StatisticValue> Statistics { get; set;}
+    }
+
+    public class GetPlayerStatisticVersionsRequest
+    {
+
+        /// <summary>
+        /// unique name of the statistic
+        /// </summary>
+        public string StatisticName { get; set;}
+    }
+
+    public class GetPlayerStatisticVersionsResult : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// version change history of the statistic
+        /// </summary>
+        public List<PlayerStatisticVersion> StatisticVersions { get; set;}
     }
 
     public class GetPlayFabIDsFromFacebookIDsRequest
@@ -1134,6 +1089,29 @@ namespace PlayFab.ServerModels
         /// Mapping of Facebook identifiers to PlayFab identifiers.
         /// </summary>
         public List<FacebookPlayFabIdPair> Data { get; set;}
+    }
+
+    public class GetPlayFabIDsFromSteamIDsRequest
+    {
+
+        /// <summary>
+        /// Deprecated: Please use SteamStringIDs
+        /// </summary>
+        public List<ulong> SteamIDs { get; set;}
+
+        /// <summary>
+        /// Array of unique Steam identifiers (Steam profile IDs) for which the title needs to get PlayFab identifiers.
+        /// </summary>
+        public List<string> SteamStringIDs { get; set;}
+    }
+
+    public class GetPlayFabIDsFromSteamIDsResult : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// Mapping of Steam identifiers to PlayFab identifiers.
+        /// </summary>
+        public List<SteamPlayFabIdPair> Data { get; set;}
     }
 
     public class GetPublisherDataRequest
@@ -1292,7 +1270,7 @@ namespace PlayFab.ServerModels
     {
 
         /// <summary>
-        /// PlayFab unique identifier of the user whose inventory is being returned.
+        /// Unique PlayFab assigned ID of the user on whom the operation will be performed.
         /// </summary>
         public string PlayFabId { get; set;}
 
@@ -1922,6 +1900,59 @@ namespace PlayFab.ServerModels
         public int Position { get; set;}
     }
 
+    public class PlayerStatisticVersion
+    {
+
+        /// <summary>
+        /// name of the statistic when the version became active
+        /// </summary>
+        public string StatisticName { get; set;}
+
+        /// <summary>
+        /// version of the statistic
+        /// </summary>
+        public uint Version { get; set;}
+
+        /// <summary>
+        /// time at which the statistic version was scheduled to become active, based on the configured ResetInterval
+        /// </summary>
+        public DateTime? ScheduledActivationTime { get; set;}
+
+        /// <summary>
+        /// time when the statistic version became active
+        /// </summary>
+        public DateTime ActivationTime { get; set;}
+
+        /// <summary>
+        /// time at which the statistic version was scheduled to become inactive, based on the configured ResetInterval
+        /// </summary>
+        public DateTime? ScheduledDeactivationTime { get; set;}
+
+        /// <summary>
+        /// time when the statistic version became inactive due to statistic version incrementing
+        /// </summary>
+        public DateTime? DeactivationTime { get; set;}
+    }
+
+    public class PlayStreamEventHistory
+    {
+
+        /// <summary>
+        /// The ID of the trigger that caused this event to be created.
+        /// </summary>
+        public string ParentTriggerId { get; set;}
+
+        /// <summary>
+        /// The ID of the previous event that caused this event to be created by hitting a trigger.
+        /// </summary>
+        public string ParentEventId { get; set;}
+
+        /// <summary>
+        /// If true, then this event was allowed to trigger subsequent events in a trigger.
+        /// </summary>
+        public bool TriggeredEvents { get; set;}
+    }
+
     public class RedeemCouponRequest
     {
 
@@ -1981,20 +2012,6 @@ namespace PlayFab.ServerModels
         /// User account information for the user validated.
         /// </summary>
         public UserAccountInfo UserInfo { get; set;}
-    }
-
-    public class RemoveFriendRequest
-    {
-
-        /// <summary>
-        /// PlayFab identifier of the friend account which is to be removed.
-        /// </summary>
-        public string FriendPlayFabId { get; set;}
-
-        /// <summary>
-        /// Unique PlayFab assigned ID of the user on whom the operation will be performed.
-        /// </summary>
-        public string PlayFabId { get; set;}
     }
 
     public class RemoveSharedGroupMembersRequest
@@ -2074,6 +2091,45 @@ namespace PlayFab.ServerModels
 
     public class RevokeInventoryResult : PlayFabResultCommon
     {
+    }
+
+    public class RunCloudScriptResult : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// id of Cloud Script run
+        /// </summary>
+        public string ActionId { get; set;}
+
+        /// <summary>
+        /// version of Cloud Script run
+        /// </summary>
+        public int Version { get; set;}
+
+        /// <summary>
+        /// revision of Cloud Script run
+        /// </summary>
+        public int Revision { get; set;}
+
+        /// <summary>
+        /// return values from the server action as a dynamic object
+        /// </summary>
+        public object Results { get; set;}
+
+        /// <summary>
+        /// return values from the server action as a JSON encoded string
+        /// </summary>
+        public string ResultsEncoded { get; set;}
+
+        /// <summary>
+        /// any log statements generated during the run of this action
+        /// </summary>
+        public string ActionLog { get; set;}
+
+        /// <summary>
+        /// time this script took to run, in seconds
+        /// </summary>
+        public double ExecutionTime { get; set;}
     }
 
     public class SendPushNotificationRequest
@@ -2159,6 +2215,30 @@ namespace PlayFab.ServerModels
         public UserDataPermission? Permission { get; set;}
     }
 
+    public enum SourceType
+    {
+        Admin,
+        BackEnd,
+        GameClient,
+        GameServer,
+        Partner,
+        Stream
+    }
+
+    public class StatisticNameVersion
+    {
+
+        /// <summary>
+        /// unique name of the statistic
+        /// </summary>
+        public string StatisticName { get; set;}
+
+        /// <summary>
+        /// the version of the statistic to be returned
+        /// </summary>
+        public uint Version { get; set;}
+    }
+
     public class StatisticUpdate
     {
 
@@ -2194,7 +2274,26 @@ namespace PlayFab.ServerModels
         /// <summary>
         /// for updates to an existing statistic value for a player, the version of the statistic when it was loaded
         /// </summary>
-        public string Version { get; set;}
+        public uint Version { get; set;}
+    }
+
+    public class SteamPlayFabIdPair
+    {
+
+        /// <summary>
+        /// Deprecated: Please use SteamStringId
+        /// </summary>
+        public ulong SteamId { get; set;}
+
+        /// <summary>
+        /// Unique Steam identifier for a user.
+        /// </summary>
+        public string SteamStringId { get; set;}
+
+        /// <summary>
+        /// Unique PlayFab identifier for a user, or null if no PlayFab account is linked to the Steam identifier.
+        /// </summary>
+        public string PlayFabId { get; set;}
     }
 
     public class SubtractCharacterVirtualCurrencyRequest
@@ -2271,6 +2370,83 @@ namespace PlayFab.ServerModels
         /// News item text.
         /// </summary>
         public string Body { get; set;}
+    }
+
+    public class UnlockContainerInstanceRequest
+    {
+
+        /// <summary>
+        /// Unique PlayFab assigned ID of the user on whom the operation will be performed.
+        /// </summary>
+        public string PlayFabId { get; set;}
+
+        /// <summary>
+        /// Unique PlayFab assigned ID for a specific character owned by a user
+        /// </summary>
+        public string CharacterId { get; set;}
+
+        /// <summary>
+        /// ItemInstanceId of the container to unlock.
+        /// </summary>
+        public string ContainerItemInstanceId { get; set;}
+
+        /// <summary>
+        /// ItemInstanceId of the key that will be consumed by unlocking this container.  If the container requires a key, this parameter is required.
+        /// </summary>
+        public string KeyItemInstanceId { get; set;}
+
+        /// <summary>
+        /// Specifies the catalog version that should be used to determine container contents.  If unspecified, uses catalog associated with the item instance.
+        /// </summary>
+        public string CatalogVersion { get; set;}
+    }
+
+    public class UnlockContainerItemRequest
+    {
+
+        /// <summary>
+        /// Unique PlayFab assigned ID of the user on whom the operation will be performed.
+        /// </summary>
+        public string PlayFabId { get; set;}
+
+        /// <summary>
+        /// Unique PlayFab assigned ID for a specific character owned by a user
+        /// </summary>
+        public string CharacterId { get; set;}
+
+        /// <summary>
+        /// Catalog ItemId of the container type to unlock.
+        /// </summary>
+        public string ContainerItemId { get; set;}
+
+        /// <summary>
+        /// Specifies the catalog version that should be used to determine container contents.  If unspecified, uses default/primary catalog.
+        /// </summary>
+        public string CatalogVersion { get; set;}
+    }
+
+    public class UnlockContainerItemResult : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// Unique instance identifier of the container unlocked.
+        /// </summary>
+        public string UnlockedItemInstanceId { get; set;}
+
+        /// <summary>
+        /// Unique instance identifier of the key used to unlock the container, if applicable.
+        /// </summary>
+        public string UnlockedWithItemInstanceId { get; set;}
+
+        /// <summary>
+        /// Items granted to the player as a result of unlocking the container.
+        /// </summary>
+        public List<ItemInstance> GrantedItems { get; set;}
+
+        /// <summary>
+        /// Virtual currency granted to the player as a result of unlocking the container.
+        /// </summary>
+        public Dictionary<string,uint> VirtualCurrency { get; set;}
     }
 
     public class UpdateCharacterDataRequest
@@ -2436,14 +2612,14 @@ namespace PlayFab.ServerModels
     {
 
         /// <summary>
-        /// Unique PlayFab assigned ID for a specific character owned by a user
-        /// </summary>
-        public string CharacterId { get; set;}
-
-        /// <summary>
         /// Unique PlayFab assigned ID of the user on whom the operation will be performed.
         /// </summary>
         public string PlayFabId { get; set;}
+
+        /// <summary>
+        /// Unique PlayFab assigned ID for a specific character owned by a user
+        /// </summary>
+        public string CharacterId { get; set;}
 
         /// <summary>
         /// Unique PlayFab assigned instance identifier of the item
@@ -2459,10 +2635,6 @@ namespace PlayFab.ServerModels
         /// Optional list of Data-keys to remove from UserData.  Some SDKs cannot insert null-values into Data due to language constraints.  Use this to delete the keys directly.
         /// </summary>
         public List<string> KeysToRemove { get; set;}
-    }
-
-    public class UpdateUserInventoryItemDataResult : PlayFabResultCommon
-    {
     }
 
     public class UpdateUserStatisticsRequest
@@ -2691,7 +2863,8 @@ namespace PlayFab.ServerModels
         PSN,
         GameCenter,
         CustomId,
-        XboxLive
+        XboxLive,
+        Parse
     }
 
     public class UserPrivateAccountInfo

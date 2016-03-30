@@ -59,6 +59,12 @@ public class PlayFabBindingsFactory {
     commandBinder.Bind<GetPlayFabIDsFromFacebookIDsResponseSignal>(); //Create empty overrideable binding.
 
     ///<summary>
+    ///Retrieves the unique PlayFab identifiers for the given set of Steam identifiers. The Steam identifiers  are the profile IDs for the user accounts, available as SteamId in the Steamworks Community API calls.
+    ///</summary>
+    commandBinder.Bind<GetPlayFabIDsFromSteamIDsSignal>().To<GetPlayFabIDsFromSteamIDsCommand>();
+    commandBinder.Bind<GetPlayFabIDsFromSteamIDsResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
     ///Retrieves the relevant details for a specified user
     ///</summary>
     commandBinder.Bind<GetUserAccountInfoSignal>().To<GetUserAccountInfoCommand>();
@@ -92,6 +98,18 @@ public class PlayFabBindingsFactory {
     ///</summary>
     commandBinder.Bind<GetLeaderboardAroundUserSignal>().To<GetLeaderboardAroundUserCommand>();
     commandBinder.Bind<GetLeaderboardAroundUserResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
+    ///Retrieves the current version and values for the indicated statistics, for the local player.
+    ///</summary>
+    commandBinder.Bind<GetPlayerStatisticsSignal>().To<GetPlayerStatisticsCommand>();
+    commandBinder.Bind<GetPlayerStatisticsResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
+    ///Retrieves the information on the available versions of the specified statistic.
+    ///</summary>
+    commandBinder.Bind<GetPlayerStatisticVersionsSignal>().To<GetPlayerStatisticVersionsCommand>();
+    commandBinder.Bind<GetPlayerStatisticVersionsResponseSignal>(); //Create empty overrideable binding.
 
     ///<summary>
     ///Retrieves the title-specific custom data for the user which is readable and writable by the client
@@ -134,6 +152,12 @@ public class PlayFabBindingsFactory {
     ///</summary>
     commandBinder.Bind<GetUserStatisticsSignal>().To<GetUserStatisticsCommand>();
     commandBinder.Bind<GetUserStatisticsResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
+    ///Updates the values of the specified title-specific statistics for the user
+    ///</summary>
+    commandBinder.Bind<UpdatePlayerStatisticsSignal>().To<UpdatePlayerStatisticsCommand>();
+    commandBinder.Bind<UpdatePlayerStatisticsResponseSignal>(); //Create empty overrideable binding.
 
     ///<summary>
     ///Updates the title-specific custom data for the user which is readable and writable by the client
@@ -326,6 +350,18 @@ public class PlayFabBindingsFactory {
     commandBinder.Bind<SubtractUserVirtualCurrencyResponseSignal>(); //Create empty overrideable binding.
 
     ///<summary>
+    ///Opens a specific container (ContainerItemInstanceId), with a specific key (KeyItemInstanceId, when required), and returns the contents of the opened container. If the container (and key when relevant) are consumable (RemainingUses > 0), their RemainingUses will be decremented, consistent with the operation of ConsumeItem.
+    ///</summary>
+    commandBinder.Bind<UnlockContainerInstanceSignal>().To<UnlockContainerInstanceCommand>();
+    commandBinder.Bind<UnlockContainerInstanceResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
+    ///Searches Player or Character inventory for any ItemInstance matching the given CatalogItemId, if necessary unlocks it using any appropriate key, and returns the contents of the opened container. If the container (and key when relevant) are consumable (RemainingUses > 0), their RemainingUses will be decremented, consistent with the operation of ConsumeItem.
+    ///</summary>
+    commandBinder.Bind<UnlockContainerItemSignal>().To<UnlockContainerItemCommand>();
+    commandBinder.Bind<UnlockContainerItemResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
     ///Updates the key-value pair data tagged to the specified item, which is read-only from the client.
     ///</summary>
     commandBinder.Bind<UpdateUserInventoryItemCustomDataSignal>().To<UpdateUserInventoryItemCustomDataCommand>();
@@ -430,11 +466,16 @@ public class PlayFabBindingsFactory {
 
 #endregion
 
+//Server-Side Cloud Script
+#region Server-Side Cloud Script
+
+#endregion
+
 //Content
 #region Content
 
     ///<summary>
-    ///This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded, the query to retrieve the data will fail. See this post for more information:  https://support.playfab.com/support/discussions/topics/1000059929
+    ///This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded, the query to retrieve the data will fail. See this post for more information:  https://community.playfab.com/hc/en-us/community/posts/205469488-How-to-upload-files-to-PlayFab-s-Content-Service
     ///</summary>
     commandBinder.Bind<GetContentDownloadUrlSignal>().To<GetContentDownloadUrlCommand>();
     commandBinder.Bind<GetContentDownloadUrlResponseSignal>(); //Create empty overrideable binding.
@@ -532,6 +573,11 @@ public class PlayFabBindingsFactory {
     ///</summary>
     commandBinder.Bind<UpdateCharacterReadOnlyDataSignal>().To<UpdateCharacterReadOnlyDataCommand>();
     commandBinder.Bind<UpdateCharacterReadOnlyDataResponseSignal>(); //Create empty overrideable binding.
+
+#endregion
+
+//Guilds
+#region Guilds
 
 #endregion
 

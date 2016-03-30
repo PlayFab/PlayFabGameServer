@@ -1,9 +1,11 @@
 #if UNITY_EDITOR
 
 #elif UNITY_ANDROID
-#define PLAYFAB_ANDROID_PLUGIN
+#define PLAYFAB_ANDROID
 #elif UNITY_IOS
-#define PLAYFAB_IOS_PLUGIN
+#define PLAYFAB_IOS
+#elif UNITY_WP8
+#define PLAYFAB_WP8
 #endif
 
 using System;
@@ -44,21 +46,21 @@ namespace PlayFab.Internal
         /// <summary>
         /// Sends a POST HTTP request
         /// </summary>
-        public static void Post(string url, string data, string authType, string authKey, Action<CallRequestContainer> callback, object request, object customData, bool isBlocking = false)
+        public static void Post(string urlPath, string data, string authType, string authKey, Action<CallRequestContainer> callback, object request, object customData, bool isBlocking = false)
         {
-            var requestContainer = new CallRequestContainer { RequestType = PlayFabSettings.RequestType, CallId = callIdGen++, AuthKey = authKey, AuthType = authType, Callback = callback, Data = data, Url = url, Request = request, CustomData = customData };
+            var requestContainer = new CallRequestContainer { RequestType = PlayFabSettings.RequestType, CallId = callIdGen++, AuthKey = authKey, AuthType = authType, Callback = callback, Data = data, Url = urlPath, Request = request, CustomData = customData };
             if (!isBlocking)
             {
-#if PLAYFAB_IOS_PLUGIN
-                PlayFabiOSPlugin.Post(PlayFabSettings.GetFullUrl(url), PlayFabVersion.getVersionString(), requestContainer, PlayFabSettings.InvokeRequest);
-#elif UNITY_WP8
+#if PLAYFAB_IOS
+                PlayFabiOSPlugin.Post(PlayFabSettings.GetFullUrl(urlPath), PlayFabVersion.getVersionString(), requestContainer, PlayFabSettings.InvokeRequest);
+#elif PLAYFAB_WP8
                 instance.StartCoroutine(instance.MakeRequestViaUnity(requestContainer));
 #else
                 if (PlayFabSettings.RequestType == WebRequestType.HttpWebRequest)
                 {
                     lock (ActiveRequests)
                         ActiveRequests.Insert(0, requestContainer); // Parsing on this container is done backwards, so insert at 0 to make calls process in roughly queue order (but still not actually guaranteed)
-                    PlayFabSettings.InvokeRequest(url, requestContainer.CallId, request, customData);
+                    PlayFabSettings.InvokeRequest(urlPath, requestContainer.CallId, request, customData);
                     _ActivateWorkerThread();
                 }
                 else
@@ -67,14 +69,19 @@ namespace PlayFab.Internal
             }
             else
             {
+#if PLAYFAB_WP8
+                throw new Exception("WP8 cannot make blocking api calls");
+#else
                 StartHttpWebRequest(requestContainer);
                 ProcessHttpWebResult(requestContainer, true);
                 callback(requestContainer);
+#endif
             }
         }
         #endregion
 
         #region Web Request Methods based on PlayFabSettings.WebRequestTypes
+#if !PLAYFAB_WP8
         /// <summary>
         /// If the worker thread is not running, start it
         /// </summary>
@@ -157,7 +164,7 @@ namespace PlayFab.Internal
                 var payload = Encoding.UTF8.GetBytes(request.Data);
                 request.HttpRequest = (HttpWebRequest)WebRequest.Create(fullUrl);
 
-                request.HttpRequest.Proxy = null; // Prevents hitting a proxy is no proxy is available. TODO: Add support for proxy's.
+                request.HttpRequest.Proxy = null; // Prevents hitting a proxy if no proxy is available. TODO: Add support for proxy's.
                 request.HttpRequest.Headers.Add("X-ReportErrorAsSuccess", "true"); // Without this, we have to catch WebException instead, and manually decode the result
                 request.HttpRequest.Headers.Add("X-PlayFabSDK", PlayFabVersion.getVersionString());
                 if (request.AuthType != null)
@@ -217,6 +224,7 @@ namespace PlayFab.Internal
             }
             return true;
         }
+#endif
 
         // This is the old Unity WWW class call.
         private IEnumerator MakeRequestViaUnity(CallRequestContainer requestContainer)

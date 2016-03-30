@@ -4,6 +4,10 @@ using PlayFab.ServerModels;
 using strange.extensions.command.impl;
 using Object = UnityEngine.Object;
 
+
+
+
+
 //Matchmaking APIs
 #region Matchmaking APIs
 
@@ -89,6 +93,10 @@ public class UserInfoCommand : Command {
 
 #endregion
 
+
+
+
+
 //Authentication
 #region Authentication
 
@@ -121,6 +129,22 @@ public class GetPlayFabIDsFromFacebookIDsCommand : Command {
     public override void Execute(){
         Retain();
         PlayFabServerAPI.GetPlayFabIDsFromFacebookIDs(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
+///Retrieves the unique PlayFab identifiers for the given set of Steam identifiers. The Steam identifiers  are the profile IDs for the user accounts, available as SteamId in the Steamworks Community API calls.
+///</summary>
+public class GetPlayFabIDsFromSteamIDsCommand : Command {
+    [Inject] public GetPlayFabIDsFromSteamIDsResponseSignal ResponseSignal {get; set;}
+    [Inject] public GetPlayFabIDsFromSteamIDsRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.GetPlayFabIDsFromSteamIDs(Request,(result)=>{
             //TODO: Map Result data to PlayFabDataStore.
             Release();
             ResponseSignal.Dispatch(result);
@@ -205,6 +229,38 @@ public class GetLeaderboardAroundUserCommand : Command {
     public override void Execute(){
         Retain();
         PlayFabServerAPI.GetLeaderboardAroundUser(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
+///Retrieves the current version and values for the indicated statistics, for the local player.
+///</summary>
+public class GetPlayerStatisticsCommand : Command {
+    [Inject] public GetPlayerStatisticsResponseSignal ResponseSignal {get; set;}
+    [Inject] public GetPlayerStatisticsRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.GetPlayerStatistics(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
+///Retrieves the information on the available versions of the specified statistic.
+///</summary>
+public class GetPlayerStatisticVersionsCommand : Command {
+    [Inject] public GetPlayerStatisticVersionsResponseSignal ResponseSignal {get; set;}
+    [Inject] public GetPlayerStatisticVersionsRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.GetPlayerStatisticVersions(Request,(result)=>{
             //TODO: Map Result data to PlayFabDataStore.
             Release();
             ResponseSignal.Dispatch(result);
@@ -317,6 +373,22 @@ public class GetUserStatisticsCommand : Command {
     public override void Execute(){
         Retain();
         PlayFabServerAPI.GetUserStatistics(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
+///Updates the values of the specified title-specific statistics for the user
+///</summary>
+public class UpdatePlayerStatisticsCommand : Command {
+    [Inject] public UpdatePlayerStatisticsResponseSignal ResponseSignal {get; set;}
+    [Inject] public UpdatePlayerStatisticsRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.UpdatePlayerStatistics(Request,(result)=>{
             //TODO: Map Result data to PlayFabDataStore.
             Release();
             ResponseSignal.Dispatch(result);
@@ -813,6 +885,38 @@ public class SubtractUserVirtualCurrencyCommand : Command {
 }
 
 ///<summary>
+///Opens a specific container (ContainerItemInstanceId), with a specific key (KeyItemInstanceId, when required), and returns the contents of the opened container. If the container (and key when relevant) are consumable (RemainingUses > 0), their RemainingUses will be decremented, consistent with the operation of ConsumeItem.
+///</summary>
+public class UnlockContainerInstanceCommand : Command {
+    [Inject] public UnlockContainerInstanceResponseSignal ResponseSignal {get; set;}
+    [Inject] public UnlockContainerInstanceRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.UnlockContainerInstance(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
+///Searches Player or Character inventory for any ItemInstance matching the given CatalogItemId, if necessary unlocks it using any appropriate key, and returns the contents of the opened container. If the container (and key when relevant) are consumable (RemainingUses > 0), their RemainingUses will be decremented, consistent with the operation of ConsumeItem.
+///</summary>
+public class UnlockContainerItemCommand : Command {
+    [Inject] public UnlockContainerItemResponseSignal ResponseSignal {get; set;}
+    [Inject] public UnlockContainerItemRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.UnlockContainerItem(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
 ///Updates the key-value pair data tagged to the specified item, which is read-only from the client.
 ///</summary>
 public class UpdateUserInventoryItemCustomDataCommand : Command {
@@ -1041,11 +1145,15 @@ public class UpdateSharedGroupDataCommand : Command {
 }
 
 #endregion
+//Server-Side Cloud Script
+#region Server-Side Cloud Script
+
+#endregion
 //Content
 #region Content
 
 ///<summary>
-///This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded, the query to retrieve the data will fail. See this post for more information:  https://support.playfab.com/support/discussions/topics/1000059929
+///This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded, the query to retrieve the data will fail. See this post for more information:  https://community.playfab.com/hc/en-us/community/posts/205469488-How-to-upload-files-to-PlayFab-s-Content-Service
 ///</summary>
 public class GetContentDownloadUrlCommand : Command {
     [Inject] public GetContentDownloadUrlResponseSignal ResponseSignal {get; set;}
@@ -1291,6 +1399,10 @@ public class UpdateCharacterReadOnlyDataCommand : Command {
         }, PlayFabErrorHandler.HandlePlayFabError);
     }
 }
+
+#endregion
+//Guilds
+#region Guilds
 
 #endregion
 
