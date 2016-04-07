@@ -24,6 +24,16 @@ Out of the Box Game Server for PlayFab.com
 * Logger
 * Local Debug Mode
 
+#### Known Issues
+* (FIXED) [Unknown message ID 200 connId:1] - This has been fixed, but in general if you get this error in the client, it is because the Server is missing one of the following in the Script Execution Order. If one of the following is missing, then this can cause problems.  *Reason:* The PlayFabContextMediator goes missing any time you or we upgrade the PlayFabSDK, in this case we mistakenly forgot to add it back into the Script Execution order.
+	*	MainGameServerMediator
+	*	PlayFabServerMediator
+	*	PlayFabContextMediator
+	*	UnityNetworkingMediator
+	
+	  
+
+
 #### Getting Started Guide
 
 When getting started with this custom game server it is good to know or at least understand what StrangeIoC is all about.  So I advise you to visit http://strangeioc.wordpress.com for more information about this framework.  However, it is not required to know as I'll explain the basics that you need to know to modify the game server.
