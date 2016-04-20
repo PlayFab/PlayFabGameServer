@@ -34,6 +34,7 @@ public class ChatMessage : MessageBase
 public class CreateChannelMessage : MessageBase
 {
     public string ChannelId = Guid.NewGuid().ToString();
+	public bool isInviteOnly = true;
 }
 
 public class LeaveChannelMessage : MessageBase

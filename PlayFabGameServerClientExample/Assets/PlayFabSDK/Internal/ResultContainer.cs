@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using PlayFab.Json;
 using System;
 using System.Net;
 
@@ -34,26 +33,20 @@ namespace PlayFab.Internal
             };
         }
 
-        private static readonly object[] _invokeParams = new object[1];
         public static TResultType HandleResults(CallRequestContainer callRequest, Delegate resultCallback, ErrorCallback errorCallback, Action<TResultType, CallRequestContainer> resultAction)
         {
             if (callRequest.Error == null) // Some other error earlier in the process, just report it below
             {
                 try
                 {
-                    ResultContainer<TResultType> resultEnvelope = new ResultContainer<TResultType>();
-                    JsonConvert.PopulateObject(callRequest.ResultStr, resultEnvelope, Util.JsonSettings);
+                    ResultContainer<TResultType> resultEnvelope = SimpleJson.DeserializeObject<ResultContainer<TResultType>>(callRequest.ResultStr, Util.ApiSerializerStrategy);
                     if (!resultEnvelope.errorCode.HasValue || resultEnvelope.errorCode.Value == (int)PlayFabErrorCode.Success)
                     {
                         resultEnvelope.data.Request = callRequest.Request;
                         resultEnvelope.data.CustomData = callRequest.CustomData;
                         if (resultAction != null)
                             resultAction(resultEnvelope.data, callRequest);
-                        if (resultCallback != null)
-                        {
-                            _invokeParams[0] = resultEnvelope.data;
-                            resultCallback.DynamicInvoke(_invokeParams);
-                        }
+                        WrapCallback(resultCallback, resultEnvelope.data);
                         PlayFabSettings.InvokeResponse(callRequest.Url, callRequest.CallId, callRequest.Request, resultEnvelope.data, callRequest.Error, callRequest.CustomData); // Do the globalMessage callback
                         return resultEnvelope.data; // This is the expected output path for successful api call
                     }
@@ -82,11 +75,26 @@ namespace PlayFab.Internal
                 }
             }
 
-            if (errorCallback != null)
-                errorCallback(callRequest.Error);
-            if (PlayFabSettings.GlobalErrorHandler != null)
-                PlayFabSettings.GlobalErrorHandler(callRequest.Error);
+            WrapCallback(errorCallback, callRequest.Error);
+            WrapCallback(PlayFabSettings.GlobalErrorHandler, callRequest.Error);
             return null;
+        }
+        private static readonly object[] _invokeParams = new object[1];
+        private static void WrapCallback(Delegate callback, object singleParam)
+        {
+            if (callback == null)
+                return;
+
+            _invokeParams[0] = singleParam;
+            try
+            {
+                callback.DynamicInvoke(_invokeParams);
+            }
+            catch (Exception e)
+            {
+                if (!PlayFabSettings.HideCallbackErrors)
+                    UnityEngine.Debug.LogException(e);
+            }
         }
     }
 }
