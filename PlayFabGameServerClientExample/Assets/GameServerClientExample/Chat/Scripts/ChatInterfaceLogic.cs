@@ -19,6 +19,8 @@ public class ChatInterfaceLogic : MonoBehaviour {
 	public GameObject sent_message_header;
 	public GameObject sent_message_prefab;
 
+	public InputField chat_diplay_name_text;
+
 	private List<GameObject> response_buttons = new List<GameObject>();
 	private List<GameObject> contact_buttons = new List<GameObject>();
 
@@ -69,6 +71,13 @@ public class ChatInterfaceLogic : MonoBehaviour {
 				MemberName = PlayerUsername,
 				IsInviteOnly = false
 			});
+
+		chat_diplay_name_text.text = PlayerUsername;
+	}
+
+	public void OnPlayerChangeUserName ()
+	{
+		PlayerUsername = chat_diplay_name_text.text;
 	}
 
 	private void OnCreateChannelResponse(NetworkMessage netMsg)

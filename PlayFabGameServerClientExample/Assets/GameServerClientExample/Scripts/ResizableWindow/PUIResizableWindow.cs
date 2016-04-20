@@ -18,8 +18,15 @@ public class PUIResizableWindow : MonoBehaviour {
 	public float min_width = 100f;
 	public float min_height = 100f;
 
+	public Canvas canvas;
+
+	private float scaleFactor = 1f;
+
 	void Start ()
 	{
+		if(canvas != null){
+			scaleFactor = canvas.scaleFactor;
+		}
 		rect_transform = GetComponent<RectTransform>();
 	}
 
@@ -46,7 +53,7 @@ public class PUIResizableWindow : MonoBehaviour {
 	{
 		if (resizing){
 			Vector2 new_mouse_position = Input.mousePosition;
-			Vector2 delta = new_mouse_position - mouse_position;
+			Vector2 delta = (new_mouse_position - mouse_position)/scaleFactor;
 			mouse_position = new_mouse_position;
 			Vector2 new_size = new Vector2(rect_transform.sizeDelta.x+delta.x, rect_transform.sizeDelta.y-delta.y);
 			if(new_size.x<min_width){new_size.x = min_width;}
@@ -55,7 +62,7 @@ public class PUIResizableWindow : MonoBehaviour {
 		}
 		else if (moving){
 			Vector2 new_mouse_position = Input.mousePosition;
-			Vector2 delta = new_mouse_position - mouse_position;
+			Vector2 delta = (new_mouse_position - mouse_position)/scaleFactor;
 			mouse_position = new_mouse_position;
 			rect_transform.anchoredPosition = new Vector2(rect_transform.anchoredPosition.x+delta.x, rect_transform.anchoredPosition.y+delta.y);
 		}
