@@ -176,7 +176,7 @@ public class SendCreateChannelReponseCommand : Command
         var playerConn = UnityNetworkingData.Connections.Find(c => c.PlayFabId == Message.MemberId);
         if (playerConn != null)
         {
-            playerConn.Connection.Send(ChatServerMessageTypes.JoinChannelResponse, Message);
+            playerConn.Connection.Send(ChatServerMessageTypes.CreateChannelResponse, Message);
         }
     }
 }
