@@ -26,25 +26,25 @@ namespace PlayFab.Internal
 
         public void GCMRegistrationReady(string status)
         {
-            bool statusParam;
+            /*bool statusParam;
             bool.TryParse(status, out statusParam);
-            PlayFabGoogleCloudMessaging.RegistrationReady(statusParam);
+            PlayFabGoogleCloudMessaging.RegistrationReady(statusParam);*/
         }
 
         public void GCMRegistered(string token)
         {
-            var error = (string.IsNullOrEmpty(token)) ? token : null;
-            PlayFabGoogleCloudMessaging.RegistrationComplete(token, error);
+            /*var error = (string.IsNullOrEmpty(token)) ? token : null;
+            PlayFabGoogleCloudMessaging.RegistrationComplete(token, error);*/
         }
 
         public void GCMRegisterError(string error)
         {
-            PlayFabGoogleCloudMessaging.RegistrationComplete(null, error);
+            //PlayFabGoogleCloudMessaging.RegistrationComplete(null, error);
         }
 
         public void GCMMessageReceived(string message)
         {
-            PlayFabGoogleCloudMessaging.MessageReceived(message);
+            //PlayFabGoogleCloudMessaging.MessageReceived(message);
         }
 
         public static void AddHttpDelegate(CallRequestContainer requestContainer)

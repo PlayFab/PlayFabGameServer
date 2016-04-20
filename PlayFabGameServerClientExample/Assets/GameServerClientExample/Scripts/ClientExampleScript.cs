@@ -25,7 +25,9 @@ public class ClientExampleScript : MonoBehaviour
     public Text Message;
     public Text StartText;
 
-    private NetworkClient _client;
+	public ChatInterfaceLogic ChatInterface;
+
+    public NetworkClient _network;
 
     public class GameServerMsgTypes
     {
@@ -117,17 +119,17 @@ public class ClientExampleScript : MonoBehaviour
     {
         //Basic Unity Networking Client, note there are other ways to do this
         //Referr to the unity documentation on Unity Networking for more info.
-        _client = new NetworkClient();
-        _client.RegisterHandler(MsgType.Connect, OnConnected);
-        _client.RegisterHandler(GameServerMsgTypes.OnAuthenticated, OnAuthenticated);
-        _client.RegisterHandler(GameServerMsgTypes.MsgRecieverExampleResponse, OnMsgRecieverExampleResponse);
-        _client.RegisterHandler(MsgType.Error, OnClientNetworkingError);
-        _client.RegisterHandler(MsgType.Disconnect, OnClientDisconnect);
+        _network = new NetworkClient();
+        _network.RegisterHandler(MsgType.Connect, OnConnected);
+        _network.RegisterHandler(GameServerMsgTypes.OnAuthenticated, OnAuthenticated);
+        _network.RegisterHandler(GameServerMsgTypes.MsgRecieverExampleResponse, OnMsgRecieverExampleResponse);
+        _network.RegisterHandler(MsgType.Error, OnClientNetworkingError);
+        _network.RegisterHandler(MsgType.Disconnect, OnClientDisconnect);
 
-        _client.RegisterHandler(GameServerMsgTypes.OnTitleNewsUpdate, OnTitleNewsUpdate);
+        _network.RegisterHandler(GameServerMsgTypes.OnTitleNewsUpdate, OnTitleNewsUpdate);
 
         //If this fails, it will automatically disconnect from the server.
-        _client.Connect(host, port);
+        _network.Connect(host, port);
         Debug.LogFormat("Network Client Created, waiting for connection on ServerHost:{0} Port:{1}", host, port);
 
         /*  I wanted to expand on the statement above,  Unity Networking has a NetworkingManager that is a 
@@ -137,6 +139,13 @@ public class ClientExampleScript : MonoBehaviour
          *  property.  This would allow you to virtually do the same code above, but on that game object.
          *  For this example, I'm taking the most simple and direct path.
          */ 
+
+
+		//Initialize Chat Interface with our NetworkClient:
+		if (ChatInterface != null)
+		{
+			ChatInterface.Initialize (_network);
+		}
 
     }
 
@@ -154,7 +163,7 @@ public class ClientExampleScript : MonoBehaviour
     {
         StartText.text = "Connected, waiting for Authorization";
         Debug.Log("Network Client Authenticated, You have 30 seconds to Authenticate or you get booted by the server.");
-        _client.Send(GameServerMsgTypes.Authenticate, new AuthTicketMessage()
+        _network.Send(GameServerMsgTypes.Authenticate, new AuthTicketMessage()
         {
             PlayFabId = PlayFabId,
             AuthTicket = !string.IsNullOrEmpty(GameServerAuthTicket) ? GameServerAuthTicket : SessionTicket
@@ -165,7 +174,7 @@ public class ClientExampleScript : MonoBehaviour
     {
         StartText.text = "Ready";
         Debug.Log("Sending Custom Message to the server, telling it to do something ");
-        _client.Send(GameServerMsgTypes.MsgRecieverExample, new StringMessage());
+        _network.Send(GameServerMsgTypes.MsgRecieverExample, new StringMessage());
     }
 
     private void OnMsgRecieverExampleResponse(NetworkMessage netMsg)

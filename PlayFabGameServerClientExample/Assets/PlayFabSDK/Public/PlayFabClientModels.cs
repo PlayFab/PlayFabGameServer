@@ -8,7 +8,7 @@ namespace PlayFab.ClientModels
     {
 
         /// <summary>
-        /// Player who opened trade.
+        /// Player who opened the trade.
         /// </summary>
         public string OfferingPlayerId { get; set;}
 
@@ -18,7 +18,7 @@ namespace PlayFab.ClientModels
         public string TradeId { get; set;}
 
         /// <summary>
-        /// Items from the accepting player's inventory in exchange for the offered items in the trade. In the case of a gift, this will be null.
+        /// Items from the accepting player's or guild's inventory in exchange for the offered items in the trade. In the case of a gift, this will be null.
         /// </summary>
         public List<string> AcceptedInventoryInstanceIds { get; set;}
     }
@@ -438,6 +438,13 @@ namespace PlayFab.ClientModels
         public string CharacterType { get; set;}
     }
 
+    public enum CloudScriptRevisionOption
+    {
+        Live,
+        Latest,
+        Specific
+    }
+
     public class ConfirmPurchaseRequest
     {
 
@@ -497,29 +504,6 @@ namespace PlayFab.ClientModels
         /// Number of uses remaining on the item.
         /// </summary>
         public int RemainingUses { get; set;}
-    }
-
-    public class ConsumePSNEntitlementsRequest
-    {
-
-        /// <summary>
-        /// Which catalog to match granted entitlements against. If null, defaults to title default catalog
-        /// </summary>
-        public string CatalogVersion { get; set;}
-
-        /// <summary>
-        /// Id of the PSN service label to consume entitlements from
-        /// </summary>
-        public int ServiceLabel { get; set;}
-    }
-
-    public class ConsumePSNEntitlementsResult : PlayFabResultCommon
-    {
-
-        /// <summary>
-        /// Array of items granted to the player as a result of consuming entitlements.
-        /// </summary>
-        public List<ItemInstance> ItemsGranted { get; set;}
     }
 
     public class CreateSharedGroupRequest
@@ -753,6 +737,78 @@ namespace PlayFab.ClientModels
     {
     }
 
+    public class ExecuteCloudScriptRequest
+    {
+
+        /// <summary>
+        /// The name of the CloudScript function to execute
+        /// </summary>
+        public string FunctionName { get; set;}
+
+        /// <summary>
+        /// Object that is passed in to the function as the first argument
+        /// </summary>
+        public object FunctionParameter { get; set;}
+
+        /// <summary>
+        /// Option for which revision of the CloudScript to execute. 'Latest' executes the most recently created revision, 'Live' executes the current live, published revision, and 'Specific' executes the specified revision.
+        /// </summary>
+        public CloudScriptRevisionOption RevisionSelection { get; set;}
+
+        /// <summary>
+        /// The specivic revision to execute, when RevisionSelection is set to 'Specific'
+        /// </summary>
+        public int? SpecificRevision { get; set;}
+
+        /// <summary>
+        /// Generate a 'player_executed_cloudscript' PlayStream event containing the results of the function execution and other contextual information. This event will show up in the PlayStream debugger console for the player in Game Manager.
+        /// </summary>
+        public bool? GeneratePlayStreamEvent { get; set;}
+    }
+
+    public class ExecuteCloudScriptResult : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// The name of the function that executed
+        /// </summary>
+        public string FunctionName { get; set;}
+
+        /// <summary>
+        /// The revision of the CloudScript that executed
+        /// </summary>
+        public int Revision { get; set;}
+
+        /// <summary>
+        /// The object returned from the CloudScript function, if any
+        /// </summary>
+        public object FunctionResult { get; set;}
+
+        /// <summary>
+        /// Entries logged during the function execution. These include both entries logged in the function code using log.info() and log.error() and error entries for API and HTTP request failures.
+        /// </summary>
+        public List<LogStatement> Logs { get; set;}
+
+        public double ExecutionTimeSeconds { get; set;}
+
+        public uint MemoryConsumedBytes { get; set;}
+
+        /// <summary>
+        /// Number of PlayFab API requests issued by the CloudScript function
+        /// </summary>
+        public int APIRequestsIssued { get; set;}
+
+        /// <summary>
+        /// Number of external HTTP requests issued by the CloudScript function
+        /// </summary>
+        public int HttpRequestsIssued { get; set;}
+
+        /// <summary>
+        /// Information about the error, if any, that occured during execution
+        /// </summary>
+        public ScriptExecutionError Error { get; set;}
+    }
+
     public class FacebookPlayFabIdPair
     {
 
@@ -943,7 +999,7 @@ namespace PlayFab.ClientModels
     {
 
         /// <summary>
-        /// Array of inventory objects.
+        /// Array of items which can be purchased.
         /// </summary>
         public List<CatalogItem> Catalog { get; set;}
     }
@@ -995,11 +1051,6 @@ namespace PlayFab.ClientModels
     {
 
         /// <summary>
-        /// Unique PlayFab assigned ID of the user on whom the operation will be performed.
-        /// </summary>
-        public string PlayFabId { get; set;}
-
-        /// <summary>
         /// Unique PlayFab assigned ID for a specific character owned by a user
         /// </summary>
         public string CharacterId { get; set;}
@@ -1012,11 +1063,6 @@ namespace PlayFab.ClientModels
 
     public class GetCharacterInventoryResult : PlayFabResultCommon
     {
-
-        /// <summary>
-        /// PlayFab unique identifier of the user whose character inventory is being returned.
-        /// </summary>
-        public string PlayFabId { get; set;}
 
         /// <summary>
         /// Unique identifier of the character for this inventory.
@@ -1421,9 +1467,14 @@ namespace PlayFab.ClientModels
     {
 
         /// <summary>
-        /// statistics to return
+        /// statistics to return (current version will be returned for each)
         /// </summary>
         public List<string> StatisticNames { get; set;}
+
+        /// <summary>
+        /// statistics to return, if StatisticNames is not set (only statistics which have a version matching that provided will be returned)
+        /// </summary>
+        public List<StatisticNameVersion> StatisticNameVersions { get; set;}
     }
 
     public class GetPlayerStatisticsResult : PlayFabResultCommon
@@ -1433,6 +1484,24 @@ namespace PlayFab.ClientModels
         /// User statistics for the requested user.
         /// </summary>
         public List<StatisticValue> Statistics { get; set;}
+    }
+
+    public class GetPlayerStatisticVersionsRequest
+    {
+
+        /// <summary>
+        /// unique name of the statistic
+        /// </summary>
+        public string StatisticName { get; set;}
+    }
+
+    public class GetPlayerStatisticVersionsResult : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// version change history of the statistic
+        /// </summary>
+        public List<PlayerStatisticVersion> StatisticVersions { get; set;}
     }
 
     public class GetPlayerTradesRequest
@@ -1530,36 +1599,18 @@ namespace PlayFab.ClientModels
         public List<KongregatePlayFabIdPair> Data { get; set;}
     }
 
-    public class GetPlayFabIDsFromPSNAccountIDsRequest
-    {
-
-        /// <summary>
-        /// Array of unique PlayStation Network identifiers for which the title needs to get PlayFab identifiers.
-        /// </summary>
-        public List<string> PSNAccountIDs { get; set;}
-
-        /// <summary>
-        /// Id of the PSN issuer environment. If null, defaults to 256 (production)
-        /// </summary>
-        public int? IssuerId { get; set;}
-    }
-
-    public class GetPlayFabIDsFromPSNAccountIDsResult : PlayFabResultCommon
-    {
-
-        /// <summary>
-        /// Mapping of PlayStation Network identifiers to PlayFab identifiers.
-        /// </summary>
-        public List<PSNAccountPlayFabIdPair> Data { get; set;}
-    }
-
     public class GetPlayFabIDsFromSteamIDsRequest
     {
 
         /// <summary>
+        /// Deprecated: Please use SteamStringIDs
+        /// </summary>
+        public List<ulong> SteamIDs { get; set;}
+
+        /// <summary>
         /// Array of unique Steam identifiers (Steam profile IDs) for which the title needs to get PlayFab identifiers.
         /// </summary>
-        public List<uint> SteamIDs { get; set;}
+        public List<string> SteamStringIDs { get; set;}
     }
 
     public class GetPlayFabIDsFromSteamIDsResult : PlayFabResultCommon
@@ -1669,21 +1720,21 @@ namespace PlayFab.ClientModels
     {
 
         /// <summary>
+        /// catalog version to store items from. Use default catalog version if null
+        /// </summary>
+        public string CatalogVersion { get; set;}
+
+        /// <summary>
         /// Unqiue identifier for the store which is being requested.
         /// </summary>
         public string StoreId { get; set;}
-
-        /// <summary>
-        /// Catalog version for the requested store items. If null, defaults to most recent catalog.
-        /// </summary>
-        public string CatalogVersion { get; set;}
     }
 
     public class GetStoreItemsResult : PlayFabResultCommon
     {
 
         /// <summary>
-        /// Array of store items.
+        /// Array of items which can be purchased from this store.
         /// </summary>
         public List<StoreItem> Store { get; set;}
     }
@@ -1896,7 +1947,7 @@ namespace PlayFab.ClientModels
     {
 
         /// <summary>
-        /// Array of inventory items in the user's current inventory.
+        /// Array of inventory items belonging to the user.
         /// </summary>
         public List<ItemInstance> Inventory { get; set;}
 
@@ -2141,7 +2192,7 @@ namespace PlayFab.ClientModels
         public string AccessToken { get; set;}
 
         /// <summary>
-        /// If this Facebook account is already linked to a Playfab account, this will unlink the old account before linking the new one. Be careful when using this call, as it may orphan the old account. Defaults to false.
+        /// If another user is already linked to the account, unlink the other user and re-link.
         /// </summary>
         public bool? ForceLink { get; set;}
     }
@@ -2167,7 +2218,7 @@ namespace PlayFab.ClientModels
     {
 
         /// <summary>
-        /// Unique token from Google Play for the user.
+        /// Unique token (https://developers.google.com/android/reference/com/google/android/gms/auth/GoogleAuthUtil#public-methods) from Google Play for the user.
         /// </summary>
         public string AccessToken { get; set;}
     }
@@ -2217,29 +2268,6 @@ namespace PlayFab.ClientModels
     {
     }
 
-    public class LinkPSNAccountRequest
-    {
-
-        /// <summary>
-        /// Authentication code provided by the PlayStation Network.
-        /// </summary>
-        public string AuthCode { get; set;}
-
-        /// <summary>
-        /// Redirect URI supplied to PSN when requesting an auth code
-        /// </summary>
-        public string RedirectUri { get; set;}
-
-        /// <summary>
-        /// Id of the PSN issuer environment. If null, defaults to 256 (production)
-        /// </summary>
-        public int? IssuerId { get; set;}
-    }
-
-    public class LinkPSNAccountResult : PlayFabResultCommon
-    {
-    }
-
     public class LinkSteamAccountRequest
     {
 
@@ -2250,19 +2278,6 @@ namespace PlayFab.ClientModels
     }
 
     public class LinkSteamAccountResult : PlayFabResultCommon
-    {
-    }
-
-    public class LinkXboxAccountRequest
-    {
-
-        /// <summary>
-        /// Token provided by the Xbox Live SDK/XDK method GetTokenAndSignatureAsync("POST", "https://playfabapi.com", "").
-        /// </summary>
-        public string XboxToken { get; set;}
-    }
-
-    public class LinkXboxAccountResult : PlayFabResultCommon
     {
     }
 
@@ -2455,7 +2470,7 @@ namespace PlayFab.ClientModels
         public string TitleId { get; set;}
 
         /// <summary>
-        /// Unique token from Google Play for the user.
+        /// Unique token (https://developers.google.com/android/reference/com/google/android/gms/auth/GoogleAuthUtil#public-methods) from Google Play for the user.
         /// </summary>
         public string AccessToken { get; set;}
 
@@ -2508,7 +2523,7 @@ namespace PlayFab.ClientModels
         public string TitleId { get; set;}
 
         /// <summary>
-        /// Unique identifier from Kongregate for the user.
+        /// Numeric user ID assigned by Kongregate
         /// </summary>
         public string KongregateId { get; set;}
 
@@ -2542,35 +2557,6 @@ namespace PlayFab.ClientModels
         public string Password { get; set;}
     }
 
-    public class LoginWithPSNRequest
-    {
-
-        /// <summary>
-        /// Unique identifier for the title, found in the Settings > Game Properties section of the PlayFab developer site when a title has been selected
-        /// </summary>
-        public string TitleId { get; set;}
-
-        /// <summary>
-        /// Auth code provided by the PSN OAuth provider.
-        /// </summary>
-        public string AuthCode { get; set;}
-
-        /// <summary>
-        /// Redirect URI supplied to PSN when requesting an auth code
-        /// </summary>
-        public string RedirectUri { get; set;}
-
-        /// <summary>
-        /// Id of the PSN issuer environment. If null, defaults to 256 (production)
-        /// </summary>
-        public int? IssuerId { get; set;}
-
-        /// <summary>
-        /// Automatically create a PlayFab account if one is not currently linked to this PSN account.
-        /// </summary>
-        public bool? CreateAccount { get; set;}
-    }
-
     public class LoginWithSteamRequest
     {
 
@@ -2590,23 +2576,20 @@ namespace PlayFab.ClientModels
         public bool? CreateAccount { get; set;}
     }
 
-    public class LoginWithXboxRequest
+    public class LogStatement
     {
 
         /// <summary>
-        /// Unique identifier for the title, found in the Settings > Game Properties section of the PlayFab developer site when a title has been selected
+        /// 'Debug', 'Info', or 'Error'
         /// </summary>
-        public string TitleId { get; set;}
+        public string Level { get; set;}
+
+        public string Message { get; set;}
 
         /// <summary>
-        /// Token provided by the Xbox Live SDK/XDK method GetTokenAndSignatureAsync("POST", "https://playfabapi.com", "").
+        /// Optional object accompanying the message as contextual information
         /// </summary>
-        public string XboxToken { get; set;}
-
-        /// <summary>
-        /// Automatically create a PlayFab account if one is not currently linked to this Xbox Live account.
-        /// </summary>
-        public bool? CreateAccount { get; set;}
+        public object Data { get; set;}
     }
 
     public class MatchmakeRequest
@@ -2732,7 +2715,7 @@ namespace PlayFab.ClientModels
         public List<string> RequestedCatalogItemIds { get; set;}
 
         /// <summary>
-        /// Players who are allowed to accept the trade. If null, the trade may be accepted by any player.
+        /// Players who are allowed to accept the trade. If null, the trade may be accepted by any player. If empty, the trade may not be accepted by any player.
         /// </summary>
         public List<string> AllowedPlayerIds { get; set;}
     }
@@ -2867,18 +2850,38 @@ namespace PlayFab.ClientModels
         public int Position { get; set;}
     }
 
-    public class PSNAccountPlayFabIdPair
+    public class PlayerStatisticVersion
     {
 
         /// <summary>
-        /// Unique PlayStation Network identifier for a user.
+        /// name of the statistic when the version became active
         /// </summary>
-        public string PSNAccountId { get; set;}
+        public string StatisticName { get; set;}
 
         /// <summary>
-        /// Unique PlayFab identifier for a user, or null if no PlayFab account is linked to the PlayStation Network identifier.
+        /// version of the statistic
         /// </summary>
-        public string PlayFabId { get; set;}
+        public uint Version { get; set;}
+
+        /// <summary>
+        /// time at which the statistic version was scheduled to become active, based on the configured ResetInterval
+        /// </summary>
+        public DateTime? ScheduledActivationTime { get; set;}
+
+        /// <summary>
+        /// time when the statistic version became active
+        /// </summary>
+        public DateTime ActivationTime { get; set;}
+
+        /// <summary>
+        /// time at which the statistic version was scheduled to become inactive, based on the configured ResetInterval
+        /// </summary>
+        public DateTime? ScheduledDeactivationTime { get; set;}
+
+        /// <summary>
+        /// time when the statistic version became inactive due to statistic version incrementing
+        /// </summary>
+        public DateTime? DeactivationTime { get; set;}
     }
 
     public class PurchaseItemRequest
@@ -2945,25 +2948,6 @@ namespace PlayFab.ClientModels
         /// Items granted to the player as a result of redeeming the coupon.
         /// </summary>
         public List<ItemInstance> GrantedItems { get; set;}
-    }
-
-    public class RefreshPSNAuthTokenRequest
-    {
-
-        /// <summary>
-        /// Auth code returned by PSN OAuth system.
-        /// </summary>
-        public string AuthCode { get; set;}
-
-        /// <summary>
-        /// Redirect URI supplied to PSN when requesting an auth code
-        /// </summary>
-        public string RedirectUri { get; set;}
-
-        /// <summary>
-        /// Id of the PSN issuer environment. If null, defaults to 256 (production)
-        /// </summary>
-        public int? IssuerId { get; set;}
     }
 
     public enum Region
@@ -3217,6 +3201,25 @@ namespace PlayFab.ClientModels
         public double ExecutionTime { get; set;}
     }
 
+    public class ScriptExecutionError
+    {
+
+        /// <summary>
+        /// Error code, such as CloudScriptNotFound, JavascriptException, CloudScriptFunctionArgumentSizeExceeded, CloudScriptAPIRequestCountExceeded, CloudScriptAPIRequestError, or CloudScriptHTTPRequestError
+        /// </summary>
+        public string Error { get; set;}
+
+        /// <summary>
+        /// Details about the error
+        /// </summary>
+        public string Message { get; set;}
+
+        /// <summary>
+        /// Point during the execution of the script at which the error occurred, if any
+        /// </summary>
+        public string StackTrace { get; set;}
+    }
+
     public class SendAccountRecoveryEmailRequest
     {
 
@@ -3393,6 +3396,20 @@ namespace PlayFab.ClientModels
         public Dictionary<string,int> VirtualCurrencyBalances { get; set;}
     }
 
+    public class StatisticNameVersion
+    {
+
+        /// <summary>
+        /// unique name of the statistic
+        /// </summary>
+        public string StatisticName { get; set;}
+
+        /// <summary>
+        /// the version of the statistic to be returned
+        /// </summary>
+        public uint Version { get; set;}
+    }
+
     public class StatisticUpdate
     {
 
@@ -3428,16 +3445,21 @@ namespace PlayFab.ClientModels
         /// <summary>
         /// for updates to an existing statistic value for a player, the version of the statistic when it was loaded
         /// </summary>
-        public string Version { get; set;}
+        public uint Version { get; set;}
     }
 
     public class SteamPlayFabIdPair
     {
 
         /// <summary>
+        /// Deprecated: Please use SteamStringId
+        /// </summary>
+        public ulong SteamId { get; set;}
+
+        /// <summary>
         /// Unique Steam identifier for a user.
         /// </summary>
-        public uint SteamId { get; set;}
+        public string SteamStringId { get; set;}
 
         /// <summary>
         /// Unique PlayFab identifier for a user, or null if no PlayFab account is linked to the Steam identifier.
@@ -3689,14 +3711,6 @@ namespace PlayFab.ClientModels
     {
     }
 
-    public class UnlinkPSNAccountRequest
-    {
-    }
-
-    public class UnlinkPSNAccountResult : PlayFabResultCommon
-    {
-    }
-
     public class UnlinkSteamAccountRequest
     {
     }
@@ -3705,29 +3719,40 @@ namespace PlayFab.ClientModels
     {
     }
 
-    public class UnlinkXboxAccountRequest
+    public class UnlockContainerInstanceRequest
     {
 
         /// <summary>
-        /// Token provided by the Xbox Live SDK/XDK method GetTokenAndSignatureAsync("POST", "https://playfabapi.com", "").
+        /// Unique PlayFab assigned ID for a specific character owned by a user
         /// </summary>
-        public string XboxToken { get; set;}
-    }
+        public string CharacterId { get; set;}
 
-    public class UnlinkXboxAccountResult : PlayFabResultCommon
-    {
+        /// <summary>
+        /// ItemInstanceId of the container to unlock.
+        /// </summary>
+        public string ContainerItemInstanceId { get; set;}
+
+        /// <summary>
+        /// ItemInstanceId of the key that will be consumed by unlocking this container.  If the container requires a key, this parameter is required.
+        /// </summary>
+        public string KeyItemInstanceId { get; set;}
+
+        /// <summary>
+        /// Specifies the catalog version that should be used to determine container contents.  If unspecified, uses catalog associated with the item instance.
+        /// </summary>
+        public string CatalogVersion { get; set;}
     }
 
     public class UnlockContainerItemRequest
     {
 
         /// <summary>
-        /// Category ItemId of the container type to unlock.
+        /// Catalog ItemId of the container type to unlock.
         /// </summary>
         public string ContainerItemId { get; set;}
 
         /// <summary>
-        /// Catalog version of the container.
+        /// Specifies the catalog version that should be used to determine container contents.  If unspecified, uses default/primary catalog.
         /// </summary>
         public string CatalogVersion { get; set;}
 
@@ -3885,7 +3910,7 @@ namespace PlayFab.ClientModels
     {
 
         /// <summary>
-        /// Statistics to be updated with the provided values.
+        /// Statistics to be updated with the provided values. UserStatistics object must follow the Key(string), Value(int) pattern.
         /// </summary>
         public Dictionary<string,int> UserStatistics { get; set;}
     }
@@ -4120,7 +4145,8 @@ namespace PlayFab.ClientModels
         PSN,
         GameCenter,
         CustomId,
-        XboxLive
+        XboxLive,
+        Parse
     }
 
     public class UserPrivateAccountInfo
@@ -4323,5 +4349,76 @@ namespace PlayFab.ClientModels
         /// Maximum value to which the regenerating currency will automatically increment. Note that it can exceed this value through use of the AddUserVirtualCurrency API call. However, it will not regenerate automatically until it has fallen below this value.
         /// </summary>
         public int RechargeMax { get; set;}
+    }
+
+    public class WriteClientCharacterEventRequest
+    {
+
+        /// <summary>
+        /// Unique PlayFab assigned ID for a specific character owned by a user
+        /// </summary>
+        public string CharacterId { get; set;}
+
+        /// <summary>
+        /// The name of this event. This field is alphanumeric and at most 64 characters long. It is internally namespaced down onto the calling title. Best practices are to name in subject_verb_object format (player_logged_in).
+        /// </summary>
+        public string EventName { get; set;}
+
+        /// <summary>
+        /// The time (in UTC) associated with this event. If omitted, a timestamp of now in UTC will be applied.
+        /// </summary>
+        public DateTime? Timestamp { get; set;}
+
+        /// <summary>
+        /// Arbitrary json values that represent the custom body of this event.
+        /// </summary>
+        public Dictionary<string,object> Body { get; set;}
+    }
+
+    public class WriteClientPlayerEventRequest
+    {
+
+        /// <summary>
+        /// The name of this event. This field is alphanumeric and at most 64 characters long. It is internally namespaced down onto the calling title. Best practices are to name in subject_verb_object format (player_logged_in).
+        /// </summary>
+        public string EventName { get; set;}
+
+        /// <summary>
+        /// The time (in UTC) associated with this event. If omitted, a timestamp of 'now' in UTC will be applied.
+        /// </summary>
+        public DateTime? Timestamp { get; set;}
+
+        /// <summary>
+        /// Arbitrary json values that represent the custom body of this event.
+        /// </summary>
+        public Dictionary<string,object> Body { get; set;}
+    }
+
+    public class WriteEventResponse : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// The ID of the event as it was written to PlayStream. This is an alphanumeric GUID.
+        /// </summary>
+        public string EventId { get; set;}
+    }
+
+    public class WriteTitleEventRequest
+    {
+
+        /// <summary>
+        /// The name of this event. This field is alphanumeric and at most 64 characters long. It is internally namespaced down onto the calling title. Best practices are to name in subject_verb_object format (player_logged_in).
+        /// </summary>
+        public string EventName { get; set;}
+
+        /// <summary>
+        /// The time (in UTC) associated with this event. If omitted, a timestamp of now in UTC will be applied.
+        /// </summary>
+        public DateTime? Timestamp { get; set;}
+
+        /// <summary>
+        /// Arbitrary json values that represent the custom body of this event.
+        /// </summary>
+        public Dictionary<string,object> Body { get; set;}
     }
 }

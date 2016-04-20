@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
@@ -36,6 +36,7 @@ public class CreateChannelMessage : MessageBase
     public string ChannelId = Guid.NewGuid().ToString();
     public string MemberId;
     public string MemberName;
+	public bool isInviteOnly = true;
 }
 
 public class CreateChannelResponseMessage : MessageBase
