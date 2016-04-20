@@ -11,6 +11,8 @@ public class ChatServerListener : Mediator {
     [Inject] public CreateChannelSignal CreateChannelSignal { get; set; }
     [Inject] public LeaveChannelSignal LeaveChannelSignal { get; set; }
     [Inject] public JoinChannelSignal JoinChannelSignal { get; set; }
+    [Inject] public UnityNetworkingData UnityNetworkingData { get; set; }
+    [Inject] public ClientDisconnectedSignal ClientDisconnectedSignal { get; set; }
 
     public override void OnRegister()
     {
@@ -19,6 +21,7 @@ public class ChatServerListener : Mediator {
         NetworkServer.RegisterHandler(ChatServerMessageTypes.LeaveChannel, OnLeaveChannel);
         NetworkServer.RegisterHandler(ChatServerMessageTypes.ChannelMessage, OnChannelMessage);
         //NetworkServer.RegisterHandler(ChatServerMessageTypes.PrivateMessage, OnPrivateMessage);
+        ClientDisconnectedSignal.AddListener(OnUserDisconnected);
     }
 
     /*
@@ -85,6 +88,28 @@ public class ChatServerListener : Mediator {
         {
             CreateChannelSignal.Dispatch(message);
         }
+    }
+
+    private void OnUserDisconnected(int connId, string playFabId)
+    {
+        Debug.Log("Chat Server, A user Diconnected.");
+
+        //TODO: Put this in a command for gods sake.
+        foreach (var channel in ChatServerData.ServerChannels)
+        {
+            var member = channel.Members.Find(m => m.MemberId == playFabId);
+            if (member != null)
+            {
+                channel.Members.Remove(member);
+                Debug.Log("Member found in channel "  + channel.ChannelId + ", Removing User.");
+            }
+
+            if (channel.Members.Count == 0 && channel.IsInviteOnly)
+            {
+                ChatServerData.ServerChannels.Remove(channel);
+            }
+        }
+
     }
 
 }

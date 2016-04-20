@@ -1,6 +1,9 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using PlayFab;
+using PlayFab.ServerModels;
 using strange.extensions.command.impl;
 using strange.extensions.signal.impl;
 
@@ -11,6 +14,9 @@ public class CreateChannelCommand : Command
     [Inject] public CreateChannelMessage Message { get; set; }
     [Inject] public ChatServerData ChatServerData { get; set; }
     [Inject] public SendCreateChannelReponseSignal Signal { get; set; }
+    [Inject] public WriteTitleEventSignal WriteTitleEventSignal { get; set; }
+    [Inject] public WritePlayerEventSignal WritePlayerEventSignal { get; set; }
+    [Inject] public ServerSettingsData ServerSettings { get; set; }
 
     public override void Execute()
     {
@@ -34,6 +40,25 @@ public class CreateChannelCommand : Command
                 MemberId = Message.MemberId,
                 ChannelId = newChannel.ChannelId,
                 Created =  true
+            });
+            WriteTitleEventSignal.Dispatch(new WriteTitleEventRequest()
+            {
+                EventName = "NewChatChannelCreated",
+                Body = new Dictionary<string, object>()
+                {
+                    {"ChannelId", newChannel.ChannelId},
+                    {"GameId", ServerSettings.GameId},
+                    {"CreatedBy", Message.MemberId }
+                }
+            });
+            WritePlayerEventSignal.Dispatch(new WriteServerPlayerEventRequest()
+            {
+                EventName = "PlayerJoinedChat",
+                PlayFabId = Message.MemberId,
+                Body = new Dictionary<string, object>()
+                {
+                    {"ChannelId",  newChannel.ChannelId },
+                }
             });
             return;
         }
@@ -60,7 +85,15 @@ public class CreateChannelCommand : Command
                 ChannelId = channel.ChannelId,
                 Created = true
             });
-
+            WritePlayerEventSignal.Dispatch(new WriteServerPlayerEventRequest()
+            {
+                EventName = "PlayerJoinedChat",
+                PlayFabId = Message.MemberId,
+                Body = new Dictionary<string, object>()
+                {
+                    {"ChannelId",  channel.ChannelId },
+                }
+            });
         }
 
     }
@@ -73,6 +106,7 @@ public class JoinChannelCommand : Command
     [Inject] public JoinChannelMessage Message { get; set; }
     [Inject] public SendJoinedReponseSignal Signal { get; set; }
     [Inject] public ChatServerData ChatServerData { get; set; }
+    [Inject] public WritePlayerEventSignal WritePlayerEventSignal { get; set; }
 
     public override void Execute()
     {
@@ -88,6 +122,15 @@ public class JoinChannelCommand : Command
             {
                 ChannelId = Message.ChannelId,
                 Joined = true
+            });
+            WritePlayerEventSignal.Dispatch(new WriteServerPlayerEventRequest()
+            {
+                EventName = "PlayerJoinedChat",
+                PlayFabId = Message.MemberId,
+                Body = new Dictionary<string, object>()
+                {
+                    {"ChannelId",  channel.ChannelId },
+                }
             });
         }
         else
@@ -108,6 +151,10 @@ public class LeaveChannelCommand : Command
 {
     [Inject] public LeaveChannelMessage Message { get; set; }
     [Inject] public ChatServerData ChatServerData { get; set; }
+    [Inject] public WritePlayerEventSignal WritePlayerEventSignal { get; set; }
+    [Inject] public WriteTitleEventSignal WriteTitleEventSignal { get; set; }
+    [Inject] public ServerSettingsData ServerSettings { get; set; }
+
     public override void Execute()
     {
         var channel = ChatServerData.ServerChannels.Find(c => c.ChannelId == Message.ChannelId);
@@ -117,7 +164,34 @@ public class LeaveChannelCommand : Command
             if (member != null)
             {
                 channel.Members.Remove(member);
+                WritePlayerEventSignal.Dispatch(new WriteServerPlayerEventRequest()
+                {
+                    EventName = "PlayerLeftChat",
+                    PlayFabId = Message.MemberId,
+                    Body = new Dictionary<string, object>()
+                    {
+                        {"ChannelId", channel.ChannelId}
+                    }
+                });
+
             }
+
+            if (channel.Members.Count == 0 && channel.IsInviteOnly)
+            {
+                ChatServerData.ServerChannels.Remove(channel);
+                WriteTitleEventSignal.Dispatch(new WriteTitleEventRequest()
+                {
+                    EventName = "ChatChannelRemoved",
+                    Body = new Dictionary<string, object>()
+                    {
+                        {"ChannelId", channel.ChannelId},
+                        {"GameId", ServerSettings.GameId},
+                        {"LastPlayer", Message.MemberId}
+                    }
+                });
+
+            }
+
         }
     }
 }
@@ -129,6 +203,8 @@ public class SendMessageCommand : Command
     [Inject] public ChatMessage Message { get; set; }
     [Inject] public ChatServerData ChatServerData { get; set; }
     [Inject] public UnityNetworkingData UnityNetworkingData { get; set; }
+    [Inject] public WritePlayerEventSignal WritePlayerEventSignal { get; set; }
+
     public override void Execute()
     {
         var channel = ChatServerData.ServerChannels.Find(c => c.ChannelId == Message.ChannelId);
@@ -139,9 +215,20 @@ public class SendMessageCommand : Command
         foreach (var member in channel.Members)
         {
             var memberConn = UnityNetworkingData.Connections.Find(mc => mc.PlayFabId == member.MemberId);
-            if (memberConn != null)
+            if (memberConn != null && memberConn.PlayFabId != Message.SenderUserId)
             {
                 memberConn.Connection.Send(ChatServerMessageTypes.ChannelMessage, Message);
+                Debug.Log("Message Sent to " + Message.SenderUserId);
+                WritePlayerEventSignal.Dispatch(new WriteServerPlayerEventRequest()
+                {
+                    EventName = "PlayerSentMessage",
+                    PlayFabId = Message.SenderUserId,
+                    Body = new Dictionary<string, object>()
+                    {
+                        {"ChannelId", channel.ChannelId},
+                        {"MessageSent",Message.Message }
+                    }
+                });
             }
         }
     }

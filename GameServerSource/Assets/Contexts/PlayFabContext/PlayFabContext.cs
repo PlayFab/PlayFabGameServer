@@ -99,12 +99,16 @@ public class PlayFabContext : MVCSContext
         #region Title-Wide Data Management
         injectionBinder.Bind<GetCatalogItemsSignal>().CrossContext();
         injectionBinder.Bind<GetCatalogItemsResponseSignal>().CrossContext();
+        injectionBinder.Bind<GetPublisherDataSignal>().CrossContext();
+        injectionBinder.Bind<GetPublisherDataResponseSignal>().CrossContext();
         injectionBinder.Bind<GetTitleDataSignal>().CrossContext();
         injectionBinder.Bind<GetTitleDataResponseSignal>().CrossContext();
         injectionBinder.Bind<GetTitleInternalDataSignal>().CrossContext();
         injectionBinder.Bind<GetTitleInternalDataResponseSignal>().CrossContext();
         injectionBinder.Bind<GetTitleNewsSignal>().CrossContext();
         injectionBinder.Bind<GetTitleNewsResponseSignal>().CrossContext();
+        injectionBinder.Bind<SetPublisherDataSignal>().CrossContext();
+        injectionBinder.Bind<SetPublisherDataResponseSignal>().CrossContext();
         injectionBinder.Bind<SetTitleDataSignal>().CrossContext();
         injectionBinder.Bind<SetTitleDataResponseSignal>().CrossContext();
         injectionBinder.Bind<SetTitleInternalDataSignal>().CrossContext();
@@ -172,6 +176,12 @@ public class PlayFabContext : MVCSContext
         #region Analytics
         injectionBinder.Bind<LogEventSignal>().CrossContext();
         injectionBinder.Bind<LogEventResponseSignal>().CrossContext();
+        injectionBinder.Bind<WriteCharacterEventSignal>().CrossContext();
+        injectionBinder.Bind<WriteCharacterEventResponseSignal>().CrossContext();
+        injectionBinder.Bind<WritePlayerEventSignal>().CrossContext();
+        injectionBinder.Bind<WritePlayerEventResponseSignal>().CrossContext();
+        injectionBinder.Bind<WriteTitleEventSignal>().CrossContext();
+        injectionBinder.Bind<WriteTitleEventResponseSignal>().CrossContext();
         #endregion
         //Shared Group Data
         #region Shared Group Data
@@ -181,19 +191,17 @@ public class PlayFabContext : MVCSContext
         injectionBinder.Bind<CreateSharedGroupResponseSignal>().CrossContext();
         injectionBinder.Bind<DeleteSharedGroupSignal>().CrossContext();
         injectionBinder.Bind<DeleteSharedGroupResponseSignal>().CrossContext();
-        injectionBinder.Bind<GetPublisherDataSignal>().CrossContext();
-        injectionBinder.Bind<GetPublisherDataResponseSignal>().CrossContext();
         injectionBinder.Bind<GetSharedGroupDataSignal>().CrossContext();
         injectionBinder.Bind<GetSharedGroupDataResponseSignal>().CrossContext();
         injectionBinder.Bind<RemoveSharedGroupMembersSignal>().CrossContext();
         injectionBinder.Bind<RemoveSharedGroupMembersResponseSignal>().CrossContext();
-        injectionBinder.Bind<SetPublisherDataSignal>().CrossContext();
-        injectionBinder.Bind<SetPublisherDataResponseSignal>().CrossContext();
         injectionBinder.Bind<UpdateSharedGroupDataSignal>().CrossContext();
         injectionBinder.Bind<UpdateSharedGroupDataResponseSignal>().CrossContext();
         #endregion
         //Server-Side Cloud Script
         #region Server-Side Cloud Script
+        injectionBinder.Bind<ExecuteCloudScriptSignal>().CrossContext();
+        injectionBinder.Bind<ExecuteCloudScriptResponseSignal>().CrossContext();
         #endregion
         //Content
         #region Content

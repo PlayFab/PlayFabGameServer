@@ -215,7 +215,11 @@ namespace PlayFab
         CloudScriptHTTPRequestError = 1211,
         InsufficientGuildRole = 1212,
         GuildNotFound = 1213,
-        OverLimit = 1214
+        OverLimit = 1214,
+        EventNotFound = 1215,
+        InvalidEventField = 1216,
+        InvalidEventName = 1217,
+        CatalogNotConfigured = 1218
     }
 
     public delegate void ErrorCallback(PlayFabError error);
