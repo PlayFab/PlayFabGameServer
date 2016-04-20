@@ -137,7 +137,7 @@ public class ChatInterfaceLogic : MonoBehaviour {
 	{
 		var chat_message = netMsg.ReadMessage<ChatMessage>();
 
-		ReceiveMessage (chat_message.SenderUserId, chat_message.Message, chat_message.Timestamp.ToString ());
+		ReceiveMessage (chat_message.SenderUserName, chat_message.Message, chat_message.Timestamp.ToString ());
 	}
 
 	public void ChannelDropdown(int index)
