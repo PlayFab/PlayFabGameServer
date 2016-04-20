@@ -20,6 +20,8 @@ public class CreateChannelCommand : Command
             var newChannel = new ChatChannel()
             {
                 ChannelId = Message.ChannelId,
+				IsInviteOnly = Message.IsInviteOnly
+
             };
             newChannel.Members.Add(new ChatChannelMember()
             {
@@ -35,7 +37,7 @@ public class CreateChannelCommand : Command
             });
             return;
         }
-        else if (channel.IsUserCreated)
+        else if (channel.IsInviteOnly)
         {
             Signal.Dispatch(new CreateChannelResponseMessage()
             {

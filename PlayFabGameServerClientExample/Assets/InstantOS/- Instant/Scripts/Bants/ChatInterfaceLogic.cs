@@ -208,6 +208,7 @@ public class ChatInterfaceLogic : MonoBehaviour {
 	//To support multiple channels, here we store the connection between the channel id, and the ui content view in the scene that will display those messages.
 	public List<ChannelTransformConnection> channel_transform_connections = new List<ChannelTransformConnection>();
 
+	/*
 	public void Start ()
 	{
 		StartCoroutine (TestThread ());
@@ -223,7 +224,7 @@ public class ChatInterfaceLogic : MonoBehaviour {
 			ReceiveMessage (senders[UnityEngine.Random.Range(0,3)], UnityEngine.Random.Range(1,100).ToString (), DateTime.Now.ToString());
 		}
 	}
-
+*/
 
 
 	public InputField input_text_field;
@@ -234,6 +235,9 @@ public class ChatInterfaceLogic : MonoBehaviour {
 
 	public Dropdown channel_dropdown;
 
+	public Transform chat_window_transform;
+
+	public GameObject chat_content_prefab;
 
 	private List<GameObject> old_objects = new List<GameObject>(); //Store our created gameobjects, so we can delete old ones if we have too many.
 	private string last_received_message_sender = "";
@@ -244,8 +248,60 @@ public class ChatInterfaceLogic : MonoBehaviour {
 
 		//Register for Messages
 		_network.RegisterHandler(ChatServerMessageTypes.ChannelMessage, OnChannelMessage);
+		_network.RegisterHandler(ChatServerMessageTypes.JoinChannelResponse, OnJoinChannelResponse);
+		_network.RegisterHandler(ChatServerMessageTypes.CreateChannelResponse, OnCreateChannelResponse);
+
+		Debug.Log ("send create channel");
+		_network.Send(ChatServerMessageTypes.CreateChannel, new CreateChannelMessage()
+			{
+				ChannelId = "General",
+				IsInviteOnly = false
+			});
 	}
 
+	private void OnCreateChannelResponse(NetworkMessage netMsg)
+	{
+		Debug.Log ("OnCreateChannelResponse");
+
+		var response_message = netMsg.ReadMessage<CreateChannelResponseMessage>();
+
+		if(response_message.Created)
+		{
+			GameObject new_object = Instantiate (chat_content_prefab) as GameObject;
+			Transform new_transform = new_object.transform;
+			new_transform.SetParent (chat_window_transform, false);
+
+			channel_transform_connections.Add (new ChannelTransformConnection() {
+				ChannelId = response_message.ChannelId,
+				ChatContentTransform = new_transform
+			});
+
+			channel_dropdown.AddOptions( new List<string>() {response_message.ChannelId});
+
+		}
+	}
+
+	private void OnJoinChannelResponse(NetworkMessage netMsg)
+	{
+		Debug.Log ("OnJoinChannelResponse");
+
+		var response_message = netMsg.ReadMessage<JoinChannelResponseMessage>();
+
+		if(response_message.Joined)
+		{
+			GameObject new_object = Instantiate (chat_content_prefab) as GameObject;
+			Transform new_transform = new_object.transform;
+			new_transform.SetParent (chat_window_transform, false);
+
+			channel_transform_connections.Add (new ChannelTransformConnection() {
+				ChannelId = response_message.ChannelId,
+				ChatContentTransform = new_transform
+			});
+
+			channel_dropdown.AddOptions( new List<string>() {response_message.ChannelId});
+
+		}
+	}
 
 	private void OnChannelMessage(NetworkMessage netMsg)
 	{
@@ -259,13 +315,14 @@ public class ChatInterfaceLogic : MonoBehaviour {
 		if ("Create Channel..." == channel_dropdown.options[index].text){
 			_network.Send(ChatServerMessageTypes.CreateChannel, new CreateChannelMessage()
 				{
-					
+					IsInviteOnly = false
 				});
 		}
 		else{	 //Selected existing channel:
 			for(int i=0;i<channel_transform_connections.Count;i++){
 				if (channel_transform_connections[i].ChannelId == channel_dropdown.options[index].text){
 					channel_transform_connections[i].ChatContentTransform.gameObject.SetActive (true);
+					chat_transform = channel_transform_connections[i].ChatContentTransform;
 				}
 				else{
 					channel_transform_connections[i].ChatContentTransform.gameObject.SetActive (false);

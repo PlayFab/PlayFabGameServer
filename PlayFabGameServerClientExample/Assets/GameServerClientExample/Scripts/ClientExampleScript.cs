@@ -9,6 +9,8 @@ using UnityEngine.UI;
 public class ClientExampleScript : MonoBehaviour
 {
     public bool IsLocalNetwork;
+	public string host = "localhost";
+	public int port = 7777;
     public string TitleId;
     public string PlayFabId;
     public string BuildVersion;
@@ -129,6 +131,10 @@ public class ClientExampleScript : MonoBehaviour
         _network.RegisterHandler(GameServerMsgTypes.OnTitleNewsUpdate, OnTitleNewsUpdate);
 
         //If this fails, it will automatically disconnect from the server.
+		if (IsLocalNetwork){
+			host = this.host;
+			port = this.port;
+		}
         _network.Connect(host, port);
         Debug.LogFormat("Network Client Created, waiting for connection on ServerHost:{0} Port:{1}", host, port);
 
@@ -141,11 +147,6 @@ public class ClientExampleScript : MonoBehaviour
          */ 
 
 
-		//Initialize Chat Interface with our NetworkClient:
-		if (ChatInterface != null)
-		{
-			ChatInterface.Initialize (_network);
-		}
 
     }
 
@@ -168,6 +169,7 @@ public class ClientExampleScript : MonoBehaviour
             PlayFabId = PlayFabId,
             AuthTicket = !string.IsNullOrEmpty(GameServerAuthTicket) ? GameServerAuthTicket : SessionTicket
         });
+
     }
 
     private void OnAuthenticated(NetworkMessage netMsg)
@@ -175,6 +177,12 @@ public class ClientExampleScript : MonoBehaviour
         StartText.text = "Ready";
         Debug.Log("Sending Custom Message to the server, telling it to do something ");
         _network.Send(GameServerMsgTypes.MsgRecieverExample, new StringMessage());
+
+		//Initialize Chat Interface with our NetworkClient:
+		if (ChatInterface != null)
+		{
+			ChatInterface.Initialize (_network);
+		}
     }
 
     private void OnMsgRecieverExampleResponse(NetworkMessage netMsg)
