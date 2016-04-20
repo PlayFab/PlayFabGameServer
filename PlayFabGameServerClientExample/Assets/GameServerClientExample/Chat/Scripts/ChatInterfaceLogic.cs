@@ -13,10 +13,6 @@ public class ChannelTransformConnection {
 
 public class ChatInterfaceLogic : MonoBehaviour {
 
-	public Animator contact_list;
-	public Animator conversation_screen;
-
-	public Transform contact_list_transform;
 	public Transform chat_transform;
 	public GameObject received_message_header;
 	public GameObject received_message_prefab;
@@ -35,7 +31,7 @@ public class ChatInterfaceLogic : MonoBehaviour {
 
 	public int old_object_limit = 100;
 
-	private NetworkClient _network;
+	public string PlayerUsername = "Newbie";
 
 	public Dropdown channel_dropdown;
 
@@ -43,8 +39,13 @@ public class ChatInterfaceLogic : MonoBehaviour {
 
 	public GameObject chat_content_prefab;
 
+	public Button send_button;
+
 	private string PlayFabId;
-	public string PlayerUsername = "Newbie";
+
+	private NetworkClient _network;
+
+
 
 	private string current_channel_id;
 
@@ -91,6 +92,9 @@ public class ChatInterfaceLogic : MonoBehaviour {
 			current_channel_id = response_message.ChannelId;
 			channel_dropdown.value = channel_dropdown.options.Count-1; //select the new room
 
+			send_button.interactable = true;
+			input_text_field.interactable = true;
+
 		}
 	}
 
@@ -115,6 +119,8 @@ public class ChatInterfaceLogic : MonoBehaviour {
 			current_channel_id = response_message.ChannelId;
 			channel_dropdown.value = channel_dropdown.options.Count-1; //select the new room
 
+			send_button.interactable = true;
+			input_text_field.interactable = true;
 		}
 	}
 
