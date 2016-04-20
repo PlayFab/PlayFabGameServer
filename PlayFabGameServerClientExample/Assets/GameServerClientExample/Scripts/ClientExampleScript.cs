@@ -181,7 +181,7 @@ public class ClientExampleScript : MonoBehaviour
 		//Initialize Chat Interface with our NetworkClient:
 		if (ChatInterface != null)
 		{
-			ChatInterface.Initialize (_network);
+			ChatInterface.Initialize (_network, PlayFabId);
 		}
     }
 
