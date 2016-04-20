@@ -43,9 +43,12 @@ public class MainGameServerContext : MVCSContext
         //TODO: If your using Photon Networking then keep the line below, otherwise comment it out.
         //PhotonNetworkingBindingsFactory.Create(commandBinder, injectionBinder);
         #endregion
-        
-        /* LOAD YOUR BINDINGS HERE */
 
+        #region Chat Server Bindings
+        ChatServerFactory.Create(commandBinder, injectionBinder, mediationBinder);
+        #endregion
+
+        /* LOAD YOUR BINDINGS HERE */
         //This is an example of recieving a message and sending a result back to the Client.
         mediationBinder.Bind<MsgReceiverExampleView>().To<MsgReceiverExampleMediator>();
         mediationBinder.Bind<NewPromoExampleView>().To<NewPromoExampleMediator>();

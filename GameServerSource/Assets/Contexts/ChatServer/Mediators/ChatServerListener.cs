@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using strange.extensions.mediation.impl;
 using UnityEngine.Networking;
 using UnityEngine.Networking.NetworkSystem;
 
 public class ChatServerListener : Mediator {
+    [Inject] public ChatServerData ChatServerData { get; set; }
     [Inject] public SendMessageSignal SendMessageSignal { get; set; }
     [Inject] public CreateChannelSignal CreateChannelSignal { get; set; }
     [Inject] public LeaveChannelSignal LeaveChannelSignal { get; set; }
@@ -16,19 +18,38 @@ public class ChatServerListener : Mediator {
         NetworkServer.RegisterHandler(ChatServerMessageTypes.JoinChannel, OnJoinChannel);
         NetworkServer.RegisterHandler(ChatServerMessageTypes.LeaveChannel, OnLeaveChannel);
         NetworkServer.RegisterHandler(ChatServerMessageTypes.ChannelMessage, OnChannelMessage);
-        NetworkServer.RegisterHandler(ChatServerMessageTypes.PrivateMessage, OnPrivateMessage);
+        //NetworkServer.RegisterHandler(ChatServerMessageTypes.PrivateMessage, OnPrivateMessage);
     }
 
+    /*
     private void OnPrivateMessage(NetworkMessage netmsg)
     {
         var message = netmsg.ReadMessage<ChatMessage>();
         if (message != null)
         {
-            //TODO: Check if channel exists
-            //TODO: If Channel doesn't exist, create channel between two Members, then send message.
+            var conn = netmsg.conn.connectionId;
+
+            var channel = ChatServerData.ServerChannels.Find(c => c.ChannelId == message.Channel);
+            if (channel == null)
+            {
+                //TODO: If Channel doesn't exist, create channel between two Members, then send message.
+                var newChannel = new ChatChannel()
+                {
+                    ChannelId = Guid.NewGuid().ToString(),
+                    IsUserCreated = true
+                };
+                newChannel.Members.Add(new ChatChannelMember()
+                {
+                    MemberId = message.SenderUserId,
+                    MemberName = message.SenderUserName
+                });
+                ChatServerData.ServerChannels.Add(newChannel);
+            }
+
             SendMessageSignal.Dispatch(message);
         }
     }
+    */
 
     private void OnChannelMessage(NetworkMessage netmsg)
     {

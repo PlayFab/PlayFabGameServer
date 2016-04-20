@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+[Serializable]
 public class ChatChannel
 {
     public string ChannelId;
@@ -10,12 +12,14 @@ public class ChatChannel
     public bool IsUserCreated;
 }
 
+[Serializable]
 public class ChatChannelMember
 {
     public string MemberId;
     public string MemberName;
 }
 
+[Serializable]
 public class ChatChannelHistoryItem
 {
     public string MemberId;

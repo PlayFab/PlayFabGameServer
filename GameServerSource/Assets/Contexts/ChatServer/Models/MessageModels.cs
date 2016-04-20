@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 public class ChatMessage : MessageBase
 {
-    public string Channel;
+    public string ChannelId;
     public string SenderUserId;
     public string SenderUserName;
     public string Message;
@@ -13,7 +13,7 @@ public class ChatMessage : MessageBase
 
     public override void Serialize(NetworkWriter writer)
     {
-        writer.Write(Channel);
+        writer.Write(ChannelId);
         writer.Write(SenderUserId);
         writer.Write(SenderUserName);
         writer.Write(Message);
@@ -23,7 +23,7 @@ public class ChatMessage : MessageBase
 
     public override void Deserialize(NetworkReader reader)
     {
-        Channel = reader.ReadString();
+        ChannelId = reader.ReadString();
         SenderUserId = reader.ReadString();
         SenderUserName = reader.ReadString();
         Message = reader.ReadString();
@@ -34,6 +34,16 @@ public class ChatMessage : MessageBase
 public class CreateChannelMessage : MessageBase
 {
     public string ChannelId = Guid.NewGuid().ToString();
+    public string MemberId;
+    public string MemberName;
+}
+
+public class CreateChannelResponseMessage : MessageBase
+{
+    public string ChannelId;
+    public string MemberId;
+    public bool Created;
+    public string Error;
 }
 
 public class LeaveChannelMessage : MessageBase
@@ -46,4 +56,13 @@ public class JoinChannelMessage : MessageBase
 {
     public string ChannelId;
     public string MemberId;
+    public string MemberName;
+}
+
+public class JoinChannelResponseMessage : MessageBase
+{
+    public string ChannelId;
+    public string MemberId;
+    public bool Joined;
+    public string Error;
 }
