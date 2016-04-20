@@ -1,7 +1,10 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using PlayFab.ServerModels;
 using strange.extensions.mediation.impl;
+using UnityEditor.VersionControl;
 using UnityEngine.Networking;
 using UnityEngine.Networking.NetworkSystem;
 
@@ -13,6 +16,7 @@ public class ChatServerListener : Mediator {
     [Inject] public JoinChannelSignal JoinChannelSignal { get; set; }
     [Inject] public UnityNetworkingData UnityNetworkingData { get; set; }
     [Inject] public ClientDisconnectedSignal ClientDisconnectedSignal { get; set; }
+    [Inject] public WritePlayerEventSignal WritePlayerEventSignal { get; set; }
 
     public override void OnRegister()
     {
@@ -102,6 +106,15 @@ public class ChatServerListener : Mediator {
             {
                 channel.Members.Remove(member);
                 Debug.Log("Member found in channel "  + channel.ChannelId + ", Removing User.");
+                WritePlayerEventSignal.Dispatch(new WriteServerPlayerEventRequest()
+                {
+                    EventName = "PlayerLeftChat",
+                    PlayFabId = member.MemberId,
+                    Body = new Dictionary<string, object>()
+                    {
+                        {"ChannelId", channel.ChannelId}
+                    }
+                });
             }
 
             if (channel.Members.Count == 0 && channel.IsInviteOnly)
