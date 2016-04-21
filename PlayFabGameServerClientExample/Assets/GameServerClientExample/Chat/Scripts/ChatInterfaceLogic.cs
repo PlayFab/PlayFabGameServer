@@ -137,7 +137,7 @@ public class ChatInterfaceLogic : MonoBehaviour {
 	{
 		var chat_message = netMsg.ReadMessage<ChatMessage>();
 
-		ReceiveMessage (chat_message.SenderUserName, chat_message.Message, chat_message.Timestamp.ToString ());
+		ReceiveMessage (chat_message.SenderUserName, chat_message.Message, chat_message.Timestamp.ToString (), chat_message.SenderUserId);
 	}
 
 	public void ChannelDropdown(int index)
@@ -184,9 +184,12 @@ public class ChatInterfaceLogic : MonoBehaviour {
 					Timestamp = DateTime.Now
 				});
 
-			GameObject new_header_gameobject = Instantiate (sent_message_header);
-			new_header_gameobject.GetComponent<TextLink>().text.text = PlayerUsername;
-			new_header_gameobject.transform.SetParent (chat_transform, false);
+			if(PlayFabId != last_received_message_sender){
+				GameObject new_header_gameobject = Instantiate (sent_message_header);
+				new_header_gameobject.GetComponent<TextLink>().text.text = PlayerUsername;
+				new_header_gameobject.transform.SetParent (chat_transform, false);
+				last_received_message_sender = PlayFabId;
+			}
 
 			GameObject new_message_gameobject = Instantiate (sent_message_prefab);
 			new_message_gameobject.GetComponent<ChatMessageView>().SetMessage (input_text_field.text, DateTime.Now.ToString());
@@ -197,13 +200,13 @@ public class ChatInterfaceLogic : MonoBehaviour {
 	}
 
 	//User received a chat message.
-	public void ReceiveMessage (string sender, string message, string timestamp)
+	public void ReceiveMessage (string sender, string message, string timestamp, string sender_playfab_id)
 	{
-		if(sender != last_received_message_sender){
+		if(sender_playfab_id != last_received_message_sender){
 			GameObject new_header_gameobject = Instantiate (received_message_header) as GameObject;
 			new_header_gameobject.GetComponent<TextLink>().text.text = sender;
 			new_header_gameobject.transform.SetParent (chat_transform, false);
-			last_received_message_sender = sender;
+			last_received_message_sender = sender_playfab_id;
 			AddToObjectList (new_header_gameobject);
 		}
 
