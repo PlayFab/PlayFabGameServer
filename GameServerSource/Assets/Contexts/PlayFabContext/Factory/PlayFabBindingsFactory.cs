@@ -88,6 +88,12 @@ public class PlayFabBindingsFactory {
     commandBinder.Bind<DeleteUsersResponseSignal>(); //Create empty overrideable binding.
 
     ///<summary>
+    ///Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the leaderboard
+    ///</summary>
+    commandBinder.Bind<GetFriendLeaderboardSignal>().To<GetFriendLeaderboardCommand>();
+    commandBinder.Bind<GetFriendLeaderboardResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
     ///Retrieves a list of ranked users for the given statistic, starting from the indicated point in the leaderboard
     ///</summary>
     commandBinder.Bind<GetLeaderboardSignal>().To<GetLeaderboardCommand>();
@@ -278,6 +284,12 @@ public class PlayFabBindingsFactory {
     commandBinder.Bind<ConsumeItemResponseSignal>(); //Create empty overrideable binding.
 
     ///<summary>
+    ///Returns the result of an evaluation of a Random Result Table - the ItemId from the game Catalog which would have been added to the player inventory, if the Random Result Table were added via a Bundle or a call to UnlockContainer.
+    ///</summary>
+    commandBinder.Bind<EvaluateRandomResultTableSignal>().To<EvaluateRandomResultTableCommand>();
+    commandBinder.Bind<EvaluateRandomResultTableResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
     ///Retrieves the specified character's current inventory of virtual goods
     ///</summary>
     commandBinder.Bind<GetCharacterInventorySignal>().To<GetCharacterInventoryCommand>();
@@ -384,6 +396,24 @@ public class PlayFabBindingsFactory {
 //Friend List Management
 #region Friend List Management
 
+    ///<summary>
+    ///Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+    ///</summary>
+    commandBinder.Bind<AddFriendSignal>().To<AddFriendCommand>();
+    commandBinder.Bind<AddFriendResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
+    ///Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+    ///</summary>
+    commandBinder.Bind<GetFriendsListSignal>().To<GetFriendsListCommand>();
+    commandBinder.Bind<GetFriendsListResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
+    ///Removes the specified friend from the the user's friend list
+    ///</summary>
+    commandBinder.Bind<RemoveFriendSignal>().To<RemoveFriendCommand>();
+    commandBinder.Bind<RemoveFriendResponseSignal>(); //Create empty overrideable binding.
+
 #endregion
 
 //Matchmaking APIs
@@ -400,6 +430,12 @@ public class PlayFabBindingsFactory {
     ///</summary>
     commandBinder.Bind<RedeemMatchmakerTicketSignal>().To<RedeemMatchmakerTicketCommand>();
     commandBinder.Bind<RedeemMatchmakerTicketResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
+    ///Sets the state of the indicated Game Server Instance
+    ///</summary>
+    commandBinder.Bind<SetGameServerInstanceStateSignal>().To<SetGameServerInstanceStateCommand>();
+    commandBinder.Bind<SetGameServerInstanceStateResponseSignal>(); //Create empty overrideable binding.
 
 #endregion
 

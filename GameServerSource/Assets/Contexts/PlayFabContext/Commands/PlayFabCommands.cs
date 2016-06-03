@@ -205,6 +205,22 @@ public class DeleteUsersCommand : Command {
 }
 
 ///<summary>
+///Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the leaderboard
+///</summary>
+public class GetFriendLeaderboardCommand : Command {
+    [Inject] public GetFriendLeaderboardResponseSignal ResponseSignal {get; set;}
+    [Inject] public GetFriendLeaderboardRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.GetFriendLeaderboard(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
 ///Retrieves a list of ranked users for the given statistic, starting from the indicated point in the leaderboard
 ///</summary>
 public class GetLeaderboardCommand : Command {
@@ -693,6 +709,22 @@ public class ConsumeItemCommand : Command {
 }
 
 ///<summary>
+///Returns the result of an evaluation of a Random Result Table - the ItemId from the game Catalog which would have been added to the player inventory, if the Random Result Table were added via a Bundle or a call to UnlockContainer.
+///</summary>
+public class EvaluateRandomResultTableCommand : Command {
+    [Inject] public EvaluateRandomResultTableResponseSignal ResponseSignal {get; set;}
+    [Inject] public EvaluateRandomResultTableRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.EvaluateRandomResultTable(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
 ///Retrieves the specified character's current inventory of virtual goods
 ///</summary>
 public class GetCharacterInventoryCommand : Command {
@@ -968,6 +1000,54 @@ public class UpdateUserInventoryItemCustomDataCommand : Command {
 //Friend List Management
 #region Friend List Management
 
+///<summary>
+///Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+///</summary>
+public class AddFriendCommand : Command {
+    [Inject] public AddFriendResponseSignal ResponseSignal {get; set;}
+    [Inject] public AddFriendRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.AddFriend(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
+///Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+///</summary>
+public class GetFriendsListCommand : Command {
+    [Inject] public GetFriendsListResponseSignal ResponseSignal {get; set;}
+    [Inject] public GetFriendsListRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.GetFriendsList(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
+///Removes the specified friend from the the user's friend list
+///</summary>
+public class RemoveFriendCommand : Command {
+    [Inject] public RemoveFriendResponseSignal ResponseSignal {get; set;}
+    [Inject] public RemoveFriendRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.RemoveFriend(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
 #endregion
 //Matchmaking APIs
 #region Matchmaking APIs
@@ -997,6 +1077,22 @@ public class RedeemMatchmakerTicketCommand : Command {
     public override void Execute(){
         Retain();
         PlayFabServerAPI.RedeemMatchmakerTicket(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
+///Sets the state of the indicated Game Server Instance
+///</summary>
+public class SetGameServerInstanceStateCommand : Command {
+    [Inject] public SetGameServerInstanceStateResponseSignal ResponseSignal {get; set;}
+    [Inject] public SetGameServerInstanceStateRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.SetGameServerInstanceState(Request,(result)=>{
             //TODO: Map Result data to PlayFabDataStore.
             Release();
             ResponseSignal.Dispatch(result);

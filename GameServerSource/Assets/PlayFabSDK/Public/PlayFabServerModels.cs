@@ -28,6 +28,34 @@ namespace PlayFab.ServerModels
         public int Amount { get; set;}
     }
 
+    public class AddFriendRequest
+    {
+
+        /// <summary>
+        /// PlayFab identifier of the player to add a new friend.
+        /// </summary>
+        public string PlayFabId { get; set;}
+
+        /// <summary>
+        /// The PlayFab identifier of the user being added.
+        /// </summary>
+        public string FriendPlayFabId { get; set;}
+
+        /// <summary>
+        /// The PlayFab username of the user being added
+        /// </summary>
+        public string FriendUsername { get; set;}
+
+        /// <summary>
+        /// Email address of the user being added.
+        /// </summary>
+        public string FriendEmail { get; set;}
+
+        /// <summary>
+        /// Title-specific display name of the user to being added.
+        /// </summary>
+        public string FriendTitleDisplayName { get; set;}
+    }
     public class AddSharedGroupMembersRequest
     {
 
@@ -613,6 +641,29 @@ namespace PlayFab.ServerModels
     {
     }
 
+    public class EvaluateRandomResultTableRequest : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// The unique identifier of the Random Result Table to use.
+        /// </summary>
+        public string TableId { get; set;}
+
+        /// <summary>
+        /// Specifies the catalog version that should be used to evaluate the Random Result Table.  If unspecified, uses default/primary catalog.
+        /// </summary>
+        public string CatalogVersion { get; set;}
+    }
+
+    public class EvaluateRandomResultTableResult : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// Unique identifier for the item returned from the Random Result Table evaluation, for the given catalog.
+        /// </summary>
+        public string ResultItemId { get; set;}
+    }
+
     public class ExecuteCloudScriptResult : PlayFabResultCommon
     {
 
@@ -675,7 +726,7 @@ namespace PlayFab.ServerModels
         public object FunctionParameter { get; set;}
 
         /// <summary>
-        /// Option for which revision of the CloudScript to execute. 'Latest' executes the most recently created revision, 'Live' executes the current live, published revision, and 'Specific' executes the specified revision.
+        /// Option for which revision of the CloudScript to execute. 'Latest' executes the most recently created revision, 'Live' executes the current live, published revision, and 'Specific' executes the specified revision. The default value is 'Specific', if the SpeificRevision parameter is specified, otherwise it is 'Live'.
         /// </summary>
         public CloudScriptRevisionOption? RevisionSelection { get; set;}
 
@@ -748,6 +799,12 @@ namespace PlayFab.ServerModels
         public UserGameCenterInfo GameCenterInfo { get; set;}
     }
 
+    public enum GameInstanceState
+    {
+        Open,
+        Closed
+    }
+
     public class GetCatalogItemsRequest
     {
 
@@ -787,7 +844,7 @@ namespace PlayFab.ServerModels
         /// <summary>
         /// The version that currently exists according to the caller. The call will return the data for all of the keys if the version in the system is greater than this.
         /// </summary>
-        public int? IfChangedFromDataVersion { get; set;}
+        public uint? IfChangedFromDataVersion { get; set;}
     }
 
     public class GetCharacterDataResult : PlayFabResultCommon
@@ -961,6 +1018,67 @@ namespace PlayFab.ServerModels
         public string URL { get; set;}
     }
 
+    public class GetFriendLeaderboardRequest
+    {
+
+        /// <summary>
+        /// The player whose friend leaderboard to get
+        /// </summary>
+        public string PlayFabId { get; set;}
+
+        /// <summary>
+        /// Statistic used to rank friends for this leaderboard.
+        /// </summary>
+        public string StatisticName { get; set;}
+
+        /// <summary>
+        /// Position in the leaderboard to start this listing (defaults to the first entry).
+        /// </summary>
+        public int StartPosition { get; set;}
+
+        /// <summary>
+        /// Maximum number of entries to retrieve.
+        /// </summary>
+        public int MaxResultsCount { get; set;}
+
+        /// <summary>
+        /// Indicates whether Steam service friends should be included in the response. Default is true.
+        /// </summary>
+        public bool? IncludeSteamFriends { get; set;}
+
+        /// <summary>
+        /// Indicates whether Facebook friends should be included in the response. Default is true.
+        /// </summary>
+        public bool? IncludeFacebookFriends { get; set;}
+    }
+
+    public class GetFriendsListRequest
+    {
+
+        /// <summary>
+        /// PlayFab identifier of the player whose friend list to get.
+        /// </summary>
+        public string PlayFabId { get; set;}
+
+        /// <summary>
+        /// Indicates whether Steam service friends should be included in the response. Default is true.
+        /// </summary>
+        public bool? IncludeSteamFriends { get; set;}
+
+        /// <summary>
+        /// Indicates whether Facebook friends should be included in the response. Default is true.
+        /// </summary>
+        public bool? IncludeFacebookFriends { get; set;}
+    }
+
+    public class GetFriendsListResult : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// Array of friends found.
+        /// </summary>
+        public List<FriendInfo> Friends { get; set;}
+    }
     public class GetLeaderboardAroundCharacterRequest
     {
 
@@ -1296,7 +1414,7 @@ namespace PlayFab.ServerModels
         /// <summary>
         /// The version that currently exists according to the caller. The call will return the data for all of the keys if the version in the system is greater than this.
         /// </summary>
-        public int? IfChangedFromDataVersion { get; set;}
+        public uint? IfChangedFromDataVersion { get; set;}
     }
 
     public class GetUserDataResult : PlayFabResultCommon
@@ -2072,6 +2190,20 @@ namespace PlayFab.ServerModels
         public UserAccountInfo UserInfo { get; set;}
     }
 
+    public class RemoveFriendRequest
+    {
+
+        /// <summary>
+        /// PlayFab identifier of the friend account which is to be removed.
+        /// </summary>
+        public string FriendPlayFabId { get; set;}
+
+        /// <summary>
+        /// Unique PlayFab assigned ID of the user on whom the operation will be performed.
+        /// </summary>
+        public string PlayFabId { get; set;}
+    }
+
     public class RemoveSharedGroupMembersRequest
     {
 
@@ -2190,6 +2322,24 @@ namespace PlayFab.ServerModels
     }
 
     public class SendPushNotificationResult : PlayFabResultCommon
+    {
+    }
+
+    public class SetGameServerInstanceStateRequest
+    {
+
+        /// <summary>
+        /// Unique identifier of the Game Instance to be updated.
+        /// </summary>
+        public string LobbyId { get; set;}
+
+        /// <summary>
+        /// State to set for the specified game server instance.
+        /// </summary>
+        public GameInstanceState State { get; set;}
+    }
+
+    public class SetGameServerInstanceStateResult : PlayFabResultCommon
     {
     }
 

@@ -22,7 +22,9 @@ public class ClientExampleScript : MonoBehaviour
     public string GameServerAuthTicket;
 
     public GameObject SmallWindow;
+    public GameObject ChatWindow;
     public Button CancelButton;
+    public Button ShowChatButton;
     public Text Header; 
     public Text Message;
     public Text StartText;
@@ -73,6 +75,11 @@ public class ClientExampleScript : MonoBehaviour
             SmallWindow.SetActive(false);
         });
 
+        ShowChatButton.onClick.AddListener(() =>
+        {
+            ChatWindow.SetActive(true);
+        });
+
 	    if (string.IsNullOrEmpty(TitleId))
 	    {
             Debug.LogError("Please Enter your Title Id on the ClientExampleGameObject");
@@ -80,11 +87,20 @@ public class ClientExampleScript : MonoBehaviour
 	    }
 
 	    PlayFabSettings.TitleId = TitleId;
-        var randomId = UnityEngine.Random.Range(0, 100);
-        PlayFabClientAPI.LoginWithCustomID(new LoginWithCustomIDRequest()
+#if UNITY_ANDROID && !UNITY_EDITOR
+
+        AndroidJavaClass up = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject currentActivity = up.GetStatic<AndroidJavaObject>("currentActivity");
+        AndroidJavaObject contentResolver = currentActivity.Call<AndroidJavaObject>("getContentResolver");
+        AndroidJavaClass secure = new AndroidJavaClass("android.provider.Settings$Secure");
+        string androidId = secure.CallStatic<string>("getString", contentResolver, "android_id");
+
+        PlayFabClientAPI.LoginWithAndroidDeviceID(new LoginWithAndroidDeviceIDRequest() 
         {
             TitleId = TitleId,
-            CustomId = string.Format("{0}-{1}",SystemInfo.deviceUniqueIdentifier,randomId),
+            AndroidDevice = SystemInfo.deviceModel,
+            AndroidDeviceId = androidId,
+            OS = SystemInfo.operatingSystem,
             CreateAccount = true
         }, (result) =>
         {
@@ -115,7 +131,46 @@ public class ClientExampleScript : MonoBehaviour
             }
 
         }, PlayFabErrorHandler.HandlePlayFabError);
-	}
+#else
+        var randomId = UnityEngine.Random.Range(0, 100);
+        PlayFabClientAPI.LoginWithCustomID(new LoginWithCustomIDRequest()
+        {
+            TitleId = TitleId,
+            CustomId = string.Format("{0}-{1}", SystemInfo.deviceUniqueIdentifier, randomId),
+            CreateAccount = true
+        }, (result) =>
+        {
+            PlayFabId = result.PlayFabId;
+            SessionTicket = result.SessionTicket;
+
+            Debug.Log("PlayFab Logged In Successfully");
+            StartText.text = "PlayFab Logged In Successfully";
+            //If you want to test locally where you are running the server in the Unity Editor
+            if (IsLocalNetwork)
+            {
+                ConnectNetworkClient();
+            }
+            else
+            {
+                PlayFabClientAPI.Matchmake(new MatchmakeRequest()
+                {
+                    BuildVersion = BuildVersion,
+                    GameMode = GameMode,
+                    Region = GameRegion
+                }, (matchMakeResult) =>
+                {
+                    int port = matchMakeResult.ServerPort ?? 7777;
+                    GameServerAuthTicket = matchMakeResult.Ticket;
+                    ConnectNetworkClient(matchMakeResult.ServerHostname, port);
+                }, PlayFabErrorHandler.HandlePlayFabError);
+
+            }
+
+        }, PlayFabErrorHandler.HandlePlayFabError);
+
+#endif
+
+    }
 
     private void ConnectNetworkClient(string host = "localhost", int port = 7777)
     {

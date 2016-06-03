@@ -80,6 +80,11 @@ using strange.extensions.signal.impl;
     public class DeleteUsersSignal : Signal<DeleteUsersRequest> { }
     
     ///<summary>
+    ///Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the leaderboard
+    ///</summary>
+    public class GetFriendLeaderboardSignal : Signal<GetFriendLeaderboardRequest> { }
+    
+    ///<summary>
     ///Retrieves a list of ranked users for the given statistic, starting from the indicated point in the leaderboard
     ///</summary>
     public class GetLeaderboardSignal : Signal<GetLeaderboardRequest> { }
@@ -240,6 +245,11 @@ using strange.extensions.signal.impl;
     public class ConsumeItemSignal : Signal<ConsumeItemRequest> { }
     
     ///<summary>
+    ///Returns the result of an evaluation of a Random Result Table - the ItemId from the game Catalog which would have been added to the player inventory, if the Random Result Table were added via a Bundle or a call to UnlockContainer.
+    ///</summary>
+    public class EvaluateRandomResultTableSignal : Signal<EvaluateRandomResultTableRequest> { }
+    
+    ///<summary>
     ///Retrieves the specified character's current inventory of virtual goods
     ///</summary>
     public class GetCharacterInventorySignal : Signal<GetCharacterInventoryRequest> { }
@@ -329,6 +339,21 @@ using strange.extensions.signal.impl;
 //Friend List Management
 #region Friend List Management
     
+    ///<summary>
+    ///Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+    ///</summary>
+    public class AddFriendSignal : Signal<AddFriendRequest> { }
+    
+    ///<summary>
+    ///Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+    ///</summary>
+    public class GetFriendsListSignal : Signal<GetFriendsListRequest> { }
+    
+    ///<summary>
+    ///Removes the specified friend from the the user's friend list
+    ///</summary>
+    public class RemoveFriendSignal : Signal<RemoveFriendRequest> { }
+    
 #endregion
     
 //Matchmaking APIs
@@ -343,6 +368,11 @@ using strange.extensions.signal.impl;
     ///Validates a Game Server session ticket and returns details about the user
     ///</summary>
     public class RedeemMatchmakerTicketSignal : Signal<RedeemMatchmakerTicketRequest> { }
+    
+    ///<summary>
+    ///Sets the state of the indicated Game Server Instance
+    ///</summary>
+    public class SetGameServerInstanceStateSignal : Signal<SetGameServerInstanceStateRequest> { }
     
 #endregion
     
@@ -599,6 +629,11 @@ using strange.extensions.signal.impl;
     public class DeleteUsersResponseSignal : Signal<DeleteUsersResult> { }
 
     ///<summary>
+    ///Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the leaderboard
+    ///</summary>
+    public class GetFriendLeaderboardResponseSignal : Signal<GetLeaderboardResult> { }
+
+    ///<summary>
     ///Retrieves a list of ranked users for the given statistic, starting from the indicated point in the leaderboard
     ///</summary>
     public class GetLeaderboardResponseSignal : Signal<GetLeaderboardResult> { }
@@ -759,6 +794,11 @@ using strange.extensions.signal.impl;
     public class ConsumeItemResponseSignal : Signal<ConsumeItemResult> { }
 
     ///<summary>
+    ///Returns the result of an evaluation of a Random Result Table - the ItemId from the game Catalog which would have been added to the player inventory, if the Random Result Table were added via a Bundle or a call to UnlockContainer.
+    ///</summary>
+    public class EvaluateRandomResultTableResponseSignal : Signal<EvaluateRandomResultTableResult> { }
+
+    ///<summary>
     ///Retrieves the specified character's current inventory of virtual goods
     ///</summary>
     public class GetCharacterInventoryResponseSignal : Signal<GetCharacterInventoryResult> { }
@@ -848,6 +888,21 @@ using strange.extensions.signal.impl;
 //Friend List Management
 #region Friend List Management
 
+    ///<summary>
+    ///Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+    ///</summary>
+    public class AddFriendResponseSignal : Signal<EmptyResult> { }
+
+    ///<summary>
+    ///Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+    ///</summary>
+    public class GetFriendsListResponseSignal : Signal<GetFriendsListResult> { }
+
+    ///<summary>
+    ///Removes the specified friend from the the user's friend list
+    ///</summary>
+    public class RemoveFriendResponseSignal : Signal<EmptyResult> { }
+
 #endregion
 
 //Matchmaking APIs
@@ -862,6 +917,11 @@ using strange.extensions.signal.impl;
     ///Validates a Game Server session ticket and returns details about the user
     ///</summary>
     public class RedeemMatchmakerTicketResponseSignal : Signal<RedeemMatchmakerTicketResult> { }
+
+    ///<summary>
+    ///Sets the state of the indicated Game Server Instance
+    ///</summary>
+    public class SetGameServerInstanceStateResponseSignal : Signal<SetGameServerInstanceStateResult> { }
 
 #endregion
 

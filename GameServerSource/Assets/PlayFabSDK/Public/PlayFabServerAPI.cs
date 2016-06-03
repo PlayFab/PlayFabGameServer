@@ -24,6 +24,8 @@ namespace PlayFab
         public delegate void SendPushNotificationResponseCallback(string urlPath, int callId, SendPushNotificationRequest request, SendPushNotificationResult result, PlayFabError error, object customData);
         public delegate void DeleteUsersRequestCallback(string urlPath, int callId, DeleteUsersRequest request, object customData);
         public delegate void DeleteUsersResponseCallback(string urlPath, int callId, DeleteUsersRequest request, DeleteUsersResult result, PlayFabError error, object customData);
+        public delegate void GetFriendLeaderboardRequestCallback(string urlPath, int callId, GetFriendLeaderboardRequest request, object customData);
+        public delegate void GetFriendLeaderboardResponseCallback(string urlPath, int callId, GetFriendLeaderboardRequest request, GetLeaderboardResult result, PlayFabError error, object customData);
         public delegate void GetLeaderboardRequestCallback(string urlPath, int callId, GetLeaderboardRequest request, object customData);
         public delegate void GetLeaderboardResponseCallback(string urlPath, int callId, GetLeaderboardRequest request, GetLeaderboardResult result, PlayFabError error, object customData);
         public delegate void GetLeaderboardAroundUserRequestCallback(string urlPath, int callId, GetLeaderboardAroundUserRequest request, object customData);
@@ -84,6 +86,8 @@ namespace PlayFab
         public delegate void AddUserVirtualCurrencyResponseCallback(string urlPath, int callId, AddUserVirtualCurrencyRequest request, ModifyUserVirtualCurrencyResult result, PlayFabError error, object customData);
         public delegate void ConsumeItemRequestCallback(string urlPath, int callId, ConsumeItemRequest request, object customData);
         public delegate void ConsumeItemResponseCallback(string urlPath, int callId, ConsumeItemRequest request, ConsumeItemResult result, PlayFabError error, object customData);
+        public delegate void EvaluateRandomResultTableRequestCallback(string urlPath, int callId, EvaluateRandomResultTableRequest request, object customData);
+        public delegate void EvaluateRandomResultTableResponseCallback(string urlPath, int callId, EvaluateRandomResultTableRequest request, EvaluateRandomResultTableResult result, PlayFabError error, object customData);
         public delegate void GetCharacterInventoryRequestCallback(string urlPath, int callId, GetCharacterInventoryRequest request, object customData);
         public delegate void GetCharacterInventoryResponseCallback(string urlPath, int callId, GetCharacterInventoryRequest request, GetCharacterInventoryResult result, PlayFabError error, object customData);
         public delegate void GetUserInventoryRequestCallback(string urlPath, int callId, GetUserInventoryRequest request, object customData);
@@ -118,10 +122,18 @@ namespace PlayFab
         public delegate void UnlockContainerItemResponseCallback(string urlPath, int callId, UnlockContainerItemRequest request, UnlockContainerItemResult result, PlayFabError error, object customData);
         public delegate void UpdateUserInventoryItemCustomDataRequestCallback(string urlPath, int callId, UpdateUserInventoryItemDataRequest request, object customData);
         public delegate void UpdateUserInventoryItemCustomDataResponseCallback(string urlPath, int callId, UpdateUserInventoryItemDataRequest request, EmptyResult result, PlayFabError error, object customData);
+        public delegate void AddFriendRequestCallback(string urlPath, int callId, AddFriendRequest request, object customData);
+        public delegate void AddFriendResponseCallback(string urlPath, int callId, AddFriendRequest request, EmptyResult result, PlayFabError error, object customData);
+        public delegate void GetFriendsListRequestCallback(string urlPath, int callId, GetFriendsListRequest request, object customData);
+        public delegate void GetFriendsListResponseCallback(string urlPath, int callId, GetFriendsListRequest request, GetFriendsListResult result, PlayFabError error, object customData);
+        public delegate void RemoveFriendRequestCallback(string urlPath, int callId, RemoveFriendRequest request, object customData);
+        public delegate void RemoveFriendResponseCallback(string urlPath, int callId, RemoveFriendRequest request, EmptyResult result, PlayFabError error, object customData);
         public delegate void NotifyMatchmakerPlayerLeftRequestCallback(string urlPath, int callId, NotifyMatchmakerPlayerLeftRequest request, object customData);
         public delegate void NotifyMatchmakerPlayerLeftResponseCallback(string urlPath, int callId, NotifyMatchmakerPlayerLeftRequest request, NotifyMatchmakerPlayerLeftResult result, PlayFabError error, object customData);
         public delegate void RedeemMatchmakerTicketRequestCallback(string urlPath, int callId, RedeemMatchmakerTicketRequest request, object customData);
         public delegate void RedeemMatchmakerTicketResponseCallback(string urlPath, int callId, RedeemMatchmakerTicketRequest request, RedeemMatchmakerTicketResult result, PlayFabError error, object customData);
+        public delegate void SetGameServerInstanceStateRequestCallback(string urlPath, int callId, SetGameServerInstanceStateRequest request, object customData);
+        public delegate void SetGameServerInstanceStateResponseCallback(string urlPath, int callId, SetGameServerInstanceStateRequest request, SetGameServerInstanceStateResult result, PlayFabError error, object customData);
         public delegate void AwardSteamAchievementRequestCallback(string urlPath, int callId, AwardSteamAchievementRequest request, object customData);
         public delegate void AwardSteamAchievementResponseCallback(string urlPath, int callId, AwardSteamAchievementRequest request, AwardSteamAchievementResult result, PlayFabError error, object customData);
         public delegate void LogEventRequestCallback(string urlPath, int callId, LogEventRequest request, object customData);
@@ -265,6 +277,21 @@ namespace PlayFab
                 ResultContainer<DeleteUsersResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
             };
             PlayFabHTTP.Post("/Server/DeleteUsers", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
+        }
+
+        /// <summary>
+        /// Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the leaderboard
+        /// </summary>
+        public static void GetFriendLeaderboard(GetFriendLeaderboardRequest request, ProcessApiCallback<GetLeaderboardResult> resultCallback, ErrorCallback errorCallback, object customData = null)
+        {
+            if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
+
+            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
+            {
+                ResultContainer<GetLeaderboardResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
+            };
+            PlayFabHTTP.Post("/Server/GetFriendLeaderboard", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
         }
 
         /// <summary>
@@ -718,6 +745,21 @@ namespace PlayFab
         }
 
         /// <summary>
+        /// Returns the result of an evaluation of a Random Result Table - the ItemId from the game Catalog which would have been added to the player inventory, if the Random Result Table were added via a Bundle or a call to UnlockContainer.
+        /// </summary>
+        public static void EvaluateRandomResultTable(EvaluateRandomResultTableRequest request, ProcessApiCallback<EvaluateRandomResultTableResult> resultCallback, ErrorCallback errorCallback, object customData = null)
+        {
+            if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
+
+            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
+            {
+                ResultContainer<EvaluateRandomResultTableResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
+            };
+            PlayFabHTTP.Post("/Server/EvaluateRandomResultTable", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
+        }
+
+        /// <summary>
         /// Retrieves the specified character's current inventory of virtual goods
         /// </summary>
         public static void GetCharacterInventory(GetCharacterInventoryRequest request, ProcessApiCallback<GetCharacterInventoryResult> resultCallback, ErrorCallback errorCallback, object customData = null)
@@ -973,6 +1015,51 @@ namespace PlayFab
         }
 
         /// <summary>
+        /// Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+        /// </summary>
+        public static void AddFriend(AddFriendRequest request, ProcessApiCallback<EmptyResult> resultCallback, ErrorCallback errorCallback, object customData = null)
+        {
+            if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
+
+            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
+            {
+                ResultContainer<EmptyResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
+            };
+            PlayFabHTTP.Post("/Server/AddFriend", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
+        }
+
+        /// <summary>
+        /// Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+        /// </summary>
+        public static void GetFriendsList(GetFriendsListRequest request, ProcessApiCallback<GetFriendsListResult> resultCallback, ErrorCallback errorCallback, object customData = null)
+        {
+            if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
+
+            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
+            {
+                ResultContainer<GetFriendsListResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
+            };
+            PlayFabHTTP.Post("/Server/GetFriendsList", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
+        }
+
+        /// <summary>
+        /// Removes the specified friend from the the user's friend list
+        /// </summary>
+        public static void RemoveFriend(RemoveFriendRequest request, ProcessApiCallback<EmptyResult> resultCallback, ErrorCallback errorCallback, object customData = null)
+        {
+            if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
+
+            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
+            {
+                ResultContainer<EmptyResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
+            };
+            PlayFabHTTP.Post("/Server/RemoveFriend", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
+        }
+
+        /// <summary>
         /// Informs the PlayFab match-making service that the user specified has left the Game Server Instance
         /// </summary>
         public static void NotifyMatchmakerPlayerLeft(NotifyMatchmakerPlayerLeftRequest request, ProcessApiCallback<NotifyMatchmakerPlayerLeftResult> resultCallback, ErrorCallback errorCallback, object customData = null)
@@ -1000,6 +1087,21 @@ namespace PlayFab
                 ResultContainer<RedeemMatchmakerTicketResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
             };
             PlayFabHTTP.Post("/Server/RedeemMatchmakerTicket", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
+        }
+
+        /// <summary>
+        /// Sets the state of the indicated Game Server Instance
+        /// </summary>
+        public static void SetGameServerInstanceState(SetGameServerInstanceStateRequest request, ProcessApiCallback<SetGameServerInstanceStateResult> resultCallback, ErrorCallback errorCallback, object customData = null)
+        {
+            if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
+
+            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
+            {
+                ResultContainer<SetGameServerInstanceStateResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
+            };
+            PlayFabHTTP.Post("/Server/SetGameServerInstanceState", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
         }
 
         /// <summary>
