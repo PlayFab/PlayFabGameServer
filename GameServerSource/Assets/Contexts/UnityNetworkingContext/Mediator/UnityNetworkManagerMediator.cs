@@ -17,6 +17,7 @@ public class UnityNetworkManagerMediator : EventMediator {
     [Inject] public AuthUserResponseSignal AuthUserResponseSignal { get; set; }
     [Inject] public NotifyMatchmakerPlayerLeftSignal PlayerLeftSignal { get; set; }
     [Inject] public NotifyMatchmakerPlayerLeftResponseSignal PlayerLeftResponse { get; set; }
+    [Inject] public ClientDisconnectedSignal ClientDisconnectedSignal { get; set; }
 
     public class AuthTicketMessage : MessageBase
     {
@@ -126,6 +127,7 @@ public class UnityNetworkManagerMediator : EventMediator {
             {
                 PlayerLeftResponse.AddOnce((playerLeftResponse) =>
                 {
+                    ClientDisconnectedSignal.Dispatch(connection.ConnectionId, connection.PlayFabId);
                     Logger.Dispatch(LoggerTypes.Info,string.Format("Player Has Left:{0}",connection.PlayFabId));
                     UnityNetworkingData.Connections.Remove(connection);
                 });
@@ -138,6 +140,7 @@ public class UnityNetworkManagerMediator : EventMediator {
             }
             else
             {
+                ClientDisconnectedSignal.Dispatch(connection.ConnectionId,connection.PlayFabId);
                 UnityNetworkingData.Connections.Remove(connection);
             }
         }

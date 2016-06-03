@@ -17,5 +17,6 @@ public class UnityNetworkingBindingsFactory  {
         //Bind Commands and Signals
         commandBinder.Bind<SetupUnityNetworkingSignal>().To<SetupUnityNetworkingCommand>();
         commandBinder.Bind<SetupUnityNetworkingCompleteSignal>();
+        commandBinder.Bind<ClientDisconnectedSignal>();
     }
 }

@@ -205,7 +205,21 @@ namespace PlayFab
         InvalidDropTable = 1201,
         StatisticVersionAlreadyIncrementedForScheduledInterval = 1202,
         StatisticCountLimitExceeded = 1203,
-        StatisticVersionIncrementRateExceeded = 1204
+        StatisticVersionIncrementRateExceeded = 1204,
+        ContainerKeyInvalid = 1205,
+        CloudScriptExecutionTimeLimitExceeded = 1206,
+        NoWritePermissionsForEvent = 1207,
+        CloudScriptFunctionArgumentSizeExceeded = 1208,
+        CloudScriptAPIRequestCountExceeded = 1209,
+        CloudScriptAPIRequestError = 1210,
+        CloudScriptHTTPRequestError = 1211,
+        InsufficientGuildRole = 1212,
+        GuildNotFound = 1213,
+        OverLimit = 1214,
+        EventNotFound = 1215,
+        InvalidEventField = 1216,
+        InvalidEventName = 1217,
+        CatalogNotConfigured = 1218
     }
 
     public delegate void ErrorCallback(PlayFabError error);

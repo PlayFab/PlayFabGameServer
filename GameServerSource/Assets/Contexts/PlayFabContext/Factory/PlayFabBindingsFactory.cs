@@ -88,6 +88,12 @@ public class PlayFabBindingsFactory {
     commandBinder.Bind<DeleteUsersResponseSignal>(); //Create empty overrideable binding.
 
     ///<summary>
+    ///Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the leaderboard
+    ///</summary>
+    commandBinder.Bind<GetFriendLeaderboardSignal>().To<GetFriendLeaderboardCommand>();
+    commandBinder.Bind<GetFriendLeaderboardResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
     ///Retrieves a list of ranked users for the given statistic, starting from the indicated point in the leaderboard
     ///</summary>
     commandBinder.Bind<GetLeaderboardSignal>().To<GetLeaderboardCommand>();
@@ -196,7 +202,7 @@ public class PlayFabBindingsFactory {
     commandBinder.Bind<UpdateUserReadOnlyDataResponseSignal>(); //Create empty overrideable binding.
 
     ///<summary>
-    ///Updates the values of the specified title-specific statistics for the user
+    ///Updates the values of the specified title-specific statistics for the user. By default, clients are not permitted to update statistics. Developers may override this setting in the Game Manager > Settings > API Features.
     ///</summary>
     commandBinder.Bind<UpdateUserStatisticsSignal>().To<UpdateUserStatisticsCommand>();
     commandBinder.Bind<UpdateUserStatisticsResponseSignal>(); //Create empty overrideable binding.
@@ -211,6 +217,12 @@ public class PlayFabBindingsFactory {
     ///</summary>
     commandBinder.Bind<GetCatalogItemsSignal>().To<GetCatalogItemsCommand>();
     commandBinder.Bind<GetCatalogItemsResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
+    ///Retrieves the key-value store of custom publisher settings
+    ///</summary>
+    commandBinder.Bind<GetPublisherDataSignal>().To<GetPublisherDataCommand>();
+    commandBinder.Bind<GetPublisherDataResponseSignal>(); //Create empty overrideable binding.
 
     ///<summary>
     ///Retrieves the key-value store of custom title settings
@@ -229,6 +241,12 @@ public class PlayFabBindingsFactory {
     ///</summary>
     commandBinder.Bind<GetTitleNewsSignal>().To<GetTitleNewsCommand>();
     commandBinder.Bind<GetTitleNewsResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
+    ///Updates the key-value store of custom publisher settings
+    ///</summary>
+    commandBinder.Bind<SetPublisherDataSignal>().To<SetPublisherDataCommand>();
+    commandBinder.Bind<SetPublisherDataResponseSignal>(); //Create empty overrideable binding.
 
     ///<summary>
     ///Updates the key-value store of custom title settings
@@ -264,6 +282,12 @@ public class PlayFabBindingsFactory {
     ///</summary>
     commandBinder.Bind<ConsumeItemSignal>().To<ConsumeItemCommand>();
     commandBinder.Bind<ConsumeItemResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
+    ///Returns the result of an evaluation of a Random Result Table - the ItemId from the game Catalog which would have been added to the player inventory, if the Random Result Table were added via a Bundle or a call to UnlockContainer.
+    ///</summary>
+    commandBinder.Bind<EvaluateRandomResultTableSignal>().To<EvaluateRandomResultTableCommand>();
+    commandBinder.Bind<EvaluateRandomResultTableResponseSignal>(); //Create empty overrideable binding.
 
     ///<summary>
     ///Retrieves the specified character's current inventory of virtual goods
@@ -372,6 +396,24 @@ public class PlayFabBindingsFactory {
 //Friend List Management
 #region Friend List Management
 
+    ///<summary>
+    ///Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+    ///</summary>
+    commandBinder.Bind<AddFriendSignal>().To<AddFriendCommand>();
+    commandBinder.Bind<AddFriendResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
+    ///Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+    ///</summary>
+    commandBinder.Bind<GetFriendsListSignal>().To<GetFriendsListCommand>();
+    commandBinder.Bind<GetFriendsListResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
+    ///Removes the specified friend from the the user's friend list
+    ///</summary>
+    commandBinder.Bind<RemoveFriendSignal>().To<RemoveFriendCommand>();
+    commandBinder.Bind<RemoveFriendResponseSignal>(); //Create empty overrideable binding.
+
 #endregion
 
 //Matchmaking APIs
@@ -388,6 +430,12 @@ public class PlayFabBindingsFactory {
     ///</summary>
     commandBinder.Bind<RedeemMatchmakerTicketSignal>().To<RedeemMatchmakerTicketCommand>();
     commandBinder.Bind<RedeemMatchmakerTicketResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
+    ///Sets the state of the indicated Game Server Instance
+    ///</summary>
+    commandBinder.Bind<SetGameServerInstanceStateSignal>().To<SetGameServerInstanceStateCommand>();
+    commandBinder.Bind<SetGameServerInstanceStateResponseSignal>(); //Create empty overrideable binding.
 
 #endregion
 
@@ -410,6 +458,24 @@ public class PlayFabBindingsFactory {
     ///</summary>
     commandBinder.Bind<LogEventSignal>().To<LogEventCommand>();
     commandBinder.Bind<LogEventResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
+    ///Writes a character-based event into PlayStream.
+    ///</summary>
+    commandBinder.Bind<WriteCharacterEventSignal>().To<WriteCharacterEventCommand>();
+    commandBinder.Bind<WriteCharacterEventResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
+    ///Writes a player-based event into PlayStream.
+    ///</summary>
+    commandBinder.Bind<WritePlayerEventSignal>().To<WritePlayerEventCommand>();
+    commandBinder.Bind<WritePlayerEventResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
+    ///Writes a title-based event into PlayStream.
+    ///</summary>
+    commandBinder.Bind<WriteTitleEventSignal>().To<WriteTitleEventCommand>();
+    commandBinder.Bind<WriteTitleEventResponseSignal>(); //Create empty overrideable binding.
 
 #endregion
 
@@ -435,12 +501,6 @@ public class PlayFabBindingsFactory {
     commandBinder.Bind<DeleteSharedGroupResponseSignal>(); //Create empty overrideable binding.
 
     ///<summary>
-    ///Retrieves the key-value store of custom publisher settings
-    ///</summary>
-    commandBinder.Bind<GetPublisherDataSignal>().To<GetPublisherDataCommand>();
-    commandBinder.Bind<GetPublisherDataResponseSignal>(); //Create empty overrideable binding.
-
-    ///<summary>
     ///Retrieves data stored in a shared group object, as well as the list of members in the group. The server can access all public and private group data.
     ///</summary>
     commandBinder.Bind<GetSharedGroupDataSignal>().To<GetSharedGroupDataCommand>();
@@ -453,12 +513,6 @@ public class PlayFabBindingsFactory {
     commandBinder.Bind<RemoveSharedGroupMembersResponseSignal>(); //Create empty overrideable binding.
 
     ///<summary>
-    ///Updates the key-value store of custom publisher settings
-    ///</summary>
-    commandBinder.Bind<SetPublisherDataSignal>().To<SetPublisherDataCommand>();
-    commandBinder.Bind<SetPublisherDataResponseSignal>(); //Create empty overrideable binding.
-
-    ///<summary>
     ///Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated or added in this call will be readable by users not in the group. By default, data permissions are set to Private. Regardless of the permission setting, only members of the group (and the server) can update the data.
     ///</summary>
     commandBinder.Bind<UpdateSharedGroupDataSignal>().To<UpdateSharedGroupDataCommand>();
@@ -468,6 +522,12 @@ public class PlayFabBindingsFactory {
 
 //Server-Side Cloud Script
 #region Server-Side Cloud Script
+
+    ///<summary>
+    ///Executes a CloudScript function, with the 'currentPlayerId' variable set to the specified PlayFabId parameter value.
+    ///</summary>
+    commandBinder.Bind<ExecuteCloudScriptSignal>().To<ExecuteCloudScriptCommand>();
+    commandBinder.Bind<ExecuteCloudScriptResponseSignal>(); //Create empty overrideable binding.
 
 #endregion
 
@@ -492,7 +552,7 @@ public class PlayFabBindingsFactory {
     commandBinder.Bind<DeleteCharacterFromUserResponseSignal>(); //Create empty overrideable binding.
 
     ///<summary>
-    ///Lists all of the characters that belong to a specific user.
+    ///Lists all of the characters that belong to a specific user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
     ///</summary>
     commandBinder.Bind<GetAllUsersCharactersSignal>().To<GetAllUsersCharactersCommand>();
     commandBinder.Bind<GetAllUsersCharactersResponseSignal>(); //Create empty overrideable binding.
@@ -522,7 +582,7 @@ public class PlayFabBindingsFactory {
     commandBinder.Bind<GetLeaderboardForUserCharactersResponseSignal>(); //Create empty overrideable binding.
 
     ///<summary>
-    ///Grants the specified character type to the user.
+    ///Grants the specified character type to the user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
     ///</summary>
     commandBinder.Bind<GrantCharacterToUserSignal>().To<GrantCharacterToUserCommand>();
     commandBinder.Bind<GrantCharacterToUserResponseSignal>(); //Create empty overrideable binding.

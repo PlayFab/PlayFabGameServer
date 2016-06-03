@@ -9,6 +9,8 @@ using UnityEngine.UI;
 public class ClientExampleScript : MonoBehaviour
 {
     public bool IsLocalNetwork;
+	public string host = "localhost";
+	public int port = 7777;
     public string TitleId;
     public string PlayFabId;
     public string BuildVersion;
@@ -20,12 +22,16 @@ public class ClientExampleScript : MonoBehaviour
     public string GameServerAuthTicket;
 
     public GameObject SmallWindow;
+    public GameObject ChatWindow;
     public Button CancelButton;
+    public Button ShowChatButton;
     public Text Header; 
     public Text Message;
     public Text StartText;
 
-    private NetworkClient _client;
+	public ChatInterfaceLogic ChatInterface;
+
+    public NetworkClient _network;
 
     public class GameServerMsgTypes
     {
@@ -69,6 +75,11 @@ public class ClientExampleScript : MonoBehaviour
             SmallWindow.SetActive(false);
         });
 
+        ShowChatButton.onClick.AddListener(() =>
+        {
+            ChatWindow.SetActive(true);
+        });
+
 	    if (string.IsNullOrEmpty(TitleId))
 	    {
             Debug.LogError("Please Enter your Title Id on the ClientExampleGameObject");
@@ -76,11 +87,20 @@ public class ClientExampleScript : MonoBehaviour
 	    }
 
 	    PlayFabSettings.TitleId = TitleId;
-        var randomId = UnityEngine.Random.Range(0, 100);
-        PlayFabClientAPI.LoginWithCustomID(new LoginWithCustomIDRequest()
+#if UNITY_ANDROID && !UNITY_EDITOR
+
+        AndroidJavaClass up = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject currentActivity = up.GetStatic<AndroidJavaObject>("currentActivity");
+        AndroidJavaObject contentResolver = currentActivity.Call<AndroidJavaObject>("getContentResolver");
+        AndroidJavaClass secure = new AndroidJavaClass("android.provider.Settings$Secure");
+        string androidId = secure.CallStatic<string>("getString", contentResolver, "android_id");
+
+        PlayFabClientAPI.LoginWithAndroidDeviceID(new LoginWithAndroidDeviceIDRequest() 
         {
             TitleId = TitleId,
-            CustomId = string.Format("{0}-{1}",SystemInfo.deviceUniqueIdentifier,randomId),
+            AndroidDevice = SystemInfo.deviceModel,
+            AndroidDeviceId = androidId,
+            OS = SystemInfo.operatingSystem,
             CreateAccount = true
         }, (result) =>
         {
@@ -111,23 +131,66 @@ public class ClientExampleScript : MonoBehaviour
             }
 
         }, PlayFabErrorHandler.HandlePlayFabError);
-	}
+#else
+        var randomId = UnityEngine.Random.Range(0, 100);
+        PlayFabClientAPI.LoginWithCustomID(new LoginWithCustomIDRequest()
+        {
+            TitleId = TitleId,
+            CustomId = string.Format("{0}-{1}", SystemInfo.deviceUniqueIdentifier, randomId),
+            CreateAccount = true
+        }, (result) =>
+        {
+            PlayFabId = result.PlayFabId;
+            SessionTicket = result.SessionTicket;
+
+            Debug.Log("PlayFab Logged In Successfully");
+            StartText.text = "PlayFab Logged In Successfully";
+            //If you want to test locally where you are running the server in the Unity Editor
+            if (IsLocalNetwork)
+            {
+                ConnectNetworkClient();
+            }
+            else
+            {
+                PlayFabClientAPI.Matchmake(new MatchmakeRequest()
+                {
+                    BuildVersion = BuildVersion,
+                    GameMode = GameMode,
+                    Region = GameRegion
+                }, (matchMakeResult) =>
+                {
+                    int port = matchMakeResult.ServerPort ?? 7777;
+                    GameServerAuthTicket = matchMakeResult.Ticket;
+                    ConnectNetworkClient(matchMakeResult.ServerHostname, port);
+                }, PlayFabErrorHandler.HandlePlayFabError);
+
+            }
+
+        }, PlayFabErrorHandler.HandlePlayFabError);
+
+#endif
+
+    }
 
     private void ConnectNetworkClient(string host = "localhost", int port = 7777)
     {
         //Basic Unity Networking Client, note there are other ways to do this
         //Referr to the unity documentation on Unity Networking for more info.
-        _client = new NetworkClient();
-        _client.RegisterHandler(MsgType.Connect, OnConnected);
-        _client.RegisterHandler(GameServerMsgTypes.OnAuthenticated, OnAuthenticated);
-        _client.RegisterHandler(GameServerMsgTypes.MsgRecieverExampleResponse, OnMsgRecieverExampleResponse);
-        _client.RegisterHandler(MsgType.Error, OnClientNetworkingError);
-        _client.RegisterHandler(MsgType.Disconnect, OnClientDisconnect);
+        _network = new NetworkClient();
+        _network.RegisterHandler(MsgType.Connect, OnConnected);
+        _network.RegisterHandler(GameServerMsgTypes.OnAuthenticated, OnAuthenticated);
+        _network.RegisterHandler(GameServerMsgTypes.MsgRecieverExampleResponse, OnMsgRecieverExampleResponse);
+        _network.RegisterHandler(MsgType.Error, OnClientNetworkingError);
+        _network.RegisterHandler(MsgType.Disconnect, OnClientDisconnect);
 
-        _client.RegisterHandler(GameServerMsgTypes.OnTitleNewsUpdate, OnTitleNewsUpdate);
+        _network.RegisterHandler(GameServerMsgTypes.OnTitleNewsUpdate, OnTitleNewsUpdate);
 
         //If this fails, it will automatically disconnect from the server.
-        _client.Connect(host, port);
+		if (IsLocalNetwork){
+			host = this.host;
+			port = this.port;
+		}
+        _network.Connect(host, port);
         Debug.LogFormat("Network Client Created, waiting for connection on ServerHost:{0} Port:{1}", host, port);
 
         /*  I wanted to expand on the statement above,  Unity Networking has a NetworkingManager that is a 
@@ -137,6 +200,8 @@ public class ClientExampleScript : MonoBehaviour
          *  property.  This would allow you to virtually do the same code above, but on that game object.
          *  For this example, I'm taking the most simple and direct path.
          */ 
+
+
 
     }
 
@@ -154,18 +219,25 @@ public class ClientExampleScript : MonoBehaviour
     {
         StartText.text = "Connected, waiting for Authorization";
         Debug.Log("Network Client Authenticated, You have 30 seconds to Authenticate or you get booted by the server.");
-        _client.Send(GameServerMsgTypes.Authenticate, new AuthTicketMessage()
+        _network.Send(GameServerMsgTypes.Authenticate, new AuthTicketMessage()
         {
             PlayFabId = PlayFabId,
             AuthTicket = !string.IsNullOrEmpty(GameServerAuthTicket) ? GameServerAuthTicket : SessionTicket
         });
+
     }
 
     private void OnAuthenticated(NetworkMessage netMsg)
     {
         StartText.text = "Ready";
         Debug.Log("Sending Custom Message to the server, telling it to do something ");
-        _client.Send(GameServerMsgTypes.MsgRecieverExample, new StringMessage());
+        _network.Send(GameServerMsgTypes.MsgRecieverExample, new StringMessage());
+
+		//Initialize Chat Interface with our NetworkClient:
+		if (ChatInterface != null)
+		{
+			ChatInterface.Initialize (_network, PlayFabId);
+		}
     }
 
     private void OnMsgRecieverExampleResponse(NetworkMessage netMsg)

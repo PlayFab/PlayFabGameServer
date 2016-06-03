@@ -56,6 +56,8 @@ public class PlayFabContext : MVCSContext
         #region Player Data Management
         injectionBinder.Bind<DeleteUsersSignal>().CrossContext();
         injectionBinder.Bind<DeleteUsersResponseSignal>().CrossContext();
+        injectionBinder.Bind<GetFriendLeaderboardSignal>().CrossContext();
+        injectionBinder.Bind<GetFriendLeaderboardResponseSignal>().CrossContext();
         injectionBinder.Bind<GetLeaderboardSignal>().CrossContext();
         injectionBinder.Bind<GetLeaderboardResponseSignal>().CrossContext();
         injectionBinder.Bind<GetLeaderboardAroundUserSignal>().CrossContext();
@@ -99,12 +101,16 @@ public class PlayFabContext : MVCSContext
         #region Title-Wide Data Management
         injectionBinder.Bind<GetCatalogItemsSignal>().CrossContext();
         injectionBinder.Bind<GetCatalogItemsResponseSignal>().CrossContext();
+        injectionBinder.Bind<GetPublisherDataSignal>().CrossContext();
+        injectionBinder.Bind<GetPublisherDataResponseSignal>().CrossContext();
         injectionBinder.Bind<GetTitleDataSignal>().CrossContext();
         injectionBinder.Bind<GetTitleDataResponseSignal>().CrossContext();
         injectionBinder.Bind<GetTitleInternalDataSignal>().CrossContext();
         injectionBinder.Bind<GetTitleInternalDataResponseSignal>().CrossContext();
         injectionBinder.Bind<GetTitleNewsSignal>().CrossContext();
         injectionBinder.Bind<GetTitleNewsResponseSignal>().CrossContext();
+        injectionBinder.Bind<SetPublisherDataSignal>().CrossContext();
+        injectionBinder.Bind<SetPublisherDataResponseSignal>().CrossContext();
         injectionBinder.Bind<SetTitleDataSignal>().CrossContext();
         injectionBinder.Bind<SetTitleDataResponseSignal>().CrossContext();
         injectionBinder.Bind<SetTitleInternalDataSignal>().CrossContext();
@@ -118,6 +124,8 @@ public class PlayFabContext : MVCSContext
         injectionBinder.Bind<AddUserVirtualCurrencyResponseSignal>().CrossContext();
         injectionBinder.Bind<ConsumeItemSignal>().CrossContext();
         injectionBinder.Bind<ConsumeItemResponseSignal>().CrossContext();
+        injectionBinder.Bind<EvaluateRandomResultTableSignal>().CrossContext();
+        injectionBinder.Bind<EvaluateRandomResultTableResponseSignal>().CrossContext();
         injectionBinder.Bind<GetCharacterInventorySignal>().CrossContext();
         injectionBinder.Bind<GetCharacterInventoryResponseSignal>().CrossContext();
         injectionBinder.Bind<GetUserInventorySignal>().CrossContext();
@@ -155,6 +163,12 @@ public class PlayFabContext : MVCSContext
         #endregion
         //Friend List Management
         #region Friend List Management
+        injectionBinder.Bind<AddFriendSignal>().CrossContext();
+        injectionBinder.Bind<AddFriendResponseSignal>().CrossContext();
+        injectionBinder.Bind<GetFriendsListSignal>().CrossContext();
+        injectionBinder.Bind<GetFriendsListResponseSignal>().CrossContext();
+        injectionBinder.Bind<RemoveFriendSignal>().CrossContext();
+        injectionBinder.Bind<RemoveFriendResponseSignal>().CrossContext();
         #endregion
         //Matchmaking APIs
         #region Matchmaking APIs
@@ -162,6 +176,8 @@ public class PlayFabContext : MVCSContext
         injectionBinder.Bind<NotifyMatchmakerPlayerLeftResponseSignal>().CrossContext();
         injectionBinder.Bind<RedeemMatchmakerTicketSignal>().CrossContext();
         injectionBinder.Bind<RedeemMatchmakerTicketResponseSignal>().CrossContext();
+        injectionBinder.Bind<SetGameServerInstanceStateSignal>().CrossContext();
+        injectionBinder.Bind<SetGameServerInstanceStateResponseSignal>().CrossContext();
         #endregion
         //Steam-Specific APIs
         #region Steam-Specific APIs
@@ -172,6 +188,12 @@ public class PlayFabContext : MVCSContext
         #region Analytics
         injectionBinder.Bind<LogEventSignal>().CrossContext();
         injectionBinder.Bind<LogEventResponseSignal>().CrossContext();
+        injectionBinder.Bind<WriteCharacterEventSignal>().CrossContext();
+        injectionBinder.Bind<WriteCharacterEventResponseSignal>().CrossContext();
+        injectionBinder.Bind<WritePlayerEventSignal>().CrossContext();
+        injectionBinder.Bind<WritePlayerEventResponseSignal>().CrossContext();
+        injectionBinder.Bind<WriteTitleEventSignal>().CrossContext();
+        injectionBinder.Bind<WriteTitleEventResponseSignal>().CrossContext();
         #endregion
         //Shared Group Data
         #region Shared Group Data
@@ -181,19 +203,17 @@ public class PlayFabContext : MVCSContext
         injectionBinder.Bind<CreateSharedGroupResponseSignal>().CrossContext();
         injectionBinder.Bind<DeleteSharedGroupSignal>().CrossContext();
         injectionBinder.Bind<DeleteSharedGroupResponseSignal>().CrossContext();
-        injectionBinder.Bind<GetPublisherDataSignal>().CrossContext();
-        injectionBinder.Bind<GetPublisherDataResponseSignal>().CrossContext();
         injectionBinder.Bind<GetSharedGroupDataSignal>().CrossContext();
         injectionBinder.Bind<GetSharedGroupDataResponseSignal>().CrossContext();
         injectionBinder.Bind<RemoveSharedGroupMembersSignal>().CrossContext();
         injectionBinder.Bind<RemoveSharedGroupMembersResponseSignal>().CrossContext();
-        injectionBinder.Bind<SetPublisherDataSignal>().CrossContext();
-        injectionBinder.Bind<SetPublisherDataResponseSignal>().CrossContext();
         injectionBinder.Bind<UpdateSharedGroupDataSignal>().CrossContext();
         injectionBinder.Bind<UpdateSharedGroupDataResponseSignal>().CrossContext();
         #endregion
         //Server-Side Cloud Script
         #region Server-Side Cloud Script
+        injectionBinder.Bind<ExecuteCloudScriptSignal>().CrossContext();
+        injectionBinder.Bind<ExecuteCloudScriptResponseSignal>().CrossContext();
         #endregion
         //Content
         #region Content

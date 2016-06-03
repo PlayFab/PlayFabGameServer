@@ -1,11 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using strange.extensions.command.impl;
 using strange.extensions.signal.impl;
 using UnityEngine.Networking;
+using Object = UnityEngine.Object;
 
 public class SetupUnityNetworkingSignal : Signal { }
 public class SetupUnityNetworkingCompleteSignal : Signal { }
-
+public class ClientDisconnectedSignal : Signal<int,string> { }
 public class SetupUnityNetworkingCommand : Command
 {
     [Inject] public UnityNetworkingData UnityNetworkingData { get; set; }

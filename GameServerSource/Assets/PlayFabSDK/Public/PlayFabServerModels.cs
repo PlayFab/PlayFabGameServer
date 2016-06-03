@@ -28,6 +28,34 @@ namespace PlayFab.ServerModels
         public int Amount { get; set;}
     }
 
+    public class AddFriendRequest
+    {
+
+        /// <summary>
+        /// PlayFab identifier of the player to add a new friend.
+        /// </summary>
+        public string PlayFabId { get; set;}
+
+        /// <summary>
+        /// The PlayFab identifier of the user being added.
+        /// </summary>
+        public string FriendPlayFabId { get; set;}
+
+        /// <summary>
+        /// The PlayFab username of the user being added
+        /// </summary>
+        public string FriendUsername { get; set;}
+
+        /// <summary>
+        /// Email address of the user being added.
+        /// </summary>
+        public string FriendEmail { get; set;}
+
+        /// <summary>
+        /// Title-specific display name of the user to being added.
+        /// </summary>
+        public string FriendTitleDisplayName { get; set;}
+    }
     public class AddSharedGroupMembersRequest
     {
 
@@ -330,6 +358,13 @@ namespace PlayFab.ServerModels
         public string CharacterType { get; set;}
     }
 
+    public enum CloudScriptRevisionOption
+    {
+        Live,
+        Latest,
+        Specific
+    }
+
     public class ConsumeItemRequest
     {
 
@@ -606,6 +641,106 @@ namespace PlayFab.ServerModels
     {
     }
 
+    public class EvaluateRandomResultTableRequest : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// The unique identifier of the Random Result Table to use.
+        /// </summary>
+        public string TableId { get; set;}
+
+        /// <summary>
+        /// Specifies the catalog version that should be used to evaluate the Random Result Table.  If unspecified, uses default/primary catalog.
+        /// </summary>
+        public string CatalogVersion { get; set;}
+    }
+
+    public class EvaluateRandomResultTableResult : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// Unique identifier for the item returned from the Random Result Table evaluation, for the given catalog.
+        /// </summary>
+        public string ResultItemId { get; set;}
+    }
+
+    public class ExecuteCloudScriptResult : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// The name of the function that executed
+        /// </summary>
+        public string FunctionName { get; set;}
+
+        /// <summary>
+        /// The revision of the CloudScript that executed
+        /// </summary>
+        public int Revision { get; set;}
+
+        /// <summary>
+        /// The object returned from the CloudScript function, if any
+        /// </summary>
+        public object FunctionResult { get; set;}
+
+        /// <summary>
+        /// Entries logged during the function execution. These include both entries logged in the function code using log.info() and log.error() and error entries for API and HTTP request failures.
+        /// </summary>
+        public List<LogStatement> Logs { get; set;}
+
+        public double ExecutionTimeSeconds { get; set;}
+
+        public uint MemoryConsumedBytes { get; set;}
+
+        /// <summary>
+        /// Number of PlayFab API requests issued by the CloudScript function
+        /// </summary>
+        public int APIRequestsIssued { get; set;}
+
+        /// <summary>
+        /// Number of external HTTP requests issued by the CloudScript function
+        /// </summary>
+        public int HttpRequestsIssued { get; set;}
+
+        /// <summary>
+        /// Information about the error, if any, that occured during execution
+        /// </summary>
+        public ScriptExecutionError Error { get; set;}
+    }
+
+    public class ExecuteCloudScriptServerRequest
+    {
+
+        /// <summary>
+        /// Unique PlayFab assigned ID of the user on whom the operation will be performed.
+        /// </summary>
+        public string PlayFabId { get; set;}
+
+        /// <summary>
+        /// The name of the CloudScript function to execute
+        /// </summary>
+        public string FunctionName { get; set;}
+
+        /// <summary>
+        /// Object that is passed in to the function as the first argument
+        /// </summary>
+        public object FunctionParameter { get; set;}
+
+        /// <summary>
+        /// Option for which revision of the CloudScript to execute. 'Latest' executes the most recently created revision, 'Live' executes the current live, published revision, and 'Specific' executes the specified revision. The default value is 'Specific', if the SpeificRevision parameter is specified, otherwise it is 'Live'.
+        /// </summary>
+        public CloudScriptRevisionOption? RevisionSelection { get; set;}
+
+        /// <summary>
+        /// The specivic revision to execute, when RevisionSelection is set to 'Specific'
+        /// </summary>
+        public int? SpecificRevision { get; set;}
+
+        /// <summary>
+        /// Generate a 'player_executed_cloudscript' PlayStream event containing the results of the function execution and other contextual information. This event will show up in the PlayStream debugger console for the player in Game Manager.
+        /// </summary>
+        public bool? GeneratePlayStreamEvent { get; set;}
+    }
+
     public class FacebookPlayFabIdPair
     {
 
@@ -664,6 +799,12 @@ namespace PlayFab.ServerModels
         public UserGameCenterInfo GameCenterInfo { get; set;}
     }
 
+    public enum GameInstanceState
+    {
+        Open,
+        Closed
+    }
+
     public class GetCatalogItemsRequest
     {
 
@@ -703,7 +844,7 @@ namespace PlayFab.ServerModels
         /// <summary>
         /// The version that currently exists according to the caller. The call will return the data for all of the keys if the version in the system is greater than this.
         /// </summary>
-        public int? IfChangedFromDataVersion { get; set;}
+        public uint? IfChangedFromDataVersion { get; set;}
     }
 
     public class GetCharacterDataResult : PlayFabResultCommon
@@ -849,29 +990,6 @@ namespace PlayFab.ServerModels
         public Dictionary<string,int> CharacterStatistics { get; set;}
     }
 
-    public class GetCloudScriptUrlRequest
-    {
-
-        /// <summary>
-        /// Cloud Script Version to use. Defaults to 1.
-        /// </summary>
-        public int? Version { get; set;}
-
-        /// <summary>
-        /// Specifies whether the URL returned should be the one for the most recently uploaded Revision of the Cloud Script (true), or the Revision most recently set to live (false). Defaults to false.
-        /// </summary>
-        public bool? Testing { get; set;}
-    }
-
-    public class GetCloudScriptUrlResult : PlayFabResultCommon
-    {
-
-        /// <summary>
-        /// URL of the Cloud Script logic server.
-        /// </summary>
-        public string Url { get; set;}
-    }
-
     public class GetContentDownloadUrlRequest
     {
 
@@ -900,6 +1018,67 @@ namespace PlayFab.ServerModels
         public string URL { get; set;}
     }
 
+    public class GetFriendLeaderboardRequest
+    {
+
+        /// <summary>
+        /// The player whose friend leaderboard to get
+        /// </summary>
+        public string PlayFabId { get; set;}
+
+        /// <summary>
+        /// Statistic used to rank friends for this leaderboard.
+        /// </summary>
+        public string StatisticName { get; set;}
+
+        /// <summary>
+        /// Position in the leaderboard to start this listing (defaults to the first entry).
+        /// </summary>
+        public int StartPosition { get; set;}
+
+        /// <summary>
+        /// Maximum number of entries to retrieve.
+        /// </summary>
+        public int MaxResultsCount { get; set;}
+
+        /// <summary>
+        /// Indicates whether Steam service friends should be included in the response. Default is true.
+        /// </summary>
+        public bool? IncludeSteamFriends { get; set;}
+
+        /// <summary>
+        /// Indicates whether Facebook friends should be included in the response. Default is true.
+        /// </summary>
+        public bool? IncludeFacebookFriends { get; set;}
+    }
+
+    public class GetFriendsListRequest
+    {
+
+        /// <summary>
+        /// PlayFab identifier of the player whose friend list to get.
+        /// </summary>
+        public string PlayFabId { get; set;}
+
+        /// <summary>
+        /// Indicates whether Steam service friends should be included in the response. Default is true.
+        /// </summary>
+        public bool? IncludeSteamFriends { get; set;}
+
+        /// <summary>
+        /// Indicates whether Facebook friends should be included in the response. Default is true.
+        /// </summary>
+        public bool? IncludeFacebookFriends { get; set;}
+    }
+
+    public class GetFriendsListResult : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// Array of friends found.
+        /// </summary>
+        public List<FriendInfo> Friends { get; set;}
+    }
     public class GetLeaderboardAroundCharacterRequest
     {
 
@@ -1235,7 +1414,7 @@ namespace PlayFab.ServerModels
         /// <summary>
         /// The version that currently exists according to the caller. The call will return the data for all of the keys if the version in the system is greater than this.
         /// </summary>
-        public int? IfChangedFromDataVersion { get; set;}
+        public uint? IfChangedFromDataVersion { get; set;}
     }
 
     public class GetUserDataResult : PlayFabResultCommon
@@ -1699,6 +1878,22 @@ namespace PlayFab.ServerModels
     {
     }
 
+    public class LogStatement
+    {
+
+        /// <summary>
+        /// 'Debug', 'Info', or 'Error'
+        /// </summary>
+        public string Level { get; set;}
+
+        public string Message { get; set;}
+
+        /// <summary>
+        /// Optional object accompanying the message as contextual information
+        /// </summary>
+        public object Data { get; set;}
+    }
+
     public class ModifyCharacterVirtualCurrencyResult : PlayFabResultCommon
     {
 
@@ -1934,25 +2129,6 @@ namespace PlayFab.ServerModels
         public DateTime? DeactivationTime { get; set;}
     }
 
-    public class PlayStreamEventHistory
-    {
-
-        /// <summary>
-        /// The ID of the trigger that caused this event to be created.
-        /// </summary>
-        public string ParentTriggerId { get; set;}
-
-        /// <summary>
-        /// The ID of the previous event that caused this event to be created by hitting a trigger.
-        /// </summary>
-        public string ParentEventId { get; set;}
-
-        /// <summary>
-        /// If true, then this event was allowed to trigger subsequent events in a trigger.
-        /// </summary>
-        public bool TriggeredEvents { get; set;}
-    }
-
     public class RedeemCouponRequest
     {
 
@@ -2012,6 +2188,20 @@ namespace PlayFab.ServerModels
         /// User account information for the user validated.
         /// </summary>
         public UserAccountInfo UserInfo { get; set;}
+    }
+
+    public class RemoveFriendRequest
+    {
+
+        /// <summary>
+        /// PlayFab identifier of the friend account which is to be removed.
+        /// </summary>
+        public string FriendPlayFabId { get; set;}
+
+        /// <summary>
+        /// Unique PlayFab assigned ID of the user on whom the operation will be performed.
+        /// </summary>
+        public string PlayFabId { get; set;}
     }
 
     public class RemoveSharedGroupMembersRequest
@@ -2093,43 +2283,23 @@ namespace PlayFab.ServerModels
     {
     }
 
-    public class RunCloudScriptResult : PlayFabResultCommon
+    public class ScriptExecutionError
     {
 
         /// <summary>
-        /// id of Cloud Script run
+        /// Error code, such as CloudScriptNotFound, JavascriptException, CloudScriptFunctionArgumentSizeExceeded, CloudScriptAPIRequestCountExceeded, CloudScriptAPIRequestError, or CloudScriptHTTPRequestError
         /// </summary>
-        public string ActionId { get; set;}
+        public string Error { get; set;}
 
         /// <summary>
-        /// version of Cloud Script run
+        /// Details about the error
         /// </summary>
-        public int Version { get; set;}
+        public string Message { get; set;}
 
         /// <summary>
-        /// revision of Cloud Script run
+        /// Point during the execution of the script at which the error occurred, if any
         /// </summary>
-        public int Revision { get; set;}
-
-        /// <summary>
-        /// return values from the server action as a dynamic object
-        /// </summary>
-        public object Results { get; set;}
-
-        /// <summary>
-        /// return values from the server action as a JSON encoded string
-        /// </summary>
-        public string ResultsEncoded { get; set;}
-
-        /// <summary>
-        /// any log statements generated during the run of this action
-        /// </summary>
-        public string ActionLog { get; set;}
-
-        /// <summary>
-        /// time this script took to run, in seconds
-        /// </summary>
-        public double ExecutionTime { get; set;}
+        public string StackTrace { get; set;}
     }
 
     public class SendPushNotificationRequest
@@ -2152,6 +2322,24 @@ namespace PlayFab.ServerModels
     }
 
     public class SendPushNotificationResult : PlayFabResultCommon
+    {
+    }
+
+    public class SetGameServerInstanceStateRequest
+    {
+
+        /// <summary>
+        /// Unique identifier of the Game Instance to be updated.
+        /// </summary>
+        public string LobbyId { get; set;}
+
+        /// <summary>
+        /// State to set for the specified game server instance.
+        /// </summary>
+        public GameInstanceState State { get; set;}
+    }
+
+    public class SetGameServerInstanceStateResult : PlayFabResultCommon
     {
     }
 
@@ -2213,16 +2401,6 @@ namespace PlayFab.ServerModels
         /// Indicates whether this data can be read by all users (public) or only members of the group (private).
         /// </summary>
         public UserDataPermission? Permission { get; set;}
-    }
-
-    public enum SourceType
-    {
-        Admin,
-        BackEnd,
-        GameClient,
-        GameServer,
-        Partner,
-        Stream
     }
 
     public class StatisticNameVersion
@@ -2974,5 +3152,86 @@ namespace PlayFab.ServerModels
         /// Maximum value to which the regenerating currency will automatically increment. Note that it can exceed this value through use of the AddUserVirtualCurrency API call. However, it will not regenerate automatically until it has fallen below this value.
         /// </summary>
         public int RechargeMax { get; set;}
+    }
+
+    public class WriteEventResponse : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// The ID of the event as it was written to PlayStream. This is an alphanumeric GUID.
+        /// </summary>
+        public string EventId { get; set;}
+    }
+
+    public class WriteServerCharacterEventRequest
+    {
+
+        /// <summary>
+        /// Unique PlayFab assigned ID of the user on whom the operation will be performed.
+        /// </summary>
+        public string PlayFabId { get; set;}
+
+        /// <summary>
+        /// Unique PlayFab assigned ID for a specific character owned by a user
+        /// </summary>
+        public string CharacterId { get; set;}
+
+        /// <summary>
+        /// The name of this event. This field is alphanumeric and at most 64 characters long. It is internally namespaced down onto the calling title. Best practices are to name in subject_verb_object format (player_logged_in).
+        /// </summary>
+        public string EventName { get; set;}
+
+        /// <summary>
+        /// The time (in UTC) associated with this event. If omitted, a timestamp of now in UTC will be applied.
+        /// </summary>
+        public DateTime? Timestamp { get; set;}
+
+        /// <summary>
+        /// Arbitrary json values that represent the custom body of this event.
+        /// </summary>
+        public Dictionary<string,object> Body { get; set;}
+    }
+
+    public class WriteServerPlayerEventRequest
+    {
+
+        /// <summary>
+        /// Unique PlayFab assigned ID of the user on whom the operation will be performed.
+        /// </summary>
+        public string PlayFabId { get; set;}
+
+        /// <summary>
+        /// The name of this event. This field is alphanumeric and at most 64 characters long. It is internally namespaced down onto the calling title. Best practices are to name in subject_verb_object format (player_logged_in).
+        /// </summary>
+        public string EventName { get; set;}
+
+        /// <summary>
+        /// The time (in UTC) associated with this event. If omitted, a timestamp of 'now' in UTC will be applied.
+        /// </summary>
+        public DateTime? Timestamp { get; set;}
+
+        /// <summary>
+        /// Arbitrary json values that represent the custom body of this event.
+        /// </summary>
+        public Dictionary<string,object> Body { get; set;}
+    }
+
+    public class WriteTitleEventRequest
+    {
+
+        /// <summary>
+        /// The name of this event. This field is alphanumeric and at most 64 characters long. It is internally namespaced down onto the calling title. Best practices are to name in subject_verb_object format (player_logged_in).
+        /// </summary>
+        public string EventName { get; set;}
+
+        /// <summary>
+        /// The time (in UTC) associated with this event. If omitted, a timestamp of now in UTC will be applied.
+        /// </summary>
+        public DateTime? Timestamp { get; set;}
+
+        /// <summary>
+        /// Arbitrary json values that represent the custom body of this event.
+        /// </summary>
+        public Dictionary<string,object> Body { get; set;}
     }
 }

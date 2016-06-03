@@ -80,6 +80,11 @@ using strange.extensions.signal.impl;
     public class DeleteUsersSignal : Signal<DeleteUsersRequest> { }
     
     ///<summary>
+    ///Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the leaderboard
+    ///</summary>
+    public class GetFriendLeaderboardSignal : Signal<GetFriendLeaderboardRequest> { }
+    
+    ///<summary>
     ///Retrieves a list of ranked users for the given statistic, starting from the indicated point in the leaderboard
     ///</summary>
     public class GetLeaderboardSignal : Signal<GetLeaderboardRequest> { }
@@ -170,7 +175,7 @@ using strange.extensions.signal.impl;
     public class UpdateUserReadOnlyDataSignal : Signal<UpdateUserDataRequest> { }
     
     ///<summary>
-    ///Updates the values of the specified title-specific statistics for the user
+    ///Updates the values of the specified title-specific statistics for the user. By default, clients are not permitted to update statistics. Developers may override this setting in the Game Manager > Settings > API Features.
     ///</summary>
     public class UpdateUserStatisticsSignal : Signal<UpdateUserStatisticsRequest> { }
     
@@ -183,6 +188,11 @@ using strange.extensions.signal.impl;
     ///Retrieves the specified version of the title's catalog of virtual goods, including all defined properties
     ///</summary>
     public class GetCatalogItemsSignal : Signal<GetCatalogItemsRequest> { }
+    
+    ///<summary>
+    ///Retrieves the key-value store of custom publisher settings
+    ///</summary>
+    public class GetPublisherDataSignal : Signal<GetPublisherDataRequest> { }
     
     ///<summary>
     ///Retrieves the key-value store of custom title settings
@@ -198,6 +208,11 @@ using strange.extensions.signal.impl;
     ///Retrieves the title news feed, as configured in the developer portal
     ///</summary>
     public class GetTitleNewsSignal : Signal<GetTitleNewsRequest> { }
+    
+    ///<summary>
+    ///Updates the key-value store of custom publisher settings
+    ///</summary>
+    public class SetPublisherDataSignal : Signal<SetPublisherDataRequest> { }
     
     ///<summary>
     ///Updates the key-value store of custom title settings
@@ -228,6 +243,11 @@ using strange.extensions.signal.impl;
     ///Consume uses of a consumable item. When all uses are consumed, it will be removed from the player's inventory.
     ///</summary>
     public class ConsumeItemSignal : Signal<ConsumeItemRequest> { }
+    
+    ///<summary>
+    ///Returns the result of an evaluation of a Random Result Table - the ItemId from the game Catalog which would have been added to the player inventory, if the Random Result Table were added via a Bundle or a call to UnlockContainer.
+    ///</summary>
+    public class EvaluateRandomResultTableSignal : Signal<EvaluateRandomResultTableRequest> { }
     
     ///<summary>
     ///Retrieves the specified character's current inventory of virtual goods
@@ -319,6 +339,21 @@ using strange.extensions.signal.impl;
 //Friend List Management
 #region Friend List Management
     
+    ///<summary>
+    ///Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+    ///</summary>
+    public class AddFriendSignal : Signal<AddFriendRequest> { }
+    
+    ///<summary>
+    ///Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+    ///</summary>
+    public class GetFriendsListSignal : Signal<GetFriendsListRequest> { }
+    
+    ///<summary>
+    ///Removes the specified friend from the the user's friend list
+    ///</summary>
+    public class RemoveFriendSignal : Signal<RemoveFriendRequest> { }
+    
 #endregion
     
 //Matchmaking APIs
@@ -333,6 +368,11 @@ using strange.extensions.signal.impl;
     ///Validates a Game Server session ticket and returns details about the user
     ///</summary>
     public class RedeemMatchmakerTicketSignal : Signal<RedeemMatchmakerTicketRequest> { }
+    
+    ///<summary>
+    ///Sets the state of the indicated Game Server Instance
+    ///</summary>
+    public class SetGameServerInstanceStateSignal : Signal<SetGameServerInstanceStateRequest> { }
     
 #endregion
     
@@ -353,6 +393,21 @@ using strange.extensions.signal.impl;
     ///Logs a custom analytics event
     ///</summary>
     public class LogEventSignal : Signal<LogEventRequest> { }
+    
+    ///<summary>
+    ///Writes a character-based event into PlayStream.
+    ///</summary>
+    public class WriteCharacterEventSignal : Signal<WriteServerCharacterEventRequest> { }
+    
+    ///<summary>
+    ///Writes a player-based event into PlayStream.
+    ///</summary>
+    public class WritePlayerEventSignal : Signal<WriteServerPlayerEventRequest> { }
+    
+    ///<summary>
+    ///Writes a title-based event into PlayStream.
+    ///</summary>
+    public class WriteTitleEventSignal : Signal<WriteTitleEventRequest> { }
     
 #endregion
     
@@ -375,11 +430,6 @@ using strange.extensions.signal.impl;
     public class DeleteSharedGroupSignal : Signal<DeleteSharedGroupRequest> { }
     
     ///<summary>
-    ///Retrieves the key-value store of custom publisher settings
-    ///</summary>
-    public class GetPublisherDataSignal : Signal<GetPublisherDataRequest> { }
-    
-    ///<summary>
     ///Retrieves data stored in a shared group object, as well as the list of members in the group. The server can access all public and private group data.
     ///</summary>
     public class GetSharedGroupDataSignal : Signal<GetSharedGroupDataRequest> { }
@@ -390,11 +440,6 @@ using strange.extensions.signal.impl;
     public class RemoveSharedGroupMembersSignal : Signal<RemoveSharedGroupMembersRequest> { }
     
     ///<summary>
-    ///Updates the key-value store of custom publisher settings
-    ///</summary>
-    public class SetPublisherDataSignal : Signal<SetPublisherDataRequest> { }
-    
-    ///<summary>
     ///Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated or added in this call will be readable by users not in the group. By default, data permissions are set to Private. Regardless of the permission setting, only members of the group (and the server) can update the data.
     ///</summary>
     public class UpdateSharedGroupDataSignal : Signal<UpdateSharedGroupDataRequest> { }
@@ -403,6 +448,11 @@ using strange.extensions.signal.impl;
     
 //Server-Side Cloud Script
 #region Server-Side Cloud Script
+    
+    ///<summary>
+    ///Executes a CloudScript function, with the 'currentPlayerId' variable set to the specified PlayFabId parameter value.
+    ///</summary>
+    public class ExecuteCloudScriptSignal : Signal<ExecuteCloudScriptServerRequest> { }
     
 #endregion
     
@@ -425,7 +475,7 @@ using strange.extensions.signal.impl;
     public class DeleteCharacterFromUserSignal : Signal<DeleteCharacterFromUserRequest> { }
     
     ///<summary>
-    ///Lists all of the characters that belong to a specific user.
+    ///Lists all of the characters that belong to a specific user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
     ///</summary>
     public class GetAllUsersCharactersSignal : Signal<ListUsersCharactersRequest> { }
     
@@ -450,7 +500,7 @@ using strange.extensions.signal.impl;
     public class GetLeaderboardForUserCharactersSignal : Signal<GetLeaderboardForUsersCharactersRequest> { }
     
     ///<summary>
-    ///Grants the specified character type to the user.
+    ///Grants the specified character type to the user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
     ///</summary>
     public class GrantCharacterToUserSignal : Signal<GrantCharacterToUserRequest> { }
     
@@ -579,6 +629,11 @@ using strange.extensions.signal.impl;
     public class DeleteUsersResponseSignal : Signal<DeleteUsersResult> { }
 
     ///<summary>
+    ///Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the leaderboard
+    ///</summary>
+    public class GetFriendLeaderboardResponseSignal : Signal<GetLeaderboardResult> { }
+
+    ///<summary>
     ///Retrieves a list of ranked users for the given statistic, starting from the indicated point in the leaderboard
     ///</summary>
     public class GetLeaderboardResponseSignal : Signal<GetLeaderboardResult> { }
@@ -669,7 +724,7 @@ using strange.extensions.signal.impl;
     public class UpdateUserReadOnlyDataResponseSignal : Signal<UpdateUserDataResult> { }
 
     ///<summary>
-    ///Updates the values of the specified title-specific statistics for the user
+    ///Updates the values of the specified title-specific statistics for the user. By default, clients are not permitted to update statistics. Developers may override this setting in the Game Manager > Settings > API Features.
     ///</summary>
     public class UpdateUserStatisticsResponseSignal : Signal<UpdateUserStatisticsResult> { }
 
@@ -682,6 +737,11 @@ using strange.extensions.signal.impl;
     ///Retrieves the specified version of the title's catalog of virtual goods, including all defined properties
     ///</summary>
     public class GetCatalogItemsResponseSignal : Signal<GetCatalogItemsResult> { }
+
+    ///<summary>
+    ///Retrieves the key-value store of custom publisher settings
+    ///</summary>
+    public class GetPublisherDataResponseSignal : Signal<GetPublisherDataResult> { }
 
     ///<summary>
     ///Retrieves the key-value store of custom title settings
@@ -697,6 +757,11 @@ using strange.extensions.signal.impl;
     ///Retrieves the title news feed, as configured in the developer portal
     ///</summary>
     public class GetTitleNewsResponseSignal : Signal<GetTitleNewsResult> { }
+
+    ///<summary>
+    ///Updates the key-value store of custom publisher settings
+    ///</summary>
+    public class SetPublisherDataResponseSignal : Signal<SetPublisherDataResult> { }
 
     ///<summary>
     ///Updates the key-value store of custom title settings
@@ -727,6 +792,11 @@ using strange.extensions.signal.impl;
     ///Consume uses of a consumable item. When all uses are consumed, it will be removed from the player's inventory.
     ///</summary>
     public class ConsumeItemResponseSignal : Signal<ConsumeItemResult> { }
+
+    ///<summary>
+    ///Returns the result of an evaluation of a Random Result Table - the ItemId from the game Catalog which would have been added to the player inventory, if the Random Result Table were added via a Bundle or a call to UnlockContainer.
+    ///</summary>
+    public class EvaluateRandomResultTableResponseSignal : Signal<EvaluateRandomResultTableResult> { }
 
     ///<summary>
     ///Retrieves the specified character's current inventory of virtual goods
@@ -818,6 +888,21 @@ using strange.extensions.signal.impl;
 //Friend List Management
 #region Friend List Management
 
+    ///<summary>
+    ///Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+    ///</summary>
+    public class AddFriendResponseSignal : Signal<EmptyResult> { }
+
+    ///<summary>
+    ///Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+    ///</summary>
+    public class GetFriendsListResponseSignal : Signal<GetFriendsListResult> { }
+
+    ///<summary>
+    ///Removes the specified friend from the the user's friend list
+    ///</summary>
+    public class RemoveFriendResponseSignal : Signal<EmptyResult> { }
+
 #endregion
 
 //Matchmaking APIs
@@ -832,6 +917,11 @@ using strange.extensions.signal.impl;
     ///Validates a Game Server session ticket and returns details about the user
     ///</summary>
     public class RedeemMatchmakerTicketResponseSignal : Signal<RedeemMatchmakerTicketResult> { }
+
+    ///<summary>
+    ///Sets the state of the indicated Game Server Instance
+    ///</summary>
+    public class SetGameServerInstanceStateResponseSignal : Signal<SetGameServerInstanceStateResult> { }
 
 #endregion
 
@@ -852,6 +942,21 @@ using strange.extensions.signal.impl;
     ///Logs a custom analytics event
     ///</summary>
     public class LogEventResponseSignal : Signal<LogEventResult> { }
+
+    ///<summary>
+    ///Writes a character-based event into PlayStream.
+    ///</summary>
+    public class WriteCharacterEventResponseSignal : Signal<WriteEventResponse> { }
+
+    ///<summary>
+    ///Writes a player-based event into PlayStream.
+    ///</summary>
+    public class WritePlayerEventResponseSignal : Signal<WriteEventResponse> { }
+
+    ///<summary>
+    ///Writes a title-based event into PlayStream.
+    ///</summary>
+    public class WriteTitleEventResponseSignal : Signal<WriteEventResponse> { }
 
 #endregion
 
@@ -874,11 +979,6 @@ using strange.extensions.signal.impl;
     public class DeleteSharedGroupResponseSignal : Signal<EmptyResult> { }
 
     ///<summary>
-    ///Retrieves the key-value store of custom publisher settings
-    ///</summary>
-    public class GetPublisherDataResponseSignal : Signal<GetPublisherDataResult> { }
-
-    ///<summary>
     ///Retrieves data stored in a shared group object, as well as the list of members in the group. The server can access all public and private group data.
     ///</summary>
     public class GetSharedGroupDataResponseSignal : Signal<GetSharedGroupDataResult> { }
@@ -889,11 +989,6 @@ using strange.extensions.signal.impl;
     public class RemoveSharedGroupMembersResponseSignal : Signal<RemoveSharedGroupMembersResult> { }
 
     ///<summary>
-    ///Updates the key-value store of custom publisher settings
-    ///</summary>
-    public class SetPublisherDataResponseSignal : Signal<SetPublisherDataResult> { }
-
-    ///<summary>
     ///Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated or added in this call will be readable by users not in the group. By default, data permissions are set to Private. Regardless of the permission setting, only members of the group (and the server) can update the data.
     ///</summary>
     public class UpdateSharedGroupDataResponseSignal : Signal<UpdateSharedGroupDataResult> { }
@@ -902,6 +997,11 @@ using strange.extensions.signal.impl;
 
 //Server-Side Cloud Script
 #region Server-Side Cloud Script
+
+    ///<summary>
+    ///Executes a CloudScript function, with the 'currentPlayerId' variable set to the specified PlayFabId parameter value.
+    ///</summary>
+    public class ExecuteCloudScriptResponseSignal : Signal<ExecuteCloudScriptResult> { }
 
 #endregion
 
@@ -924,7 +1024,7 @@ using strange.extensions.signal.impl;
     public class DeleteCharacterFromUserResponseSignal : Signal<DeleteCharacterFromUserResult> { }
 
     ///<summary>
-    ///Lists all of the characters that belong to a specific user.
+    ///Lists all of the characters that belong to a specific user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
     ///</summary>
     public class GetAllUsersCharactersResponseSignal : Signal<ListUsersCharactersResult> { }
 
@@ -949,7 +1049,7 @@ using strange.extensions.signal.impl;
     public class GetLeaderboardForUserCharactersResponseSignal : Signal<GetLeaderboardForUsersCharactersResult> { }
 
     ///<summary>
-    ///Grants the specified character type to the user.
+    ///Grants the specified character type to the user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
     ///</summary>
     public class GrantCharacterToUserResponseSignal : Signal<GrantCharacterToUserResult> { }
 
