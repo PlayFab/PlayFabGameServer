@@ -36,10 +36,12 @@
 
 // NOTE: uncomment the following line if you are compiling under Window Metro style application/library.
 // usually already defined in properties
-//#define NETFX_CORE;
+#if UNITY_WSA && UNITY_WP8
+#define NETFX_CORE
+#endif
 
 // If you are targetting WinStore, WP8 and NET4.5+ PCL make sure to
-#if UNITY_WP8 || UNITY_WP8_1
+#if UNITY_WP8 || UNITY_WP8_1 || UNITY_WSA
 // #define SIMPLE_JSON_TYPEINFO
 #endif
 
@@ -69,6 +71,22 @@ using System.Text;
 // ReSharper disable SuggestUseVarKeywordEvident
 namespace PlayFab.Json
 {
+    public enum NullValueHandling
+    {
+        Include, // Include null values when serializing and deserializing objects
+        Ignore // Ignore null values when serializing and deserializing objects
+    }
+
+    /// <summary>
+    /// Customize the json output of a field or property
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+    public class JsonProperty : Attribute
+    {
+        public string PropertyName = null;
+        public NullValueHandling NullValueHandling = NullValueHandling.Include;
+    }
+
     /// <summary>
     /// Represents the json array.
     /// </summary>
@@ -99,7 +117,7 @@ namespace PlayFab.Json
         /// <returns>The json representation of the array.</returns>
         public override string ToString()
         {
-            return SimpleJson.SerializeObject(this) ?? string.Empty;
+            return PlayFabSimpleJson.SerializeObject(this) ?? string.Empty;
         }
     }
 
@@ -120,6 +138,7 @@ namespace PlayFab.Json
 #endif
  IDictionary<string, object>
     {
+        private const int DICTIONARY_DEFAULT_SIZE = 16;
         /// <summary>
         /// The internal member dictionary.
         /// </summary>
@@ -130,7 +149,7 @@ namespace PlayFab.Json
         /// </summary>
         public JsonObject()
         {
-            _members = new Dictionary<string, object>();
+            _members = new Dictionary<string, object>(DICTIONARY_DEFAULT_SIZE);
         }
 
         /// <summary>
@@ -272,7 +291,7 @@ namespace PlayFab.Json
         {
             if (array == null) throw new ArgumentNullException("array");
             int num = Count;
-            foreach (KeyValuePair<string, object> kvp in this)
+            foreach (KeyValuePair<string, object> kvp in _members)
             {
                 array[arrayIndex++] = kvp;
                 if (--num <= 0)
@@ -338,7 +357,7 @@ namespace PlayFab.Json
         /// </returns>
         public override string ToString()
         {
-            return SimpleJson.SerializeObject(this);
+            return PlayFabSimpleJson.SerializeObject(_members);
         }
 
 #if SIMPLE_JSON_DYNAMIC
@@ -492,7 +511,7 @@ namespace PlayFab.Json
 #else
     public
 #endif
- static class SimpleJson
+ static class PlayFabSimpleJson
     {
         private enum TokenType : byte
         {
@@ -524,7 +543,7 @@ namespace PlayFab.Json
         [ThreadStatic]
         private static StringBuilder _parseStringBuilder;
 
-        static SimpleJson()
+        static PlayFabSimpleJson()
         {
             EscapeTable = new char[93];
             EscapeTable['"'] = '"';
@@ -567,9 +586,8 @@ namespace PlayFab.Json
             bool success = true;
             if (json != null)
             {
-                char[] charArray = json.ToCharArray();
                 int index = 0;
-                obj = ParseValue(charArray, ref index, ref success);
+                obj = ParseValue(json, ref index, ref success);
             }
             else
                 obj = null;
@@ -580,9 +598,9 @@ namespace PlayFab.Json
         public static object DeserializeObject(string json, Type type, IJsonSerializerStrategy jsonSerializerStrategy)
         {
             object jsonObject = DeserializeObject(json);
-            return type == null || jsonObject != null && ReflectionUtils.IsAssignableFrom(jsonObject.GetType(), type)
-                       ? jsonObject
-                       : (jsonSerializerStrategy ?? CurrentJsonSerializerStrategy).DeserializeObject(jsonObject, type);
+            if (type == null || jsonObject != null && ReflectionUtils.IsAssignableFrom(jsonObject.GetType(), type))
+                return jsonObject;
+            return (jsonSerializerStrategy ?? CurrentJsonSerializerStrategy).DeserializeObject(jsonObject, type);
         }
 
         public static object DeserializeObject(string json, Type type)
@@ -627,7 +645,7 @@ namespace PlayFab.Json
             StringBuilder sb = new StringBuilder();
             char c;
 
-            for (int i = 0; i < jsonString.Length; )
+            for (int i = 0; i < jsonString.Length;)
             {
                 c = jsonString[i++];
 
@@ -677,7 +695,7 @@ namespace PlayFab.Json
             return sb.ToString();
         }
 
-        static IDictionary<string, object> ParseObject(char[] json, ref int index, ref bool success)
+        static IDictionary<string, object> ParseObject(string json, ref int index, ref bool success)
         {
             IDictionary<string, object> table = new JsonObject();
             TokenType token;
@@ -730,7 +748,7 @@ namespace PlayFab.Json
             return table;
         }
 
-        static JsonArray ParseArray(char[] json, ref int index, ref bool success)
+        static JsonArray ParseArray(string json, ref int index, ref bool success)
         {
             JsonArray array = new JsonArray();
 
@@ -764,7 +782,7 @@ namespace PlayFab.Json
             return array;
         }
 
-        static object ParseValue(char[] json, ref int index, ref bool success)
+        static object ParseValue(string json, ref int index, ref bool success)
         {
             switch (LookAhead(json, index))
             {
@@ -792,7 +810,7 @@ namespace PlayFab.Json
             return null;
         }
 
-        static string ParseString(char[] json, ref int index, ref bool success)
+        static string ParseString(string json, ref int index, ref bool success)
         {
             if (_parseStringBuilder == null)
                 _parseStringBuilder = new StringBuilder(BUILDER_INIT);
@@ -842,7 +860,7 @@ namespace PlayFab.Json
                         {
                             // parse the 32 bit hex into an integer codepoint
                             uint codePoint;
-                            if (!(success = UInt32.TryParse(new string(json, index, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out codePoint)))
+                            if (!(success = UInt32.TryParse(json.Substring(index, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out codePoint)))
                                 return "";
 
                             // convert the integer codepoint to a unicode char and add to string
@@ -853,7 +871,7 @@ namespace PlayFab.Json
                                 if (remainingLength >= 6)
                                 {
                                     uint lowCodePoint;
-                                    if (new string(json, index, 2) == "\\u" && UInt32.TryParse(new string(json, index + 2, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out lowCodePoint))
+                                    if (json.Substring(index, 2) == "\\u" && UInt32.TryParse(json.Substring(index + 2, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out lowCodePoint))
                                     {
                                         if (0xDC00 <= lowCodePoint && lowCodePoint <= 0xDFFF)    // if low surrogate
                                         {
@@ -899,36 +917,36 @@ namespace PlayFab.Json
             return new string(new char[] { (char)((utf32 >> 10) + 0xD800), (char)(utf32 % 0x0400 + 0xDC00) });
         }
 
-        static object ParseNumber(char[] json, ref int index, ref bool success)
+        static object ParseNumber(string json, ref int index, ref bool success)
         {
             EatWhitespace(json, ref index);
             int lastIndex = GetLastIndexOfNumber(json, index);
             int charLength = (lastIndex - index) + 1;
             object returnNumber;
-            string str = new string(json, index, charLength);
+            string str = json.Substring(index, charLength);
             if (str.IndexOf(".", StringComparison.OrdinalIgnoreCase) != -1 || str.IndexOf("e", StringComparison.OrdinalIgnoreCase) != -1)
             {
                 double number;
-                success = double.TryParse(new string(json, index, charLength), NumberStyles.Any, CultureInfo.InvariantCulture, out number);
+                success = double.TryParse(json.Substring(index, charLength), NumberStyles.Any, CultureInfo.InvariantCulture, out number);
                 returnNumber = number;
             }
             else if (str.IndexOf("-", StringComparison.OrdinalIgnoreCase) == -1)
             {
                 ulong number;
-                success = ulong.TryParse(new string(json, index, charLength), NumberStyles.Any, CultureInfo.InvariantCulture, out number);
+                success = ulong.TryParse(json.Substring(index, charLength), NumberStyles.Any, CultureInfo.InvariantCulture, out number);
                 returnNumber = number;
             }
             else
             {
                 long number;
-                success = long.TryParse(new string(json, index, charLength), NumberStyles.Any, CultureInfo.InvariantCulture, out number);
+                success = long.TryParse(json.Substring(index, charLength), NumberStyles.Any, CultureInfo.InvariantCulture, out number);
                 returnNumber = number;
             }
             index = lastIndex + 1;
             return returnNumber;
         }
 
-        static int GetLastIndexOfNumber(char[] json, int index)
+        static int GetLastIndexOfNumber(string json, int index)
         {
             int lastIndex;
             for (lastIndex = index; lastIndex < json.Length; lastIndex++)
@@ -936,20 +954,20 @@ namespace PlayFab.Json
             return lastIndex - 1;
         }
 
-        static void EatWhitespace(char[] json, ref int index)
+        static void EatWhitespace(string json, ref int index)
         {
             for (; index < json.Length; index++)
                 if (" \t\n\r\b\f".IndexOf(json[index]) == -1) break;
         }
 
-        static TokenType LookAhead(char[] json, int index)
+        static TokenType LookAhead(string json, int index)
         {
             int saveIndex = index;
             return NextToken(json, ref saveIndex);
         }
 
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
-        static TokenType NextToken(char[] json, ref int index)
+        static TokenType NextToken(string json, ref int index)
         {
             EatWhitespace(json, ref index);
             if (index == json.Length)
@@ -1260,7 +1278,7 @@ namespace PlayFab.Json
  class PocoJsonSerializerStrategy : IJsonSerializerStrategy
     {
         internal IDictionary<Type, ReflectionUtils.ConstructorDelegate> ConstructorCache;
-        internal IDictionary<Type, IDictionary<string, ReflectionUtils.GetDelegate>> GetCache;
+        internal IDictionary<Type, IDictionary<MemberInfo, ReflectionUtils.GetDelegate>> GetCache;
         internal IDictionary<Type, IDictionary<string, KeyValuePair<Type, ReflectionUtils.SetDelegate>>> SetCache;
 
         internal static readonly Type[] EmptyTypes = new Type[0];
@@ -1276,13 +1294,30 @@ namespace PlayFab.Json
         public PocoJsonSerializerStrategy()
         {
             ConstructorCache = new ReflectionUtils.ThreadSafeDictionary<Type, ReflectionUtils.ConstructorDelegate>(ContructorDelegateFactory);
-            GetCache = new ReflectionUtils.ThreadSafeDictionary<Type, IDictionary<string, ReflectionUtils.GetDelegate>>(GetterValueFactory);
+            GetCache = new ReflectionUtils.ThreadSafeDictionary<Type, IDictionary<MemberInfo, ReflectionUtils.GetDelegate>>(GetterValueFactory);
             SetCache = new ReflectionUtils.ThreadSafeDictionary<Type, IDictionary<string, KeyValuePair<Type, ReflectionUtils.SetDelegate>>>(SetterValueFactory);
         }
 
-        protected virtual string MapClrMemberNameToJsonFieldName(string clrPropertyName)
+        protected virtual string MapClrMemberNameToJsonFieldName(MemberInfo memberInfo)
         {
-            return clrPropertyName;
+            // TODO: Optimize and/or cache
+            foreach (JsonProperty eachAttr in memberInfo.GetCustomAttributes(typeof(JsonProperty), true))
+                if (!string.IsNullOrEmpty(eachAttr.PropertyName))
+                    return eachAttr.PropertyName;
+            return memberInfo.Name;
+        }
+
+        protected virtual void MapClrMemberNameToJsonFieldName(MemberInfo memberInfo, out string jsonName, out JsonProperty jsonProp)
+        {
+            jsonName = memberInfo.Name;
+            jsonProp = null;
+            // TODO: Optimize and/or cache
+            foreach (JsonProperty eachAttr in memberInfo.GetCustomAttributes(typeof(JsonProperty), true))
+            {
+                jsonProp = eachAttr;
+                if (!string.IsNullOrEmpty(eachAttr.PropertyName))
+                    jsonName = eachAttr.PropertyName;
+            }
         }
 
         internal virtual ReflectionUtils.ConstructorDelegate ContructorDelegateFactory(Type key)
@@ -1290,9 +1325,9 @@ namespace PlayFab.Json
             return ReflectionUtils.GetContructor(key, key.IsArray ? ArrayConstructorParameterTypes : EmptyTypes);
         }
 
-        internal virtual IDictionary<string, ReflectionUtils.GetDelegate> GetterValueFactory(Type type)
+        internal virtual IDictionary<MemberInfo, ReflectionUtils.GetDelegate> GetterValueFactory(Type type)
         {
-            IDictionary<string, ReflectionUtils.GetDelegate> result = new Dictionary<string, ReflectionUtils.GetDelegate>();
+            IDictionary<MemberInfo, ReflectionUtils.GetDelegate> result = new Dictionary<MemberInfo, ReflectionUtils.GetDelegate>();
             foreach (PropertyInfo propertyInfo in ReflectionUtils.GetProperties(type))
             {
                 if (propertyInfo.CanRead)
@@ -1300,14 +1335,14 @@ namespace PlayFab.Json
                     MethodInfo getMethod = ReflectionUtils.GetGetterMethodInfo(propertyInfo);
                     if (getMethod.IsStatic || !getMethod.IsPublic)
                         continue;
-                    result[MapClrMemberNameToJsonFieldName(propertyInfo.Name)] = ReflectionUtils.GetGetMethod(propertyInfo);
+                    result[propertyInfo] = ReflectionUtils.GetGetMethod(propertyInfo);
                 }
             }
             foreach (FieldInfo fieldInfo in ReflectionUtils.GetFields(type))
             {
                 if (fieldInfo.IsStatic || !fieldInfo.IsPublic)
                     continue;
-                result[MapClrMemberNameToJsonFieldName(fieldInfo.Name)] = ReflectionUtils.GetGetMethod(fieldInfo);
+                result[fieldInfo] = ReflectionUtils.GetGetMethod(fieldInfo);
             }
             return result;
         }
@@ -1322,14 +1357,14 @@ namespace PlayFab.Json
                     MethodInfo setMethod = ReflectionUtils.GetSetterMethodInfo(propertyInfo);
                     if (setMethod.IsStatic || !setMethod.IsPublic)
                         continue;
-                    result[MapClrMemberNameToJsonFieldName(propertyInfo.Name)] = new KeyValuePair<Type, ReflectionUtils.SetDelegate>(propertyInfo.PropertyType, ReflectionUtils.GetSetMethod(propertyInfo));
+                    result[MapClrMemberNameToJsonFieldName(propertyInfo)] = new KeyValuePair<Type, ReflectionUtils.SetDelegate>(propertyInfo.PropertyType, ReflectionUtils.GetSetMethod(propertyInfo));
                 }
             }
             foreach (FieldInfo fieldInfo in ReflectionUtils.GetFields(type))
             {
                 if (fieldInfo.IsInitOnly || fieldInfo.IsStatic || !fieldInfo.IsPublic)
                     continue;
-                result[MapClrMemberNameToJsonFieldName(fieldInfo.Name)] = new KeyValuePair<Type, ReflectionUtils.SetDelegate>(fieldInfo.FieldType, ReflectionUtils.GetSetMethod(fieldInfo));
+                result[MapClrMemberNameToJsonFieldName(fieldInfo)] = new KeyValuePair<Type, ReflectionUtils.SetDelegate>(fieldInfo.FieldType, ReflectionUtils.GetSetMethod(fieldInfo));
             }
             return result;
         }
@@ -1399,9 +1434,9 @@ namespace PlayFab.Json
             bool valueIsUlong = value is ulong;
             bool valueIsDouble = value is double;
             Type nullableType = Nullable.GetUnderlyingType(type);
-            if (nullableType != null && SimpleJson.NumberTypes.IndexOf(nullableType) != -1)
+            if (nullableType != null && PlayFabSimpleJson.NumberTypes.IndexOf(nullableType) != -1)
                 type = nullableType; // Just use the regular type for the conversion
-            bool isNumberType = SimpleJson.NumberTypes.IndexOf(type) != -1;
+            bool isNumberType = PlayFabSimpleJson.NumberTypes.IndexOf(type) != -1;
             bool isEnumType = type.IsEnum;
             if ((valueIsLong && type == typeof(long)) || (valueIsUlong && type == typeof(ulong)) || (valueIsDouble && type == typeof(double)))
                 return value;
@@ -1465,10 +1500,15 @@ namespace PlayFab.Json
                         foreach (object o in jsonObject)
                             list[i++] = DeserializeObject(o, type.GetElementType());
                     }
-                    else if (ReflectionUtils.IsTypeGenericeCollectionInterface(type) || ReflectionUtils.IsAssignableFrom(typeof(IList), type))
+                    else if (ReflectionUtils.IsTypeGenericeCollectionInterface(type) || ReflectionUtils.IsAssignableFrom(typeof(IList), type) || type == typeof(object))
                     {
                         Type innerType = ReflectionUtils.GetGenericListElementType(type);
-                        list = (IList)(ConstructorCache[type] ?? ConstructorCache[typeof(List<>).MakeGenericType(innerType)])();
+                        ReflectionUtils.ConstructorDelegate ctrDelegate = null;
+                        if (type != typeof(object))
+                            ctrDelegate = ConstructorCache[type];
+                        if (ctrDelegate == null)
+                            ctrDelegate = ConstructorCache[typeof(List<>).MakeGenericType(innerType)];
+                        list = (IList)ctrDelegate();
                         foreach (object o in jsonObject)
                             list.Add(DeserializeObject(o, innerType));
                     }
@@ -1520,11 +1560,19 @@ namespace PlayFab.Json
             if (type.FullName == null)
                 return false;
             IDictionary<string, object> obj = new JsonObject();
-            IDictionary<string, ReflectionUtils.GetDelegate> getters = GetCache[type];
-            foreach (KeyValuePair<string, ReflectionUtils.GetDelegate> getter in getters)
+            IDictionary<MemberInfo, ReflectionUtils.GetDelegate> getters = GetCache[type];
+            foreach (KeyValuePair<MemberInfo, ReflectionUtils.GetDelegate> getter in getters)
             {
-                if (getter.Value != null)
-                    obj.Add(MapClrMemberNameToJsonFieldName(getter.Key), getter.Value(input));
+                if (getter.Value == null)
+                    continue;
+                string jsonKey;
+                JsonProperty jsonProp;
+                MapClrMemberNameToJsonFieldName(getter.Key, out jsonKey, out jsonProp);
+                if (obj.ContainsKey(jsonKey))
+                    throw new Exception("The given key is defined multiple times in the same type: " + input.GetType().Name + "." + jsonKey);
+                object value = getter.Value(input);
+                if (jsonProp == null || jsonProp.NullValueHandling == NullValueHandling.Include || value != null)
+                    obj.Add(jsonKey, value);
             }
             output = obj;
             return true;
@@ -1632,10 +1680,10 @@ namespace PlayFab.Json
         private static object[] _1ObjArray;
 
 #if SIMPLE_JSON_TYPEINFO
-            public static TypeInfo GetTypeInfo(Type type)
-            {
-                return type.GetTypeInfo();
-            }
+        public static TypeInfo GetTypeInfo(Type type)
+        {
+            return type.GetTypeInfo();
+        }
 #else
         public static Type GetTypeInfo(Type type)
         {
@@ -1646,9 +1694,9 @@ namespace PlayFab.Json
         public static Attribute GetAttribute(MemberInfo info, Type type)
         {
 #if SIMPLE_JSON_TYPEINFO
-                if (info == null || type == null || !info.IsDefined(type))
-                    return null;
-                return info.GetCustomAttribute(type);
+            if (info == null || type == null || !info.IsDefined(type))
+                return null;
+            return info.GetCustomAttribute(type);
 #else
             if (info == null || type == null || !Attribute.IsDefined(info, type))
                 return null;
@@ -1658,9 +1706,12 @@ namespace PlayFab.Json
 
         public static Type GetGenericListElementType(Type type)
         {
+            if (type == typeof(object))
+                return type;
+
             IEnumerable<Type> interfaces;
 #if SIMPLE_JSON_TYPEINFO
-                interfaces = type.GetTypeInfo().ImplementedInterfaces;
+            interfaces = type.GetTypeInfo().ImplementedInterfaces;
 #else
             interfaces = type.GetInterfaces();
 #endif
@@ -1679,9 +1730,9 @@ namespace PlayFab.Json
         {
 
 #if SIMPLE_JSON_TYPEINFO
-                if (objectType == null || attributeType == null || !objectType.GetTypeInfo().IsDefined(attributeType))
-                    return null;
-                return objectType.GetTypeInfo().GetCustomAttribute(attributeType);
+            if (objectType == null || attributeType == null || !objectType.GetTypeInfo().IsDefined(attributeType))
+                return null;
+            return objectType.GetTypeInfo().GetCustomAttribute(attributeType);
 #else
             if (objectType == null || attributeType == null || !Attribute.IsDefined(objectType, attributeType))
                 return null;
@@ -1692,7 +1743,7 @@ namespace PlayFab.Json
         public static Type[] GetGenericTypeArguments(Type type)
         {
 #if SIMPLE_JSON_TYPEINFO
-                return type.GetTypeInfo().GenericTypeArguments;
+            return type.GetTypeInfo().GenericTypeArguments;
 #else
             return type.GetGenericArguments();
 #endif
@@ -1728,8 +1779,8 @@ namespace PlayFab.Json
         public static bool IsTypeDictionary(Type type)
         {
 #if SIMPLE_JSON_TYPEINFO
-                if (typeof(IDictionary<,>).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()))
-                    return true;
+            if (typeof(IDictionary<,>).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()))
+                return true;
 #else
             if (typeof(System.Collections.IDictionary).IsAssignableFrom(type))
                 return true;
@@ -1759,7 +1810,7 @@ namespace PlayFab.Json
         public static IEnumerable<ConstructorInfo> GetConstructors(Type type)
         {
 #if SIMPLE_JSON_TYPEINFO
-                return type.GetTypeInfo().DeclaredConstructors;
+            return type.GetTypeInfo().DeclaredConstructors;
 #else
             return type.GetConstructors();
 #endif
@@ -1797,7 +1848,7 @@ namespace PlayFab.Json
         public static IEnumerable<PropertyInfo> GetProperties(Type type)
         {
 #if SIMPLE_JSON_TYPEINFO
-                return type.GetRuntimeProperties();
+            return type.GetRuntimeProperties();
 #else
             return type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
 #endif
@@ -1806,7 +1857,7 @@ namespace PlayFab.Json
         public static IEnumerable<FieldInfo> GetFields(Type type)
         {
 #if SIMPLE_JSON_TYPEINFO
-                return type.GetRuntimeFields();
+            return type.GetRuntimeFields();
 #else
             return type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
 #endif
@@ -1815,7 +1866,7 @@ namespace PlayFab.Json
         public static MethodInfo GetGetterMethodInfo(PropertyInfo propertyInfo)
         {
 #if SIMPLE_JSON_TYPEINFO
-                return propertyInfo.GetMethod;
+            return propertyInfo.GetMethod;
 #else
             return propertyInfo.GetGetMethod(true);
 #endif
@@ -1824,7 +1875,7 @@ namespace PlayFab.Json
         public static MethodInfo GetSetterMethodInfo(PropertyInfo propertyInfo)
         {
 #if SIMPLE_JSON_TYPEINFO
-                return propertyInfo.SetMethod;
+            return propertyInfo.SetMethod;
 #else
             return propertyInfo.GetSetMethod(true);
 #endif
@@ -1842,7 +1893,7 @@ namespace PlayFab.Json
 
         public static ConstructorDelegate GetConstructorByReflection(ConstructorInfo constructorInfo)
         {
-            return delegate(object[] args)
+            return delegate (object[] args)
             {
                 var x = constructorInfo;
                 return x.Invoke(args);
@@ -1868,12 +1919,12 @@ namespace PlayFab.Json
         public static GetDelegate GetGetMethodByReflection(PropertyInfo propertyInfo)
         {
             MethodInfo methodInfo = GetGetterMethodInfo(propertyInfo);
-            return delegate(object source) { return methodInfo.Invoke(source, EmptyObjects); };
+            return delegate (object source) { return methodInfo.Invoke(source, EmptyObjects); };
         }
 
         public static GetDelegate GetGetMethodByReflection(FieldInfo fieldInfo)
         {
-            return delegate(object source) { return fieldInfo.GetValue(source); };
+            return delegate (object source) { return fieldInfo.GetValue(source); };
         }
 
         public static SetDelegate GetSetMethod(PropertyInfo propertyInfo)
@@ -1889,7 +1940,7 @@ namespace PlayFab.Json
         public static SetDelegate GetSetMethodByReflection(PropertyInfo propertyInfo)
         {
             MethodInfo methodInfo = GetSetterMethodInfo(propertyInfo);
-            return delegate(object source, object value)
+            return delegate (object source, object value)
             {
                 if (_1ObjArray == null)
                     _1ObjArray = new object[1];
@@ -1900,7 +1951,7 @@ namespace PlayFab.Json
 
         public static SetDelegate GetSetMethodByReflection(FieldInfo fieldInfo)
         {
-            return delegate(object source, object value) { fieldInfo.SetValue(source, value); };
+            return delegate (object source, object value) { fieldInfo.SetValue(source, value); };
         }
 
         public sealed class ThreadSafeDictionary<TKey, TValue> : IDictionary<TKey, TValue>

@@ -22,7 +22,7 @@ public class SetupUnityNetworkingCommand : Command
         var networkManager = Object.FindObjectOfType<CustomNetworkManager>();
         if (networkManager == null)
         {
-            var config = new ConnectionConfig();
+            // var config = new ConnectionConfig();
             //TODO: Set some config properties if you want.
 
             //Create one.

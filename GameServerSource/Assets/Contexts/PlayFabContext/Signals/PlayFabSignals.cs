@@ -80,11 +80,6 @@ using strange.extensions.signal.impl;
     public class DeleteUsersSignal : Signal<DeleteUsersRequest> { }
     
     ///<summary>
-    ///Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the leaderboard
-    ///</summary>
-    public class GetFriendLeaderboardSignal : Signal<GetFriendLeaderboardRequest> { }
-    
-    ///<summary>
     ///Retrieves a list of ranked users for the given statistic, starting from the indicated point in the leaderboard
     ///</summary>
     public class GetLeaderboardSignal : Signal<GetLeaderboardRequest> { }
@@ -339,21 +334,6 @@ using strange.extensions.signal.impl;
 //Friend List Management
 #region Friend List Management
     
-    ///<summary>
-    ///Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
-    ///</summary>
-    public class AddFriendSignal : Signal<AddFriendRequest> { }
-    
-    ///<summary>
-    ///Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
-    ///</summary>
-    public class GetFriendsListSignal : Signal<GetFriendsListRequest> { }
-    
-    ///<summary>
-    ///Removes the specified friend from the the user's friend list
-    ///</summary>
-    public class RemoveFriendSignal : Signal<RemoveFriendRequest> { }
-    
 #endregion
     
 //Matchmaking APIs
@@ -368,6 +348,11 @@ using strange.extensions.signal.impl;
     ///Validates a Game Server session ticket and returns details about the user
     ///</summary>
     public class RedeemMatchmakerTicketSignal : Signal<RedeemMatchmakerTicketRequest> { }
+    
+    ///<summary>
+    ///Sets the custom data of the indicated Game Server Instance
+    ///</summary>
+    public class SetGameServerInstanceDataSignal : Signal<SetGameServerInstanceDataRequest> { }
     
     ///<summary>
     ///Sets the state of the indicated Game Server Instance
@@ -629,11 +614,6 @@ using strange.extensions.signal.impl;
     public class DeleteUsersResponseSignal : Signal<DeleteUsersResult> { }
 
     ///<summary>
-    ///Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the leaderboard
-    ///</summary>
-    public class GetFriendLeaderboardResponseSignal : Signal<GetLeaderboardResult> { }
-
-    ///<summary>
     ///Retrieves a list of ranked users for the given statistic, starting from the indicated point in the leaderboard
     ///</summary>
     public class GetLeaderboardResponseSignal : Signal<GetLeaderboardResult> { }
@@ -888,21 +868,6 @@ using strange.extensions.signal.impl;
 //Friend List Management
 #region Friend List Management
 
-    ///<summary>
-    ///Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
-    ///</summary>
-    public class AddFriendResponseSignal : Signal<EmptyResult> { }
-
-    ///<summary>
-    ///Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
-    ///</summary>
-    public class GetFriendsListResponseSignal : Signal<GetFriendsListResult> { }
-
-    ///<summary>
-    ///Removes the specified friend from the the user's friend list
-    ///</summary>
-    public class RemoveFriendResponseSignal : Signal<EmptyResult> { }
-
 #endregion
 
 //Matchmaking APIs
@@ -917,6 +882,11 @@ using strange.extensions.signal.impl;
     ///Validates a Game Server session ticket and returns details about the user
     ///</summary>
     public class RedeemMatchmakerTicketResponseSignal : Signal<RedeemMatchmakerTicketResult> { }
+
+    ///<summary>
+    ///Sets the custom data of the indicated Game Server Instance
+    ///</summary>
+    public class SetGameServerInstanceDataResponseSignal : Signal<SetGameServerInstanceDataResult> { }
 
     ///<summary>
     ///Sets the state of the indicated Game Server Instance

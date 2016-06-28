@@ -43,7 +43,7 @@ public class LogSignalCommand : Command
         if (ServerSettingsData.IsCustomLogFile)
         { 
             var logFilePath = ServerSettingsData.LogFilePath;
-            var outputDirectory = ServerSettingsData.OutputFilesDirectory;
+            //var outputDirectory = ServerSettingsData.OutputFilesDirectory;
             if (string.IsNullOrEmpty(logFilePath))
             {
                 return;

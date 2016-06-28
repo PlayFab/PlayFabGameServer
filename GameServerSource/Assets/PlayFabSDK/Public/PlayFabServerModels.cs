@@ -28,34 +28,6 @@ namespace PlayFab.ServerModels
         public int Amount { get; set;}
     }
 
-    public class AddFriendRequest
-    {
-
-        /// <summary>
-        /// PlayFab identifier of the player to add a new friend.
-        /// </summary>
-        public string PlayFabId { get; set;}
-
-        /// <summary>
-        /// The PlayFab identifier of the user being added.
-        /// </summary>
-        public string FriendPlayFabId { get; set;}
-
-        /// <summary>
-        /// The PlayFab username of the user being added
-        /// </summary>
-        public string FriendUsername { get; set;}
-
-        /// <summary>
-        /// Email address of the user being added.
-        /// </summary>
-        public string FriendEmail { get; set;}
-
-        /// <summary>
-        /// Title-specific display name of the user to being added.
-        /// </summary>
-        public string FriendTitleDisplayName { get; set;}
-    }
     public class AddSharedGroupMembersRequest
     {
 
@@ -1018,67 +990,6 @@ namespace PlayFab.ServerModels
         public string URL { get; set;}
     }
 
-    public class GetFriendLeaderboardRequest
-    {
-
-        /// <summary>
-        /// The player whose friend leaderboard to get
-        /// </summary>
-        public string PlayFabId { get; set;}
-
-        /// <summary>
-        /// Statistic used to rank friends for this leaderboard.
-        /// </summary>
-        public string StatisticName { get; set;}
-
-        /// <summary>
-        /// Position in the leaderboard to start this listing (defaults to the first entry).
-        /// </summary>
-        public int StartPosition { get; set;}
-
-        /// <summary>
-        /// Maximum number of entries to retrieve.
-        /// </summary>
-        public int MaxResultsCount { get; set;}
-
-        /// <summary>
-        /// Indicates whether Steam service friends should be included in the response. Default is true.
-        /// </summary>
-        public bool? IncludeSteamFriends { get; set;}
-
-        /// <summary>
-        /// Indicates whether Facebook friends should be included in the response. Default is true.
-        /// </summary>
-        public bool? IncludeFacebookFriends { get; set;}
-    }
-
-    public class GetFriendsListRequest
-    {
-
-        /// <summary>
-        /// PlayFab identifier of the player whose friend list to get.
-        /// </summary>
-        public string PlayFabId { get; set;}
-
-        /// <summary>
-        /// Indicates whether Steam service friends should be included in the response. Default is true.
-        /// </summary>
-        public bool? IncludeSteamFriends { get; set;}
-
-        /// <summary>
-        /// Indicates whether Facebook friends should be included in the response. Default is true.
-        /// </summary>
-        public bool? IncludeFacebookFriends { get; set;}
-    }
-
-    public class GetFriendsListResult : PlayFabResultCommon
-    {
-
-        /// <summary>
-        /// Array of friends found.
-        /// </summary>
-        public List<FriendInfo> Friends { get; set;}
-    }
     public class GetLeaderboardAroundCharacterRequest
     {
 
@@ -2190,20 +2101,6 @@ namespace PlayFab.ServerModels
         public UserAccountInfo UserInfo { get; set;}
     }
 
-    public class RemoveFriendRequest
-    {
-
-        /// <summary>
-        /// PlayFab identifier of the friend account which is to be removed.
-        /// </summary>
-        public string FriendPlayFabId { get; set;}
-
-        /// <summary>
-        /// Unique PlayFab assigned ID of the user on whom the operation will be performed.
-        /// </summary>
-        public string PlayFabId { get; set;}
-    }
-
     public class RemoveSharedGroupMembersRequest
     {
 
@@ -2322,6 +2219,24 @@ namespace PlayFab.ServerModels
     }
 
     public class SendPushNotificationResult : PlayFabResultCommon
+    {
+    }
+
+    public class SetGameServerInstanceDataRequest
+    {
+
+        /// <summary>
+        /// Unique identifier of the Game Instance to be updated.
+        /// </summary>
+        public string LobbyId { get; set;}
+
+        /// <summary>
+        /// Custom data to set for the specified game server instance.
+        /// </summary>
+        public string GameServerData { get; set;}
+    }
+
+    public class SetGameServerInstanceDataResult : PlayFabResultCommon
     {
     }
 
@@ -3158,7 +3073,7 @@ namespace PlayFab.ServerModels
     {
 
         /// <summary>
-        /// The ID of the event as it was written to PlayStream. This is an alphanumeric GUID.
+        /// The unique identifier of the event. This can be used to retrieve the event's properties using the GetEvent API. The values of this identifier consist of ASCII characters and are not constrained to any particular format.
         /// </summary>
         public string EventId { get; set;}
     }
@@ -3177,17 +3092,17 @@ namespace PlayFab.ServerModels
         public string CharacterId { get; set;}
 
         /// <summary>
-        /// The name of this event. This field is alphanumeric and at most 64 characters long. It is internally namespaced down onto the calling title. Best practices are to name in subject_verb_object format (player_logged_in).
+        /// The name of the event, within the namespace scoped to the title. The naming convention is up to the caller, but it commonly follows the subject_verb_object pattern (e.g. player_logged_in).
         /// </summary>
         public string EventName { get; set;}
 
         /// <summary>
-        /// The time (in UTC) associated with this event. If omitted, a timestamp of now in UTC will be applied.
+        /// The time (in UTC) associated with this event. The value dafaults to the current time.
         /// </summary>
         public DateTime? Timestamp { get; set;}
 
         /// <summary>
-        /// Arbitrary json values that represent the custom body of this event.
+        /// Custom event properties. Each property consists of a name (string) and a value (JSON object).
         /// </summary>
         public Dictionary<string,object> Body { get; set;}
     }
@@ -3201,17 +3116,17 @@ namespace PlayFab.ServerModels
         public string PlayFabId { get; set;}
 
         /// <summary>
-        /// The name of this event. This field is alphanumeric and at most 64 characters long. It is internally namespaced down onto the calling title. Best practices are to name in subject_verb_object format (player_logged_in).
+        /// The name of the event, within the namespace scoped to the title. The naming convention is up to the caller, but it commonly follows the subject_verb_object pattern (e.g. player_logged_in).
         /// </summary>
         public string EventName { get; set;}
 
         /// <summary>
-        /// The time (in UTC) associated with this event. If omitted, a timestamp of 'now' in UTC will be applied.
+        /// The time (in UTC) associated with this event. The value dafaults to the current time.
         /// </summary>
         public DateTime? Timestamp { get; set;}
 
         /// <summary>
-        /// Arbitrary json values that represent the custom body of this event.
+        /// Custom data properties associated with the event. Each property consists of a name (string) and a value (JSON object).
         /// </summary>
         public Dictionary<string,object> Body { get; set;}
     }
@@ -3220,17 +3135,17 @@ namespace PlayFab.ServerModels
     {
 
         /// <summary>
-        /// The name of this event. This field is alphanumeric and at most 64 characters long. It is internally namespaced down onto the calling title. Best practices are to name in subject_verb_object format (player_logged_in).
+        /// The name of the event, within the namespace scoped to the title. The naming convention is up to the caller, but it commonly follows the subject_verb_object pattern (e.g. player_logged_in).
         /// </summary>
         public string EventName { get; set;}
 
         /// <summary>
-        /// The time (in UTC) associated with this event. If omitted, a timestamp of now in UTC will be applied.
+        /// The time (in UTC) associated with this event. The value dafaults to the current time.
         /// </summary>
         public DateTime? Timestamp { get; set;}
 
         /// <summary>
-        /// Arbitrary json values that represent the custom body of this event.
+        /// Custom event properties. Each property consists of a name (string) and a value (JSON object).
         /// </summary>
         public Dictionary<string,object> Body { get; set;}
     }

@@ -7,7 +7,7 @@ public class UnityNetworkingContext : MVCSContext
 {
     public UnityNetworkingMediator GameContext;
 
-    private PlayFabServerStartupCompleteSignal loadPlayFabDataCompleteSignal;
+    // private PlayFabServerStartupCompleteSignal loadPlayFabDataCompleteSignal;
 
     public UnityNetworkingContext(MonoBehaviour ctxView, bool autoMap)
         : base(ctxView, autoMap)

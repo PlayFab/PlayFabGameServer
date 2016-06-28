@@ -1,6 +1,7 @@
 using System;
 using PlayFab.ServerModels;
 using PlayFab.Internal;
+using PlayFab.Json;
 using UnityEngine;
 
 namespace PlayFab
@@ -24,8 +25,6 @@ namespace PlayFab
         public delegate void SendPushNotificationResponseCallback(string urlPath, int callId, SendPushNotificationRequest request, SendPushNotificationResult result, PlayFabError error, object customData);
         public delegate void DeleteUsersRequestCallback(string urlPath, int callId, DeleteUsersRequest request, object customData);
         public delegate void DeleteUsersResponseCallback(string urlPath, int callId, DeleteUsersRequest request, DeleteUsersResult result, PlayFabError error, object customData);
-        public delegate void GetFriendLeaderboardRequestCallback(string urlPath, int callId, GetFriendLeaderboardRequest request, object customData);
-        public delegate void GetFriendLeaderboardResponseCallback(string urlPath, int callId, GetFriendLeaderboardRequest request, GetLeaderboardResult result, PlayFabError error, object customData);
         public delegate void GetLeaderboardRequestCallback(string urlPath, int callId, GetLeaderboardRequest request, object customData);
         public delegate void GetLeaderboardResponseCallback(string urlPath, int callId, GetLeaderboardRequest request, GetLeaderboardResult result, PlayFabError error, object customData);
         public delegate void GetLeaderboardAroundUserRequestCallback(string urlPath, int callId, GetLeaderboardAroundUserRequest request, object customData);
@@ -122,16 +121,12 @@ namespace PlayFab
         public delegate void UnlockContainerItemResponseCallback(string urlPath, int callId, UnlockContainerItemRequest request, UnlockContainerItemResult result, PlayFabError error, object customData);
         public delegate void UpdateUserInventoryItemCustomDataRequestCallback(string urlPath, int callId, UpdateUserInventoryItemDataRequest request, object customData);
         public delegate void UpdateUserInventoryItemCustomDataResponseCallback(string urlPath, int callId, UpdateUserInventoryItemDataRequest request, EmptyResult result, PlayFabError error, object customData);
-        public delegate void AddFriendRequestCallback(string urlPath, int callId, AddFriendRequest request, object customData);
-        public delegate void AddFriendResponseCallback(string urlPath, int callId, AddFriendRequest request, EmptyResult result, PlayFabError error, object customData);
-        public delegate void GetFriendsListRequestCallback(string urlPath, int callId, GetFriendsListRequest request, object customData);
-        public delegate void GetFriendsListResponseCallback(string urlPath, int callId, GetFriendsListRequest request, GetFriendsListResult result, PlayFabError error, object customData);
-        public delegate void RemoveFriendRequestCallback(string urlPath, int callId, RemoveFriendRequest request, object customData);
-        public delegate void RemoveFriendResponseCallback(string urlPath, int callId, RemoveFriendRequest request, EmptyResult result, PlayFabError error, object customData);
         public delegate void NotifyMatchmakerPlayerLeftRequestCallback(string urlPath, int callId, NotifyMatchmakerPlayerLeftRequest request, object customData);
         public delegate void NotifyMatchmakerPlayerLeftResponseCallback(string urlPath, int callId, NotifyMatchmakerPlayerLeftRequest request, NotifyMatchmakerPlayerLeftResult result, PlayFabError error, object customData);
         public delegate void RedeemMatchmakerTicketRequestCallback(string urlPath, int callId, RedeemMatchmakerTicketRequest request, object customData);
         public delegate void RedeemMatchmakerTicketResponseCallback(string urlPath, int callId, RedeemMatchmakerTicketRequest request, RedeemMatchmakerTicketResult result, PlayFabError error, object customData);
+        public delegate void SetGameServerInstanceDataRequestCallback(string urlPath, int callId, SetGameServerInstanceDataRequest request, object customData);
+        public delegate void SetGameServerInstanceDataResponseCallback(string urlPath, int callId, SetGameServerInstanceDataRequest request, SetGameServerInstanceDataResult result, PlayFabError error, object customData);
         public delegate void SetGameServerInstanceStateRequestCallback(string urlPath, int callId, SetGameServerInstanceStateRequest request, object customData);
         public delegate void SetGameServerInstanceStateResponseCallback(string urlPath, int callId, SetGameServerInstanceStateRequest request, SetGameServerInstanceStateResult result, PlayFabError error, object customData);
         public delegate void AwardSteamAchievementRequestCallback(string urlPath, int callId, AwardSteamAchievementRequest request, object customData);
@@ -196,7 +191,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<AuthenticateSessionTicketResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -211,7 +206,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetPlayFabIDsFromFacebookIDsResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -226,7 +221,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetPlayFabIDsFromSteamIDsResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -241,7 +236,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetUserAccountInfoResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -256,7 +251,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<SendPushNotificationResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -271,27 +266,12 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<DeleteUsersResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
             };
             PlayFabHTTP.Post("/Server/DeleteUsers", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
-        }
-
-        /// <summary>
-        /// Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the leaderboard
-        /// </summary>
-        public static void GetFriendLeaderboard(GetFriendLeaderboardRequest request, ProcessApiCallback<GetLeaderboardResult> resultCallback, ErrorCallback errorCallback, object customData = null)
-        {
-            if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
-
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
-            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
-            {
-                ResultContainer<GetLeaderboardResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
-            };
-            PlayFabHTTP.Post("/Server/GetFriendLeaderboard", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
         }
 
         /// <summary>
@@ -301,7 +281,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetLeaderboardResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -316,7 +296,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetLeaderboardAroundUserResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -331,7 +311,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetPlayerStatisticsResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -346,7 +326,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetPlayerStatisticVersionsResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -361,7 +341,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetUserDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -376,7 +356,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetUserDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -391,7 +371,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetUserDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -406,7 +386,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetUserDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -421,7 +401,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetUserDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -436,7 +416,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetUserDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -451,7 +431,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetUserStatisticsResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -466,7 +446,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<UpdatePlayerStatisticsResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -481,7 +461,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<UpdateUserDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -496,7 +476,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<UpdateUserDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -511,7 +491,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<UpdateUserDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -526,7 +506,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<UpdateUserDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -541,7 +521,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<UpdateUserDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -556,7 +536,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<UpdateUserDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -571,7 +551,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<UpdateUserStatisticsResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -586,7 +566,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetCatalogItemsResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -601,7 +581,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetPublisherDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -616,7 +596,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetTitleDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -631,7 +611,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetTitleDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -646,7 +626,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetTitleNewsResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -661,7 +641,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<SetPublisherDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -676,7 +656,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<SetTitleDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -691,7 +671,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<SetTitleDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -706,7 +686,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<ModifyCharacterVirtualCurrencyResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -721,7 +701,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<ModifyUserVirtualCurrencyResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -736,7 +716,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<ConsumeItemResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -751,7 +731,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<EvaluateRandomResultTableResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -766,7 +746,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetCharacterInventoryResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -781,7 +761,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetUserInventoryResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -796,7 +776,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GrantItemsToCharacterResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -811,7 +791,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GrantItemsToUserResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -826,7 +806,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GrantItemsToUsersResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -841,7 +821,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<ModifyItemUsesResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -856,7 +836,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<MoveItemToCharacterFromCharacterResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -871,7 +851,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<MoveItemToCharacterFromUserResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -886,7 +866,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<MoveItemToUserFromCharacterResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -901,7 +881,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<RedeemCouponResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -916,7 +896,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<ReportPlayerServerResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -931,7 +911,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<RevokeInventoryResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -946,7 +926,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<ModifyCharacterVirtualCurrencyResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -961,7 +941,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<ModifyUserVirtualCurrencyResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -976,7 +956,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<UnlockContainerItemResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -991,7 +971,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<UnlockContainerItemResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1006,57 +986,12 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<EmptyResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
             };
             PlayFabHTTP.Post("/Server/UpdateUserInventoryItemCustomData", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
-        }
-
-        /// <summary>
-        /// Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
-        /// </summary>
-        public static void AddFriend(AddFriendRequest request, ProcessApiCallback<EmptyResult> resultCallback, ErrorCallback errorCallback, object customData = null)
-        {
-            if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
-
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
-            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
-            {
-                ResultContainer<EmptyResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
-            };
-            PlayFabHTTP.Post("/Server/AddFriend", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
-        }
-
-        /// <summary>
-        /// Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
-        /// </summary>
-        public static void GetFriendsList(GetFriendsListRequest request, ProcessApiCallback<GetFriendsListResult> resultCallback, ErrorCallback errorCallback, object customData = null)
-        {
-            if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
-
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
-            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
-            {
-                ResultContainer<GetFriendsListResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
-            };
-            PlayFabHTTP.Post("/Server/GetFriendsList", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
-        }
-
-        /// <summary>
-        /// Removes the specified friend from the the user's friend list
-        /// </summary>
-        public static void RemoveFriend(RemoveFriendRequest request, ProcessApiCallback<EmptyResult> resultCallback, ErrorCallback errorCallback, object customData = null)
-        {
-            if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
-
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
-            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
-            {
-                ResultContainer<EmptyResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
-            };
-            PlayFabHTTP.Post("/Server/RemoveFriend", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
         }
 
         /// <summary>
@@ -1066,7 +1001,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<NotifyMatchmakerPlayerLeftResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1081,12 +1016,27 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<RedeemMatchmakerTicketResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
             };
             PlayFabHTTP.Post("/Server/RedeemMatchmakerTicket", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
+        }
+
+        /// <summary>
+        /// Sets the custom data of the indicated Game Server Instance
+        /// </summary>
+        public static void SetGameServerInstanceData(SetGameServerInstanceDataRequest request, ProcessApiCallback<SetGameServerInstanceDataResult> resultCallback, ErrorCallback errorCallback, object customData = null)
+        {
+            if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
+
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
+            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
+            {
+                ResultContainer<SetGameServerInstanceDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
+            };
+            PlayFabHTTP.Post("/Server/SetGameServerInstanceData", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
         }
 
         /// <summary>
@@ -1096,7 +1046,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<SetGameServerInstanceStateResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1111,7 +1061,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<AwardSteamAchievementResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1126,7 +1076,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<LogEventResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1141,7 +1091,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<WriteEventResponse>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1156,7 +1106,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<WriteEventResponse>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1171,7 +1121,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<WriteEventResponse>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1186,7 +1136,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<AddSharedGroupMembersResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1201,7 +1151,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<CreateSharedGroupResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1216,7 +1166,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<EmptyResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1231,7 +1181,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetSharedGroupDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1246,7 +1196,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<RemoveSharedGroupMembersResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1261,7 +1211,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<UpdateSharedGroupDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1276,7 +1226,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<ExecuteCloudScriptResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1291,7 +1241,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetContentDownloadUrlResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1306,7 +1256,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<DeleteCharacterFromUserResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1321,7 +1271,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<ListUsersCharactersResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1336,7 +1286,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetCharacterLeaderboardResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1351,7 +1301,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetCharacterStatisticsResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1366,7 +1316,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetLeaderboardAroundCharacterResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1381,7 +1331,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetLeaderboardForUsersCharactersResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1396,7 +1346,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GrantCharacterToUserResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1411,7 +1361,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<UpdateCharacterStatisticsResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1426,7 +1376,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetCharacterDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1441,7 +1391,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetCharacterDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1456,7 +1406,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<GetCharacterDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1471,7 +1421,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<UpdateCharacterDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1486,7 +1436,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<UpdateCharacterDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
@@ -1501,7 +1451,7 @@ namespace PlayFab
         {
             if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
 
-            string serializedJson = SimpleJson.SerializeObject(request, Util.ApiSerializerStrategy);
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
             Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
             {
                 ResultContainer<UpdateCharacterDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);

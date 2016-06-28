@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using PlayFab.Internal;
+using PlayFab.Json;
 using PlayFab.UUnit;
 
 namespace PlayFab.UUnit
@@ -86,8 +87,8 @@ namespace PlayFab.UUnit
                 for (int i = 0; i < expectedObjects.Length; i++)
                 {
                     // Convert the object to json and back, and verify that everything is the same
-                    var actualJson = SimpleJson.SerializeObject(expectedObjects[i], Util.ApiSerializerStrategy).Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("\t", "");
-                    var actualObject = SimpleJson.DeserializeObject<ObjNumFieldTest>(actualJson, Util.ApiSerializerStrategy);
+                    var actualJson = JsonWrapper.SerializeObject(expectedObjects[i], PlayFabUtil.ApiSerializerStrategy).Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("\t", "");
+                    var actualObject = JsonWrapper.DeserializeObject<ObjNumFieldTest>(actualJson, PlayFabUtil.ApiSerializerStrategy);
 
                     UUnitAssert.SbyteEquals(expectedObjects[i].SbyteValue, actualObject.SbyteValue);
                     UUnitAssert.ByteEquals(expectedObjects[i].ByteValue, actualObject.ByteValue);
@@ -109,8 +110,8 @@ namespace PlayFab.UUnit
                 for (int i = 0; i < expectedObjects.Length; i++)
                 {
                     // Convert the object to json and back, and verify that everything is the same
-                    var actualJson = SimpleJson.SerializeObject(expectedObjects[i], Util.ApiSerializerStrategy).Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("\t", "");
-                    var actualObject = SimpleJson.DeserializeObject<ObjNumPropTest>(actualJson, Util.ApiSerializerStrategy);
+                    var actualJson = JsonWrapper.SerializeObject(expectedObjects[i], PlayFabUtil.ApiSerializerStrategy).Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("\t", "");
+                    var actualObject = JsonWrapper.DeserializeObject<ObjNumPropTest>(actualJson, PlayFabUtil.ApiSerializerStrategy);
 
                     UUnitAssert.SbyteEquals(expectedObjects[i].SbyteValue, actualObject.SbyteValue);
                     UUnitAssert.ByteEquals(expectedObjects[i].ByteValue, actualObject.ByteValue);
@@ -132,8 +133,8 @@ namespace PlayFab.UUnit
                 for (int i = 0; i < expectedObjects.Length; i++)
                 {
                     // Convert the object to json and back, and verify that everything is the same
-                    var actualJson = SimpleJson.SerializeObject(expectedObjects[i], Util.ApiSerializerStrategy).Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("\t", "");
-                    var actualObject = SimpleJson.DeserializeObject<ObjNumPropTest>(actualJson, Util.ApiSerializerStrategy);
+                    var actualJson = JsonWrapper.SerializeObject(expectedObjects[i], PlayFabUtil.ApiSerializerStrategy).Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("\t", "");
+                    var actualObject = JsonWrapper.DeserializeObject<ObjNumPropTest>(actualJson, PlayFabUtil.ApiSerializerStrategy);
 
                     UUnitAssert.SbyteEquals(expectedObjects[i].SbyteValue, actualObject.SbyteValue);
                     UUnitAssert.ByteEquals(expectedObjects[i].ByteValue, actualObject.ByteValue);
@@ -155,8 +156,8 @@ namespace PlayFab.UUnit
                 for (int i = 0; i < expectedObjects.Length; i++)
                 {
                     // Convert the object to json and back, and verify that everything is the same
-                    var actualJson = SimpleJson.SerializeObject(expectedObjects[i], Util.ApiSerializerStrategy).Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("\t", "");
-                    var actualObject = SimpleJson.DeserializeObject<ObjOptNumFieldTest>(actualJson, Util.ApiSerializerStrategy);
+                    var actualJson = JsonWrapper.SerializeObject(expectedObjects[i], PlayFabUtil.ApiSerializerStrategy).Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("\t", "");
+                    var actualObject = JsonWrapper.DeserializeObject<ObjOptNumFieldTest>(actualJson, PlayFabUtil.ApiSerializerStrategy);
 
                     UUnitAssert.SbyteEquals(expectedObjects[i].SbyteValue, actualObject.SbyteValue);
                     UUnitAssert.ByteEquals(expectedObjects[i].ByteValue, actualObject.ByteValue);
@@ -183,8 +184,8 @@ namespace PlayFab.UUnit
                     TestString = "yup",
                 };
                 // Convert the object to json and back, and verify that everything is the same
-                var actualJson = SimpleJson.SerializeObject(expectedObj, Util.ApiSerializerStrategy).Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("\t", "");
-                var actualObject = SimpleJson.DeserializeObject<OtherSpecificDatatypes>(actualJson, Util.ApiSerializerStrategy);
+                var actualJson = JsonWrapper.SerializeObject(expectedObj, PlayFabUtil.ApiSerializerStrategy).Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("\t", "");
+                var actualObject = JsonWrapper.DeserializeObject<OtherSpecificDatatypes>(actualJson, PlayFabUtil.ApiSerializerStrategy);
 
                 UUnitAssert.ObjEquals(expectedObj.TestString, actualObject.TestString);
                 UUnitAssert.SequenceEquals(expectedObj.IntDict, actualObject.IntDict);
@@ -202,39 +203,91 @@ namespace PlayFab.Json
     [Obsolete("Use PlayFab.SimpleJson")]
     public static class JsonConvert
     {
-        [Obsolete("Use PlayFab.SimpleJson.SerializeObject()")]
+        [Obsolete("Use PlayFab.JsonWrapper.SerializeObject()")]
         public static string SerializeObject(object obj)
         {
-            return SimpleJson.SerializeObject(obj, Util.ApiSerializerStrategy);
+            return JsonWrapper.SerializeObject(obj, PlayFabUtil.ApiSerializerStrategy);
         }
 
-        [Obsolete("Use PlayFab.SimpleJson.DeserializeObject<t>()")]
+        [Obsolete("Use PlayFab.JsonWrapper.DeserializeObject<t>()")]
         public static T DeserializeObject<T>(string json)
         {
-            return SimpleJson.DeserializeObject<T>(json, Util.ApiSerializerStrategy);
+            return JsonWrapper.DeserializeObject<T>(json, PlayFabUtil.ApiSerializerStrategy);
         }
 
-        [Obsolete("Use PlayFab.SimpleJson.DeserializeObject()")]
+        [Obsolete("Use PlayFab.JsonWrapper.DeserializeObject()")]
         public static object DeserializeObject(string json)
         {
-            return SimpleJson.DeserializeObject(json);
+            return JsonWrapper.DeserializeObject(json);
         }
     }
 
-    public class JsonLegacyTest : UUnitTestCase
+    public static class SimpleJson
     {
-        private class JsonTest { public bool TestBool; }
-
-        [UUnitTest]
-        public void TestLegacySignature()
+        [Obsolete("Use PlayFab.JsonWrapper.SerializeObject()")]
+        public static string SerializeObject(object obj)
         {
-#pragma warning disable 0618
-            var expectedObj = new JsonTest { TestBool = true };
-            var actualJson = PlayFab.Json.JsonConvert.SerializeObject(expectedObj);
-            JsonTest actualObj = PlayFab.Json.JsonConvert.DeserializeObject<JsonTest>(actualJson);
-            PlayFab.Json.JsonConvert.DeserializeObject(actualJson);
-            UUnitAssert.True(actualObj.TestBool);
-#pragma warning restore 0618
+            return JsonWrapper.SerializeObject(obj, PlayFabUtil.ApiSerializerStrategy);
+        }
+
+        [Obsolete("Use PlayFab.JsonWrapper.SerializeObject()")]
+        public static string SerializeObject(object obj, IJsonSerializerStrategy serializerStrategy)
+        {
+            return JsonWrapper.SerializeObject(obj, serializerStrategy);
+        }
+
+        [Obsolete("Use PlayFab.JsonWrapper.DeserializeObject<t>()")]
+        public static T DeserializeObject<T>(string json)
+        {
+            return JsonWrapper.DeserializeObject<T>(json, PlayFabUtil.ApiSerializerStrategy);
+        }
+
+        [Obsolete("Use PlayFab.JsonWrapper.DeserializeObject<t>()")]
+        public static T DeserializeObject<T>(string json, IJsonSerializerStrategy serializerStrategy)
+        {
+            return JsonWrapper.DeserializeObject<T>(json, serializerStrategy);
+        }
+
+        [Obsolete("Use PlayFab.JsonWrapper.DeserializeObject()")]
+        public static object DeserializeObject(string json)
+        {
+            return JsonWrapper.DeserializeObject(json);
+        }
+    }
+}
+
+namespace PlayFab
+{
+    public static class SimpleJson
+    {
+        [Obsolete("Use PlayFab.JsonWrapper.SerializeObject()")]
+        public static string SerializeObject(object obj)
+        {
+            return JsonWrapper.SerializeObject(obj, PlayFabUtil.ApiSerializerStrategy);
+        }
+
+        [Obsolete("Use PlayFab.JsonWrapper.SerializeObject()")]
+        public static string SerializeObject(object obj, IJsonSerializerStrategy serializerStrategy)
+        {
+            return JsonWrapper.SerializeObject(obj, serializerStrategy);
+        }
+
+        [Obsolete("Use PlayFab.JsonWrapper.DeserializeObject<t>()")]
+        public static T DeserializeObject<T>(string json)
+        {
+            return JsonWrapper.DeserializeObject<T>(json, PlayFabUtil.ApiSerializerStrategy);
+        }
+
+        [Obsolete("Use PlayFab.JsonWrapper.DeserializeObject<t>()")]
+        public static T DeserializeObject<T>(string json, IJsonSerializerStrategy serializerStrategy)
+        {
+            return JsonWrapper.DeserializeObject<T>(json, serializerStrategy);
+        }
+
+        [Obsolete("Use PlayFab.JsonWrapper.DeserializeObject()")]
+        public static object DeserializeObject(string json)
+        {
+            return JsonWrapper.DeserializeObject(json);
         }
     }
 }

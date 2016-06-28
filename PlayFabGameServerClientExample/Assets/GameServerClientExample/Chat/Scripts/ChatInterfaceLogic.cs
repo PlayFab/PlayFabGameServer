@@ -21,8 +21,8 @@ public class ChatInterfaceLogic : MonoBehaviour {
 
 	public InputField chat_diplay_name_text;
 
-	private List<GameObject> response_buttons = new List<GameObject>();
-	private List<GameObject> contact_buttons = new List<GameObject>();
+	//private List<GameObject> response_buttons = new List<GameObject>();
+	//private List<GameObject> contact_buttons = new List<GameObject>();
 
 
 	//To support multiple channels, here we store the connection between the channel id, and the ui content view in the scene that will display those messages.

@@ -223,7 +223,16 @@ namespace PlayFab
         OperationNotSupportedForPlatform = 1219,
         SegmentNotFound = 1220,
         StoreNotFound = 1221,
-        InvalidStatisticName = 1222
+        InvalidStatisticName = 1222,
+        TitleNotQualifiedForLimit = 1223,
+        InvalidServiceLimitLevel = 1224,
+        ServiceLimitLevelInTransition = 1225,
+        CouponAlreadyRedeemed = 1226,
+        GameServerBuildSizeLimitExceeded = 1227,
+        GameServerBuildCountLimitExceeded = 1228,
+        VirtualCurrencyCountLimitExceeded = 1229,
+        VirtualCurrencyCodeExists = 1230,
+        TitleNewsItemCountLimitExceeded = 1231
     }
 
     public delegate void ErrorCallback(PlayFabError error);

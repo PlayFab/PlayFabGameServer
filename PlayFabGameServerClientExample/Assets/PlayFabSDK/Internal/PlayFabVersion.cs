@@ -3,11 +3,11 @@ namespace PlayFab.Internal
 {
     public class PlayFabVersion
     {
-        public static string SdkRevision = "0.24.160419";
+        public static string SdkVersion = "0.0.160628";
 
         public static string getVersionString()
         {
-            return "UnitySDK-" + SdkRevision;
+            return "UnitySDK-" + SdkVersion;
         }
     }
 }

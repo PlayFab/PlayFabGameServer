@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PlayFab.Internal
 {
-    internal static class Util
+    internal static class PlayFabUtil
     {
         public static readonly string[] _defaultDateTimeFormats = new string[]{ // All possible input time formats
 
