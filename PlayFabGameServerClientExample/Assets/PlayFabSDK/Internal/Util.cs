@@ -8,12 +8,11 @@ namespace PlayFab.Internal
 {
     internal static class PlayFabUtil
     {
-        public static readonly string[] _defaultDateTimeFormats = new string[]{ // All possible input time formats
-
+        public static readonly string[] _defaultDateTimeFormats = new string[]{ // All parseable ISO 8601 formats for DateTime.[Try]ParseExact - Lets us deserialize any legacy timestamps in one of these formats
             // These are the standard format with ISO 8601 UTC markers (T/Z)
-            "yyyy-MM-ddTHH:mm:ss.FFFFFFZ", // DEFAULT_UTC_OUTPUT_INDEX
+            "yyyy-MM-ddTHH:mm:ss.FFFFFFZ",
             "yyyy-MM-ddTHH:mm:ss.FFFFZ",
-            "yyyy-MM-ddTHH:mm:ss.FFFZ",
+            "yyyy-MM-ddTHH:mm:ss.FFFZ", // DEFAULT_UTC_OUTPUT_INDEX
             "yyyy-MM-ddTHH:mm:ss.FFZ",
             "yyyy-MM-ddTHH:mm:ssZ",
 
@@ -30,8 +29,8 @@ namespace PlayFab.Internal
             "yyyy-MM-dd HH:mm.ss.FF",
             "yyyy-MM-dd HH:mm.ss",
         };
-        public const int DEFAULT_UTC_OUTPUT_INDEX = 0;
-        public const int DEFAULT_LOCAL_OUTPUT_INDEX = 8;
+        public const int DEFAULT_UTC_OUTPUT_INDEX = 2; // The default format everybody should use
+        public const int DEFAULT_LOCAL_OUTPUT_INDEX = 8; // The default format if you want to use local time (This doesn't have universal support in all PlayFab code)
         private static DateTimeStyles _dateTimeStyles = DateTimeStyles.RoundtripKind;
 
         public static string timeStamp
@@ -64,7 +63,11 @@ namespace PlayFab.Internal
                 Type underType = Nullable.GetUnderlyingType(type);
                 if (underType != null)
                     return DeserializeObject(value, underType);
+#if NETFX_CORE
+                else if (type.GetTypeInfo().IsEnum)
+#else
                 else if (type.IsEnum)
+#endif
                     return Enum.Parse(type, (string)value, true);
                 else if (type == typeof(DateTime))
                 {
@@ -80,6 +83,12 @@ namespace PlayFab.Internal
                     if (result)
                         return output;
                 }
+                else if (type == typeof(TimeSpan))
+                {
+                    double seconds;
+                    if (double.TryParse(valueStr, out seconds))
+                        return TimeSpan.FromSeconds(seconds);
+                }
                 return base.DeserializeObject(value, type);
             }
 
@@ -88,7 +97,11 @@ namespace PlayFab.Internal
             /// </summary>
             protected override bool TrySerializeKnownTypes(object input, out object output)
             {
+#if NETFX_CORE
+                if (input.GetType().GetTypeInfo().IsEnum)
+#else
                 if (input.GetType().IsEnum)
+#endif
                 {
                     output = input.ToString();
                     return true;
@@ -101,6 +114,11 @@ namespace PlayFab.Internal
                 else if (input is DateTimeOffset)
                 {
                     output = ((DateTimeOffset)input).ToString(_defaultDateTimeFormats[DEFAULT_UTC_OUTPUT_INDEX], CultureInfo.CurrentCulture);
+                    return true;
+                }
+                else if (input is TimeSpan)
+                {
+                    output = ((TimeSpan)input).TotalSeconds;
                     return true;
                 }
                 return base.TrySerializeKnownTypes(input, out output);
