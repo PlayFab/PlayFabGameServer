@@ -218,7 +218,7 @@ public class ClientExampleScript : MonoBehaviour
     private void OnConnected(NetworkMessage netMsg)
     {
         StartText.text = "Connected, waiting for Authorization";
-        Debug.Log("Network Client Authenticated, You have 30 seconds to Authenticate or you get booted by the server.");
+        Debug.Log("Network Client connected, You have 30 seconds to Authenticate or you get booted by the server.");
         _network.Send(GameServerMsgTypes.Authenticate, new AuthTicketMessage()
         {
             PlayFabId = PlayFabId,
