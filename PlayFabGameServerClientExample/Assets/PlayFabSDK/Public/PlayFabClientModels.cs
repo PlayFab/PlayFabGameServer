@@ -468,12 +468,12 @@ namespace PlayFab.ClientModels
         /// <summary>
         /// List of Include rules, with any of which if a collection matches, it is included by the filter, unless it is excluded by one of the Exclude rule
         /// </summary>
-        public List<Container`1> Includes { get; set;}
+        public List<Container_Dictionary_String_String> Includes { get; set;}
 
         /// <summary>
         /// List of Exclude rules, with any of which if a collection matches, it is excluded by the filter.
         /// </summary>
-        public List<Container`1> Excludes { get; set;}
+        public List<Container_Dictionary_String_String> Excludes { get; set;}
     }
 
     public class ConfirmPurchaseRequest
@@ -540,7 +540,7 @@ namespace PlayFab.ClientModels
     /// <summary>
     /// A data container
     /// </summary>
-    public class Container`1
+    public class Container_Dictionary_String_String
     {
 
         /// <summary>
