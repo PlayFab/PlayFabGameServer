@@ -414,7 +414,7 @@ public class PlayFabBindingsFactory {
     commandBinder.Bind<SetGameServerInstanceDataResponseSignal>(); //Create empty overrideable binding.
 
     ///<summary>
-    ///Sets the state of the indicated Game Server Instance
+    ///Set the state of the indicated Game Server Instance.
     ///</summary>
     commandBinder.Bind<SetGameServerInstanceStateSignal>().To<SetGameServerInstanceStateCommand>();
     commandBinder.Bind<SetGameServerInstanceStateResponseSignal>(); //Create empty overrideable binding.

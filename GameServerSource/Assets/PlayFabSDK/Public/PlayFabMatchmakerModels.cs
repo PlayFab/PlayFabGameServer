@@ -147,13 +147,13 @@ namespace PlayFab.MatchmakerModels
 
     public enum Region
     {
-        USCentral,
         USEast,
         EUWest,
         Singapore,
         Japan,
+        Australia,
         Brazil,
-        Australia
+        USCentral
     }
 
     public class StartGameRequest
@@ -189,7 +189,7 @@ namespace PlayFab.MatchmakerModels
     {
 
         /// <summary>
-        /// Unique identifier for the lobby in the new Game Server Instance.
+        /// Unique identifier for the game/lobby in the new Game Server Instance.
         /// </summary>
         public string GameID { get; set;}
 

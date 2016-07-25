@@ -1037,7 +1037,7 @@ public class SetGameServerInstanceDataCommand : Command {
 }
 
 ///<summary>
-///Sets the state of the indicated Game Server Instance
+///Set the state of the indicated Game Server Instance.
 ///</summary>
 public class SetGameServerInstanceStateCommand : Command {
     [Inject] public SetGameServerInstanceStateResponseSignal ResponseSignal {get; set;}

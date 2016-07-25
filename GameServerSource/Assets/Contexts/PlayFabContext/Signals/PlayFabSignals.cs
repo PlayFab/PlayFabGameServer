@@ -355,7 +355,7 @@ using strange.extensions.signal.impl;
     public class SetGameServerInstanceDataSignal : Signal<SetGameServerInstanceDataRequest> { }
     
     ///<summary>
-    ///Sets the state of the indicated Game Server Instance
+    ///Set the state of the indicated Game Server Instance.
     ///</summary>
     public class SetGameServerInstanceStateSignal : Signal<SetGameServerInstanceStateRequest> { }
     
@@ -889,7 +889,7 @@ using strange.extensions.signal.impl;
     public class SetGameServerInstanceDataResponseSignal : Signal<SetGameServerInstanceDataResult> { }
 
     ///<summary>
-    ///Sets the state of the indicated Game Server Instance
+    ///Set the state of the indicated Game Server Instance.
     ///</summary>
     public class SetGameServerInstanceStateResponseSignal : Signal<SetGameServerInstanceStateResult> { }
 
