@@ -1040,7 +1040,7 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Sets the state of the indicated Game Server Instance
+        /// Set the state of the indicated Game Server Instance.
         /// </summary>
         public static void SetGameServerInstanceState(SetGameServerInstanceStateRequest request, ProcessApiCallback<SetGameServerInstanceStateResult> resultCallback, ErrorCallback errorCallback, object customData = null)
         {
