@@ -3299,13 +3299,13 @@ namespace PlayFab.ClientModels
 
     public enum Region
     {
+        USCentral,
         USEast,
         EUWest,
         Singapore,
         Japan,
-        Australia,
         Brazil,
-        USCentral
+        Australia
     }
 
     public class RegionInfo
