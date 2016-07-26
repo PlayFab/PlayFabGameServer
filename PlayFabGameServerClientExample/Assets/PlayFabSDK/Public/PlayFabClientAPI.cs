@@ -39,6 +39,8 @@ namespace PlayFab
         public delegate void LoginWithTwitchResponseCallback(string urlPath, int callId, LoginWithTwitchRequest request, LoginResult result, PlayFabError error, object customData);
         public delegate void RegisterPlayFabUserRequestCallback(string urlPath, int callId, RegisterPlayFabUserRequest request, object customData);
         public delegate void RegisterPlayFabUserResponseCallback(string urlPath, int callId, RegisterPlayFabUserRequest request, RegisterPlayFabUserResult result, PlayFabError error, object customData);
+        public delegate void AddGenericIDRequestCallback(string urlPath, int callId, AddGenericIDRequest request, object customData);
+        public delegate void AddGenericIDResponseCallback(string urlPath, int callId, AddGenericIDRequest request, AddGenericIDResult result, PlayFabError error, object customData);
         public delegate void AddUsernamePasswordRequestCallback(string urlPath, int callId, AddUsernamePasswordRequest request, object customData);
         public delegate void AddUsernamePasswordResponseCallback(string urlPath, int callId, AddUsernamePasswordRequest request, AddUsernamePasswordResult result, PlayFabError error, object customData);
         public delegate void GetAccountInfoRequestCallback(string urlPath, int callId, GetAccountInfoRequest request, object customData);
@@ -49,6 +51,8 @@ namespace PlayFab
         public delegate void GetPlayFabIDsFromFacebookIDsResponseCallback(string urlPath, int callId, GetPlayFabIDsFromFacebookIDsRequest request, GetPlayFabIDsFromFacebookIDsResult result, PlayFabError error, object customData);
         public delegate void GetPlayFabIDsFromGameCenterIDsRequestCallback(string urlPath, int callId, GetPlayFabIDsFromGameCenterIDsRequest request, object customData);
         public delegate void GetPlayFabIDsFromGameCenterIDsResponseCallback(string urlPath, int callId, GetPlayFabIDsFromGameCenterIDsRequest request, GetPlayFabIDsFromGameCenterIDsResult result, PlayFabError error, object customData);
+        public delegate void GetPlayFabIDsFromGenericIDsRequestCallback(string urlPath, int callId, GetPlayFabIDsFromGenericIDsRequest request, object customData);
+        public delegate void GetPlayFabIDsFromGenericIDsResponseCallback(string urlPath, int callId, GetPlayFabIDsFromGenericIDsRequest request, GetPlayFabIDsFromGenericIDsResult result, PlayFabError error, object customData);
         public delegate void GetPlayFabIDsFromGoogleIDsRequestCallback(string urlPath, int callId, GetPlayFabIDsFromGoogleIDsRequest request, object customData);
         public delegate void GetPlayFabIDsFromGoogleIDsResponseCallback(string urlPath, int callId, GetPlayFabIDsFromGoogleIDsRequest request, GetPlayFabIDsFromGoogleIDsResult result, PlayFabError error, object customData);
         public delegate void GetPlayFabIDsFromKongregateIDsRequestCallback(string urlPath, int callId, GetPlayFabIDsFromKongregateIDsRequest request, object customData);
@@ -77,6 +81,8 @@ namespace PlayFab
         public delegate void LinkSteamAccountResponseCallback(string urlPath, int callId, LinkSteamAccountRequest request, LinkSteamAccountResult result, PlayFabError error, object customData);
         public delegate void LinkTwitchRequestCallback(string urlPath, int callId, LinkTwitchAccountRequest request, object customData);
         public delegate void LinkTwitchResponseCallback(string urlPath, int callId, LinkTwitchAccountRequest request, LinkTwitchAccountResult result, PlayFabError error, object customData);
+        public delegate void RemoveGenericIDRequestCallback(string urlPath, int callId, RemoveGenericIDRequest request, object customData);
+        public delegate void RemoveGenericIDResponseCallback(string urlPath, int callId, RemoveGenericIDRequest request, RemoveGenericIDResult result, PlayFabError error, object customData);
         public delegate void ReportPlayerRequestCallback(string urlPath, int callId, ReportPlayerClientRequest request, object customData);
         public delegate void ReportPlayerResponseCallback(string urlPath, int callId, ReportPlayerClientRequest request, ReportPlayerClientResult result, PlayFabError error, object customData);
         public delegate void SendAccountRecoveryEmailRequestCallback(string urlPath, int callId, SendAccountRecoveryEmailRequest request, object customData);
@@ -538,6 +544,21 @@ namespace PlayFab
         }
 
         /// <summary>
+        /// Adds the specified generic service identifier to the player's PlayFab account. This is designed to allow for a PlayFab ID lookup of any arbitrary service identifier a title wants to add. This identifier should never be used as authentication credentials, as the intent is that it is easily accessible by other players.
+        /// </summary>
+        public static void AddGenericID(AddGenericIDRequest request, ProcessApiCallback<AddGenericIDResult> resultCallback, ErrorCallback errorCallback, object customData = null)
+        {
+            if (_authKey == null) throw new Exception("Must be logged in to call this method");
+
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
+            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
+            {
+                ResultContainer<AddGenericIDResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
+            };
+            PlayFabHTTP.Post("/Client/AddGenericID", serializedJson, "X-Authorization", _authKey, callback, request, customData);
+        }
+
+        /// <summary>
         /// Adds playfab username/password auth to an existing semi-anonymous account created via a 3rd party auth method.
         /// </summary>
         public static void AddUsernamePassword(AddUsernamePasswordRequest request, ProcessApiCallback<AddUsernamePasswordResult> resultCallback, ErrorCallback errorCallback, object customData = null)
@@ -610,6 +631,21 @@ namespace PlayFab
                 ResultContainer<GetPlayFabIDsFromGameCenterIDsResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
             };
             PlayFabHTTP.Post("/Client/GetPlayFabIDsFromGameCenterIDs", serializedJson, "X-Authorization", _authKey, callback, request, customData);
+        }
+
+        /// <summary>
+        /// Retrieves the unique PlayFab identifiers for the given set of generic service identifiers. A generic identifier is the service name plus the service-specific ID for the player, as specified by the title when the generic identifier was added to the player account.
+        /// </summary>
+        public static void GetPlayFabIDsFromGenericIDs(GetPlayFabIDsFromGenericIDsRequest request, ProcessApiCallback<GetPlayFabIDsFromGenericIDsResult> resultCallback, ErrorCallback errorCallback, object customData = null)
+        {
+            if (_authKey == null) throw new Exception("Must be logged in to call this method");
+
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
+            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
+            {
+                ResultContainer<GetPlayFabIDsFromGenericIDsResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
+            };
+            PlayFabHTTP.Post("/Client/GetPlayFabIDsFromGenericIDs", serializedJson, "X-Authorization", _authKey, callback, request, customData);
         }
 
         /// <summary>
@@ -820,6 +856,21 @@ namespace PlayFab
                 ResultContainer<LinkTwitchAccountResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
             };
             PlayFabHTTP.Post("/Client/LinkTwitch", serializedJson, "X-Authorization", _authKey, callback, request, customData);
+        }
+
+        /// <summary>
+        /// Removes the specified generic service identifier from the player's PlayFab account.
+        /// </summary>
+        public static void RemoveGenericID(RemoveGenericIDRequest request, ProcessApiCallback<RemoveGenericIDResult> resultCallback, ErrorCallback errorCallback, object customData = null)
+        {
+            if (_authKey == null) throw new Exception("Must be logged in to call this method");
+
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
+            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
+            {
+                ResultContainer<RemoveGenericIDResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
+            };
+            PlayFabHTTP.Post("/Client/RemoveGenericID", serializedJson, "X-Authorization", _authKey, callback, request, customData);
         }
 
         /// <summary>
