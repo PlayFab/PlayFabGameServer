@@ -29,6 +29,8 @@ namespace PlayFab
         public delegate void GetLeaderboardResponseCallback(string urlPath, int callId, GetLeaderboardRequest request, GetLeaderboardResult result, PlayFabError error, object customData);
         public delegate void GetLeaderboardAroundUserRequestCallback(string urlPath, int callId, GetLeaderboardAroundUserRequest request, object customData);
         public delegate void GetLeaderboardAroundUserResponseCallback(string urlPath, int callId, GetLeaderboardAroundUserRequest request, GetLeaderboardAroundUserResult result, PlayFabError error, object customData);
+        public delegate void GetPlayerCombinedInfoRequestCallback(string urlPath, int callId, GetPlayerCombinedInfoRequest request, object customData);
+        public delegate void GetPlayerCombinedInfoResponseCallback(string urlPath, int callId, GetPlayerCombinedInfoRequest request, GetPlayerCombinedInfoResult result, PlayFabError error, object customData);
         public delegate void GetPlayerStatisticsRequestCallback(string urlPath, int callId, GetPlayerStatisticsRequest request, object customData);
         public delegate void GetPlayerStatisticsResponseCallback(string urlPath, int callId, GetPlayerStatisticsRequest request, GetPlayerStatisticsResult result, PlayFabError error, object customData);
         public delegate void GetPlayerStatisticVersionsRequestCallback(string urlPath, int callId, GetPlayerStatisticVersionsRequest request, object customData);
@@ -302,6 +304,21 @@ namespace PlayFab
                 ResultContainer<GetLeaderboardAroundUserResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
             };
             PlayFabHTTP.Post("/Server/GetLeaderboardAroundUser", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
+        }
+
+        /// <summary>
+        /// Returns whatever info is requested in the response for the user. Note that PII (like email address, facebook id)             may be returned. All parameters default to false.
+        /// </summary>
+        public static void GetPlayerCombinedInfo(GetPlayerCombinedInfoRequest request, ProcessApiCallback<GetPlayerCombinedInfoResult> resultCallback, ErrorCallback errorCallback, object customData = null)
+        {
+            if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
+
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
+            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
+            {
+                ResultContainer<GetPlayerCombinedInfoResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
+            };
+            PlayFabHTTP.Post("/Server/GetPlayerCombinedInfo", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
         }
 
         /// <summary>

@@ -90,6 +90,11 @@ using strange.extensions.signal.impl;
     public class GetLeaderboardAroundUserSignal : Signal<GetLeaderboardAroundUserRequest> { }
     
     ///<summary>
+    ///Returns whatever info is requested in the response for the user. Note that PII (like email address, facebook id)             may be returned. All parameters default to false.
+    ///</summary>
+    public class GetPlayerCombinedInfoSignal : Signal<GetPlayerCombinedInfoRequest> { }
+    
+    ///<summary>
     ///Retrieves the current version and values for the indicated statistics, for the local player.
     ///</summary>
     public class GetPlayerStatisticsSignal : Signal<GetPlayerStatisticsRequest> { }
@@ -622,6 +627,11 @@ using strange.extensions.signal.impl;
     ///Retrieves a list of ranked users for the given statistic, centered on the currently signed-in user
     ///</summary>
     public class GetLeaderboardAroundUserResponseSignal : Signal<GetLeaderboardAroundUserResult> { }
+
+    ///<summary>
+    ///Returns whatever info is requested in the response for the user. Note that PII (like email address, facebook id)             may be returned. All parameters default to false.
+    ///</summary>
+    public class GetPlayerCombinedInfoResponseSignal : Signal<GetPlayerCombinedInfoResult> { }
 
     ///<summary>
     ///Retrieves the current version and values for the indicated statistics, for the local player.

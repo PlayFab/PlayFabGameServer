@@ -100,6 +100,12 @@ public class PlayFabBindingsFactory {
     commandBinder.Bind<GetLeaderboardAroundUserResponseSignal>(); //Create empty overrideable binding.
 
     ///<summary>
+    ///Returns whatever info is requested in the response for the user. Note that PII (like email address, facebook id)             may be returned. All parameters default to false.
+    ///</summary>
+    commandBinder.Bind<GetPlayerCombinedInfoSignal>().To<GetPlayerCombinedInfoCommand>();
+    commandBinder.Bind<GetPlayerCombinedInfoResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
     ///Retrieves the current version and values for the indicated statistics, for the local player.
     ///</summary>
     commandBinder.Bind<GetPlayerStatisticsSignal>().To<GetPlayerStatisticsCommand>();
