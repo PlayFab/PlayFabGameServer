@@ -540,6 +540,26 @@ using strange.extensions.signal.impl;
 #region Guilds
     
 #endregion
+    
+//PlayStream
+#region PlayStream
+    
+    ///<summary>
+    ///Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
+    ///</summary>
+    public class GetAllSegmentsSignal : Signal<GetAllSegmentsRequest> { }
+    
+    ///<summary>
+    ///List all segments that a player currently belongs to at this moment in time.
+    ///</summary>
+    public class GetPlayerSegmentsSignal : Signal<GetPlayersSegmentsRequest> { }
+    
+    ///<summary>
+    ///Allows for paging through all players in a given segment. This API creates a snapshot of all player profiles that match the segment definition at the time of its creation and lives through the Total Seconds to Live, refreshing its life span on each subsequent use of the Continuation Token. Profiles that change during the course of paging will not be reflected in the results. AB Test segments are currently not supported by this operation.
+    ///</summary>
+    public class GetPlayersInSegmentSignal : Signal<GetPlayersInSegmentRequest> { }
+    
+#endregion
 #endregion
 
 //Response Signals
@@ -1077,6 +1097,26 @@ using strange.extensions.signal.impl;
 
 //Guilds
 #region Guilds
+
+#endregion
+
+//PlayStream
+#region PlayStream
+
+    ///<summary>
+    ///Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
+    ///</summary>
+    public class GetAllSegmentsResponseSignal : Signal<GetAllSegmentsResult> { }
+
+    ///<summary>
+    ///List all segments that a player currently belongs to at this moment in time.
+    ///</summary>
+    public class GetPlayerSegmentsResponseSignal : Signal<GetPlayerSegmentsResult> { }
+
+    ///<summary>
+    ///Allows for paging through all players in a given segment. This API creates a snapshot of all player profiles that match the segment definition at the time of its creation and lives through the Total Seconds to Live, refreshing its life span on each subsequent use of the Continuation Token. Profiles that change during the course of paging will not be reflected in the results. AB Test segments are currently not supported by this operation.
+    ///</summary>
+    public class GetPlayersInSegmentResponseSignal : Signal<GetPlayersInSegmentResult> { }
 
 #endregion
 

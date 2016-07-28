@@ -4,6 +4,25 @@ using System.Collections.Generic;
 
 namespace PlayFab.ServerModels
 {
+    public class AdCampaignAttribution
+    {
+
+        /// <summary>
+        /// Attribution network name
+        /// </summary>
+        public string Platform { get; set;}
+
+        /// <summary>
+        /// Attribution campaign identifier
+        /// </summary>
+        public string CampaignId { get; set;}
+
+        /// <summary>
+        /// UTC time stamp of attribution
+        /// </summary>
+        public DateTime AttributedAt { get; set;}
+    }
+
     public class AddCharacterVirtualCurrencyRequest
     {
 
@@ -791,6 +810,19 @@ namespace PlayFab.ServerModels
         Closed
     }
 
+    public class GetAllSegmentsRequest
+    {
+    }
+
+    public class GetAllSegmentsResult : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// Array of segments for this title.
+        /// </summary>
+        public List<GetSegmentResult> Segments { get; set;}
+    }
+
     public class GetCatalogItemsRequest
     {
 
@@ -1287,6 +1319,67 @@ namespace PlayFab.ServerModels
         public List<StatisticValue> PlayerStatistics { get; set;}
     }
 
+    public class GetPlayerSegmentsResult : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// Array of segments the requested player currently belongs to.
+        /// </summary>
+        public List<GetSegmentResult> Segments { get; set;}
+    }
+
+    public class GetPlayersInSegmentRequest
+    {
+
+        /// <summary>
+        /// Unique identifier for this segment.
+        /// </summary>
+        public string SegmentId { get; set;}
+
+        /// <summary>
+        /// Number of seconds to keep the continuation token active. After token expiration it is not possible to continue paging results. Default is 300 (5 minutes). Maximum is 1,800 (30 minutes).
+        /// </summary>
+        public uint? SecondsToLive { get; set;}
+
+        /// <summary>
+        /// Maximum number of profiles to load. Default is 1,000. Maximum is 10,000.
+        /// </summary>
+        public uint? MaxBatchSize { get; set;}
+
+        /// <summary>
+        /// Continuation token if retrieving subsequent pages of results.
+        /// </summary>
+        public string ContinuationToken { get; set;}
+    }
+
+    public class GetPlayersInSegmentResult : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// Count of profiles matching this segment.
+        /// </summary>
+        public int ProfilesInSegment { get; set;}
+
+        /// <summary>
+        /// Continuation token to use to retrieve subsequent pages of results. If token returns null there are no more results.
+        /// </summary>
+        public string ContinuationToken { get; set;}
+
+        /// <summary>
+        /// Array of player profiles in this segment.
+        /// </summary>
+        public List<PlayerProfile> PlayerProfiles { get; set;}
+    }
+
+    public class GetPlayersSegmentsRequest
+    {
+
+        /// <summary>
+        /// Unique PlayFab assigned ID of the user on whom the operation will be performed.
+        /// </summary>
+        public string PlayFabId { get; set;}
+    }
+
     public class GetPlayerStatisticsRequest
     {
 
@@ -1395,6 +1488,25 @@ namespace PlayFab.ServerModels
         /// a dictionary object of key / value pairs
         /// </summary>
         public Dictionary<string,string> Data { get; set;}
+    }
+
+    public class GetSegmentResult : PlayFabResultCommon
+    {
+
+        /// <summary>
+        /// Unique identifier for this segment.
+        /// </summary>
+        public string Id { get; set;}
+
+        /// <summary>
+        /// Segment name.
+        /// </summary>
+        public string Name { get; set;}
+
+        /// <summary>
+        /// Identifier of the segments AB Test, if it is attached to one.
+        /// </summary>
+        public string ABTestParent { get; set;}
     }
 
     public class GetSharedGroupDataRequest
@@ -1832,7 +1944,7 @@ namespace PlayFab.ServerModels
     }
 
     /// <summary>
-    /// A unique instance of an item in a user's inventory
+    /// A unique instance of an item in a user's inventory. Note, To retrieve additional information for an item instance (such as Tags, Description, or Custom Data that are set on the root catalog item), a call to GetCatalogItems is required. The Item ID of the instance can then be matched to a catalog entry, which contains the additional information.
     /// </summary>
     public class ItemInstance
     {
@@ -1972,6 +2084,23 @@ namespace PlayFab.ServerModels
 
     public class LogEventResult : PlayFabResultCommon
     {
+    }
+
+    public enum LoginIdentityProvider
+    {
+        Unknown,
+        PlayFab,
+        Custom,
+        GameCenter,
+        GooglePlay,
+        Steam,
+        XBoxLive,
+        PSN,
+        Kongregate,
+        Facebook,
+        IOSDevice,
+        AndroidDevice,
+        Twitch
     }
 
     public class LogStatement
@@ -2191,6 +2320,123 @@ namespace PlayFab.ServerModels
         public int Position { get; set;}
     }
 
+    public class PlayerLinkedAccount
+    {
+
+        /// <summary>
+        /// Authentication platform
+        /// </summary>
+        public LoginIdentityProvider? Platform { get; set;}
+
+        /// <summary>
+        /// Platform user identifier
+        /// </summary>
+        public string PlatformUserId { get; set;}
+
+        /// <summary>
+        /// Linked account's username
+        /// </summary>
+        public string Username { get; set;}
+
+        /// <summary>
+        /// Linked account's email
+        /// </summary>
+        public string Email { get; set;}
+    }
+
+    public class PlayerProfile
+    {
+
+        /// <summary>
+        /// PlayFab Player ID
+        /// </summary>
+        public string PlayerId { get; set;}
+
+        /// <summary>
+        /// Title ID this profile applies to
+        /// </summary>
+        public string TitleId { get; set;}
+
+        /// <summary>
+        /// Player Display Name
+        /// </summary>
+        public string DisplayName { get; set;}
+
+        /// <summary>
+        /// Player account origination
+        /// </summary>
+        public LoginIdentityProvider? Origination { get; set;}
+
+        /// <summary>
+        /// Player record created
+        /// </summary>
+        public DateTime? Created { get; set;}
+
+        /// <summary>
+        /// Last login
+        /// </summary>
+        public DateTime? LastLogin { get; set;}
+
+        /// <summary>
+        /// Banned until UTC Date. If permanent ban this is set for 20 years after the original ban date.
+        /// </summary>
+        public DateTime? BannedUntil { get; set;}
+
+        /// <summary>
+        /// Dictionary of player's statistics using only the latest version's value
+        /// </summary>
+        public Dictionary<string,int> Statistics { get; set;}
+
+        /// <summary>
+        /// Dictionary of player's virtual currency balances
+        /// </summary>
+        public Dictionary<string,int> VirtualCurrencyBalances { get; set;}
+
+        /// <summary>
+        /// Array of ad campaigns player has been attributed to
+        /// </summary>
+        public List<AdCampaignAttribution> AdCampaignAttributions { get; set;}
+
+        /// <summary>
+        /// Array of configured push notification end points
+        /// </summary>
+        public List<PushNotificationRegistration> PushNotificationRegistrations { get; set;}
+
+        /// <summary>
+        /// Array of third party accounts linked to this player
+        /// </summary>
+        public List<PlayerLinkedAccount> LinkedAccounts { get; set;}
+
+        /// <summary>
+        /// Array of player statistics
+        /// </summary>
+        public List<PlayerStatistic> PlayerStatistics { get; set;}
+    }
+
+    public class PlayerStatistic
+    {
+
+        /// <summary>
+        /// Statistic ID
+        /// </summary>
+        public string Id { get; set;}
+
+        /// <summary>
+        /// Statistic version (0 if not a versioned statistic)
+        /// </summary>
+        public int StatisticVersion { get; set;}
+
+        /// <summary>
+        /// Current statistic value
+        /// </summary>
+        public int StatisticValue { get; set;}
+
+        /// <summary>
+        /// Statistic name
+        /// </summary>
+        public string Name { get; set;}
+    }
+
     public class PlayerStatisticVersion
     {
 
@@ -2223,6 +2469,26 @@ namespace PlayFab.ServerModels
         /// time when the statistic version became inactive due to statistic version incrementing
         /// </summary>
         public DateTime? DeactivationTime { get; set;}
+    }
+
+    public enum PushNotificationPlatform
+    {
+        ApplePushNotificationService,
+        GoogleCloudMessaging
+    }
+
+    public class PushNotificationRegistration
+    {
+
+        /// <summary>
+        /// Push notification platform
+        /// </summary>
+        public PushNotificationPlatform? Platform { get; set;}
+
+        /// <summary>
+        /// Notification configured endpoint
+        /// </summary>
+        public string NotificationEndpointARN { get; set;}
     }
 
     public class RedeemCouponRequest

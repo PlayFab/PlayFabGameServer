@@ -263,6 +263,8 @@ namespace PlayFab
         public delegate void OpenTradeResponseCallback(string urlPath, int callId, OpenTradeRequest request, OpenTradeResponse result, PlayFabError error, object customData);
         public delegate void AttributeInstallRequestCallback(string urlPath, int callId, AttributeInstallRequest request, object customData);
         public delegate void AttributeInstallResponseCallback(string urlPath, int callId, AttributeInstallRequest request, AttributeInstallResult result, PlayFabError error, object customData);
+        public delegate void GetPlayerSegmentsRequestCallback(string urlPath, int callId, GetPlayerSegmentsRequest request, object customData);
+        public delegate void GetPlayerSegmentsResponseCallback(string urlPath, int callId, GetPlayerSegmentsRequest request, GetPlayerSegmentsResult result, PlayFabError error, object customData);
 
         /// <summary>
         /// Gets a Photon custom authentication token that can be used to securely join the player into a Photon room. See https://api.playfab.com/docs/using-photon-with-playfab/ for more details.
@@ -2231,6 +2233,21 @@ namespace PlayFab
             // Modify AdvertisingIdType:  Prevents us from sending the id multiple times, and allows automated tests to determine id was sent successfully
             PlayFabSettings.AdvertisingIdType += "_Successful";
 
+        }
+
+        /// <summary>
+        /// List all segments that a player currently belongs to at this moment in time.
+        /// </summary>
+        public static void GetPlayerSegments(GetPlayerSegmentsRequest request, ProcessApiCallback<GetPlayerSegmentsResult> resultCallback, ErrorCallback errorCallback, object customData = null)
+        {
+            if (_authKey == null) throw new Exception("Must be logged in to call this method");
+
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
+            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
+            {
+                ResultContainer<GetPlayerSegmentsResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
+            };
+            PlayFabHTTP.Post("/Client/GetPlayerSegments", serializedJson, "X-Authorization", _authKey, callback, request, customData);
         }
 
         private static string _authKey = null;

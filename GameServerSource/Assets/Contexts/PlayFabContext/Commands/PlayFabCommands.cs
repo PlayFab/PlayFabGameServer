@@ -1533,5 +1533,57 @@ public class UpdateCharacterReadOnlyDataCommand : Command {
 #region Guilds
 
 #endregion
+//PlayStream
+#region PlayStream
+
+///<summary>
+///Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
+///</summary>
+public class GetAllSegmentsCommand : Command {
+    [Inject] public GetAllSegmentsResponseSignal ResponseSignal {get; set;}
+    [Inject] public GetAllSegmentsRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.GetAllSegments(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
+///List all segments that a player currently belongs to at this moment in time.
+///</summary>
+public class GetPlayerSegmentsCommand : Command {
+    [Inject] public GetPlayerSegmentsResponseSignal ResponseSignal {get; set;}
+    [Inject] public GetPlayersSegmentsRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.GetPlayerSegments(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
+///Allows for paging through all players in a given segment. This API creates a snapshot of all player profiles that match the segment definition at the time of its creation and lives through the Total Seconds to Live, refreshing its life span on each subsequent use of the Continuation Token. Profiles that change during the course of paging will not be reflected in the results. AB Test segments are currently not supported by this operation.
+///</summary>
+public class GetPlayersInSegmentCommand : Command {
+    [Inject] public GetPlayersInSegmentResponseSignal ResponseSignal {get; set;}
+    [Inject] public GetPlayersInSegmentRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.GetPlayersInSegment(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+#endregion
 
 

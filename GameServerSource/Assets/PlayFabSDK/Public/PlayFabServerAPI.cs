@@ -185,6 +185,12 @@ namespace PlayFab
         public delegate void UpdateCharacterInternalDataResponseCallback(string urlPath, int callId, UpdateCharacterDataRequest request, UpdateCharacterDataResult result, PlayFabError error, object customData);
         public delegate void UpdateCharacterReadOnlyDataRequestCallback(string urlPath, int callId, UpdateCharacterDataRequest request, object customData);
         public delegate void UpdateCharacterReadOnlyDataResponseCallback(string urlPath, int callId, UpdateCharacterDataRequest request, UpdateCharacterDataResult result, PlayFabError error, object customData);
+        public delegate void GetAllSegmentsRequestCallback(string urlPath, int callId, GetAllSegmentsRequest request, object customData);
+        public delegate void GetAllSegmentsResponseCallback(string urlPath, int callId, GetAllSegmentsRequest request, GetAllSegmentsResult result, PlayFabError error, object customData);
+        public delegate void GetPlayerSegmentsRequestCallback(string urlPath, int callId, GetPlayersSegmentsRequest request, object customData);
+        public delegate void GetPlayerSegmentsResponseCallback(string urlPath, int callId, GetPlayersSegmentsRequest request, GetPlayerSegmentsResult result, PlayFabError error, object customData);
+        public delegate void GetPlayersInSegmentRequestCallback(string urlPath, int callId, GetPlayersInSegmentRequest request, object customData);
+        public delegate void GetPlayersInSegmentResponseCallback(string urlPath, int callId, GetPlayersInSegmentRequest request, GetPlayersInSegmentResult result, PlayFabError error, object customData);
 
         /// <summary>
         /// Validated a client's session ticket, and if successful, returns details for that user
@@ -1474,6 +1480,51 @@ namespace PlayFab
                 ResultContainer<UpdateCharacterDataResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
             };
             PlayFabHTTP.Post("/Server/UpdateCharacterReadOnlyData", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
+        }
+
+        /// <summary>
+        /// Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
+        /// </summary>
+        public static void GetAllSegments(GetAllSegmentsRequest request, ProcessApiCallback<GetAllSegmentsResult> resultCallback, ErrorCallback errorCallback, object customData = null)
+        {
+            if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
+
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
+            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
+            {
+                ResultContainer<GetAllSegmentsResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
+            };
+            PlayFabHTTP.Post("/Server/GetAllSegments", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
+        }
+
+        /// <summary>
+        /// List all segments that a player currently belongs to at this moment in time.
+        /// </summary>
+        public static void GetPlayerSegments(GetPlayersSegmentsRequest request, ProcessApiCallback<GetPlayerSegmentsResult> resultCallback, ErrorCallback errorCallback, object customData = null)
+        {
+            if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
+
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
+            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
+            {
+                ResultContainer<GetPlayerSegmentsResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
+            };
+            PlayFabHTTP.Post("/Server/GetPlayerSegments", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
+        }
+
+        /// <summary>
+        /// Allows for paging through all players in a given segment. This API creates a snapshot of all player profiles that match the segment definition at the time of its creation and lives through the Total Seconds to Live, refreshing its life span on each subsequent use of the Continuation Token. Profiles that change during the course of paging will not be reflected in the results. AB Test segments are currently not supported by this operation.
+        /// </summary>
+        public static void GetPlayersInSegment(GetPlayersInSegmentRequest request, ProcessApiCallback<GetPlayersInSegmentResult> resultCallback, ErrorCallback errorCallback, object customData = null)
+        {
+            if (PlayFabSettings.DeveloperSecretKey == null) throw new Exception("Must have PlayFabSettings.DeveloperSecretKey set to call this method");
+
+            string serializedJson = JsonWrapper.SerializeObject(request, PlayFabUtil.ApiSerializerStrategy);
+            Action<CallRequestContainer> callback = delegate(CallRequestContainer requestContainer)
+            {
+                ResultContainer<GetPlayersInSegmentResult>.HandleResults(requestContainer, resultCallback, errorCallback, null);
+            };
+            PlayFabHTTP.Post("/Server/GetPlayersInSegment", serializedJson, "X-SecretKey", PlayFabSettings.DeveloperSecretKey, callback, request, customData);
         }
 
 

@@ -253,5 +253,14 @@ public class PlayFabContext : MVCSContext
         //Guilds
         #region Guilds
         #endregion
+        //PlayStream
+        #region PlayStream
+        injectionBinder.Bind<GetAllSegmentsSignal>().CrossContext();
+        injectionBinder.Bind<GetAllSegmentsResponseSignal>().CrossContext();
+        injectionBinder.Bind<GetPlayerSegmentsSignal>().CrossContext();
+        injectionBinder.Bind<GetPlayerSegmentsResponseSignal>().CrossContext();
+        injectionBinder.Bind<GetPlayersInSegmentSignal>().CrossContext();
+        injectionBinder.Bind<GetPlayersInSegmentResponseSignal>().CrossContext();
+        #endregion
     }
 }
