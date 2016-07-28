@@ -2,15 +2,18 @@
 using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
+using PlayFab.Json;
+using PlayFab.PlayStreamModels;
 using UnityEngine.Networking;
 using UnityEngine.Networking.NetworkSystem;
 using UnityEngine.UI;
+using SimpleJson = PlayFab.SimpleJson;
 
 public class ClientExampleScript : MonoBehaviour
 {
     public bool IsLocalNetwork;
-	public string host = "localhost";
-	public int port = 7777;
+    public string host = "localhost";
+    public int port = 7777;
     public string TitleId;
     public string PlayFabId;
     public string BuildVersion;
@@ -21,15 +24,21 @@ public class ClientExampleScript : MonoBehaviour
     public string SessionTicket;
     public string GameServerAuthTicket;
 
+    public GameObject FriendPrefab;
+
     public GameObject SmallWindow;
     public GameObject ChatWindow;
+    public GameObject FriendsWindow;
+    public Transform FriendListContent;
     public Button CancelButton;
+    public Button ShowFriendsButton;
     public Button ShowChatButton;
-    public Text Header; 
+    public Button HideChatButton;
+    public Text Header;
     public Text Message;
     public Text StartText;
 
-	public ChatInterfaceLogic ChatInterface;
+    public ChatInterfaceLogic ChatInterface;
 
     public NetworkClient _network;
 
@@ -37,7 +46,13 @@ public class ClientExampleScript : MonoBehaviour
     {
         public const short Authenticate = 200;    //this is a custom message type defined on the server.
         public const short OnAuthenticated = 201; //this is a custom response message type defined on the server
-        
+
+
+        public static short RegisterForEvents = 300;
+        public static short OnPlayStreamEventReceived = 301;
+        public static short RequestForFriendList = 302;
+        public static short OnSendFriendsList = 303;
+
         // These are custom defined message types that are defined on the server
         // You would normally have more of these custom to your game and this is 
         // an example of how to use these custom messages to communicate with your server
@@ -56,18 +71,10 @@ public class ClientExampleScript : MonoBehaviour
         public string AuthTicket;
     }
 
-    public class TitleNewsItemMessage : MessageBase
+    // Use this for initialization
+    void Start()
     {
-        public DateTime Timestamp;
-        public string NewsId;
-        public string Title;
-        public string Body;
-    }
-
-	// Use this for initialization
-	void Start ()
-	{
-	    StartText.text = "Loading...";
+        StartText.text = "Loading...";
         CancelButton.onClick.AddListener(() =>
         {
             Header.text = string.Empty;
@@ -75,18 +82,37 @@ public class ClientExampleScript : MonoBehaviour
             SmallWindow.SetActive(false);
         });
 
+        ShowFriendsButton.onClick.AddListener(() =>
+        {
+            if (!FriendsWindow.activeInHierarchy)
+            {
+                foreach (Transform tr in FriendListContent.transform)
+                {
+                    Destroy(tr.gameObject);
+                }
+                FriendsWindow.SetActive(true);
+                _network.Send(GameServerMsgTypes.RequestForFriendList, new AskForFriendListMessage() { PlayfabId = PlayFabId });
+            }
+        });
+
         ShowChatButton.onClick.AddListener(() =>
         {
             ChatWindow.SetActive(true);
         });
 
-	    if (string.IsNullOrEmpty(TitleId))
-	    {
-            Debug.LogError("Please Enter your Title Id on the ClientExampleGameObject");
-	        return;
-	    }
+        HideChatButton.onClick.AddListener(() =>
+        {
+            ChatWindow.SetActive(false);
+        });
 
-	    PlayFabSettings.TitleId = TitleId;
+
+        if (string.IsNullOrEmpty(TitleId))
+        {
+            Debug.LogError("Please Enter your Title Id on the ClientExampleGameObject");
+            return;
+        }
+
+        PlayFabSettings.TitleId = TitleId;
 #if UNITY_ANDROID && !UNITY_EDITOR
 
         AndroidJavaClass up = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
@@ -183,13 +209,16 @@ public class ClientExampleScript : MonoBehaviour
         _network.RegisterHandler(MsgType.Error, OnClientNetworkingError);
         _network.RegisterHandler(MsgType.Disconnect, OnClientDisconnect);
 
-        _network.RegisterHandler(GameServerMsgTypes.OnTitleNewsUpdate, OnTitleNewsUpdate);
+        _network.RegisterHandler(GameServerMsgTypes.OnPlayStreamEventReceived, OnReceivedPlayStreamEvent);
+        _network.RegisterHandler(GameServerMsgTypes.OnSendFriendsList, OnReceivedFriendList);
+        //_network.RegisterHandler(GameServerMsgTypes.OnTitleNewsUpdate, OnTitleNewsUpdate);
 
         //If this fails, it will automatically disconnect from the server.
-		if (IsLocalNetwork){
-			host = this.host;
-			port = this.port;
-		}
+        if (IsLocalNetwork)
+        {
+            host = this.host;
+            port = this.port;
+        }
         _network.Connect(host, port);
         Debug.LogFormat("Network Client Created, waiting for connection on ServerHost:{0} Port:{1}", host, port);
 
@@ -199,21 +228,21 @@ public class ClientExampleScript : MonoBehaviour
          *  You could just instantiate a NetworkManager Game Object Prefab, and get a refrence to it's Client
          *  property.  This would allow you to virtually do the same code above, but on that game object.
          *  For this example, I'm taking the most simple and direct path.
-         */ 
+         */
 
 
 
     }
 
-    private void OnTitleNewsUpdate(NetworkMessage netMsg)
-    {
-        var message = netMsg.ReadMessage<TitleNewsItemMessage>();
-        Debug.LogFormat("{0} New Title News '{1}' Message Received: {2}", message.NewsId, message.Title, message.Body);
+    //private void OnTitleNewsUpdate(NetworkMessage netMsg)
+    //{
+    //    var message = netMsg.ReadMessage<TitleNewsItemMessage>();
+    //    Debug.LogFormat("{0} New Title News '{1}' Message Received: {2}", message.NewsId, message.Title, message.Body);
 
-        Header.text = message.Title;
-        Message.text = message.Body;
-        SmallWindow.SetActive(true);
-    }
+    //    Header.text = message.Title;
+    //    Message.text = message.Body;
+    //    SmallWindow.SetActive(true);
+    //}
 
     private void OnConnected(NetworkMessage netMsg)
     {
@@ -224,20 +253,22 @@ public class ClientExampleScript : MonoBehaviour
             PlayFabId = PlayFabId,
             AuthTicket = !string.IsNullOrEmpty(GameServerAuthTicket) ? GameServerAuthTicket : SessionTicket
         });
-
     }
 
     private void OnAuthenticated(NetworkMessage netMsg)
     {
         StartText.text = "Ready";
+        ShowFriendsButton.gameObject.SetActive(true);
         Debug.Log("Sending Custom Message to the server, telling it to do something ");
         _network.Send(GameServerMsgTypes.MsgRecieverExample, new StringMessage());
 
-		//Initialize Chat Interface with our NetworkClient:
-		if (ChatInterface != null)
-		{
-			ChatInterface.Initialize (_network, PlayFabId);
-		}
+        _network.Send(GameServerMsgTypes.RegisterForEvents, new RegisterForEventsMessage() { Subscription = new PlayStreamSubscription() { EventName = "player_inventory_item_added", PlayFabId = PlayFabId } });
+
+        //Initialize Chat Interface with our NetworkClient:
+        if (ChatInterface != null)
+        {
+            ChatInterface.Initialize(_network, PlayFabId);
+        }
     }
 
     private void OnMsgRecieverExampleResponse(NetworkMessage netMsg)
@@ -265,6 +296,78 @@ public class ClientExampleScript : MonoBehaviour
         StartText.text = "Disconnected";
         //TODO: Find out why it disconnected, and retry if needed.
     }
+
+    private void OnReceivedPlayStreamEvent(NetworkMessage netMsg)
+    {
+        var psEvent = netMsg.ReadMessage<PlayStreamEventMessage>();
+        if (psEvent == null) return;
+        Debug.Log("there is a event");
+        var nobodycares = JsonWrapper.DeserializeObject<PlayerInventoryItemAddedEvent>(psEvent.EventData);
+        if (nobodycares.EventName == "title_statistic_version_changed")
+        {
+            StartText.text = "New Tournament Season Begins!";
+            Invoke("ClearText", 6.0f);
+
+        }
+        else if (nobodycares.EventName == "player_inventory_item_added")
+        {
+            StartText.text = "You received " + nobodycares.DisplayName + "!";
+            Invoke("ClearText", 6.0f);
+        }
+        else if (nobodycares.EventName == "player_virtual_currency_balance_changed")
+        {
+            var vcevent = JsonWrapper.DeserializeObject<PlayerVirtualCurrencyBalanceChanged>(psEvent.EventData);
+            if (vcevent.VirtualCurrencyBalance == 0) return;
+            StartText.text = "You Virtual Currency " + vcevent.VirtualCurrencyName + " just changed from " +
+                             vcevent.VirtualCurrencyPreviousBalance + " to " + vcevent.VirtualCurrencyBalance;
+            Invoke("ClearText", 6.0f);
+        }
+    }
+
+    private void OnReceivedFriendList(NetworkMessage netMsg)
+    {
+        var playerListMsg = netMsg.ReadMessage<FriendListMessage>();
+        if (playerListMsg == null) return;
+        var playerList = playerListMsg.PlayfabIds;
+        foreach (var player in playerList)
+        {
+            Debug.Log(player);
+            if (!FriendsWindow.activeInHierarchy) break;
+
+            var go = Instantiate(FriendPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+            if (go == null) continue;
+            go.transform.SetParent(FriendListContent, false);
+
+            var playerIdGo = go.transform.FindChild("PlayerId");
+            if (playerIdGo != null)
+            {
+                var playerIdText = playerIdGo.GetComponent<Text>();
+                playerIdText.text = player;
+            }
+
+            var addFriendGo = go.transform.FindChild("AddFriendButton");
+            if (addFriendGo != null)
+            {
+                addFriendGo.name = player;
+                if (player == PlayFabId)
+                {
+                    addFriendGo.gameObject.SetActive(false);
+                    continue;
+                }
+            }
+        }
+    }
+
+    public void GiftButtonClicked()
+    {
+
+    }
+
+    void ClearText()
+    {
+        StartText.text = "";
+    }
+
 
     public void QuitButton()
     {

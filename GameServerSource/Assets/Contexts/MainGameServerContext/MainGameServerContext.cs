@@ -52,6 +52,7 @@ public class MainGameServerContext : MVCSContext
         //This is an example of recieving a message and sending a result back to the Client.
         mediationBinder.Bind<MsgReceiverExampleView>().To<MsgReceiverExampleMediator>();
         mediationBinder.Bind<NewPromoExampleView>().To<NewPromoExampleMediator>();
+        mediationBinder.Bind<PlayStreamView>().To<PlayStreamMediator>();
         /*END LOAD YOUR BINDINGS */
     }
 

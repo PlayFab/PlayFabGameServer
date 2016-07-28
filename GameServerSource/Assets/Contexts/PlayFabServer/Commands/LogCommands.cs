@@ -33,10 +33,10 @@ public class LogSignalCommand : Command
                 break;
             case LoggerTypes.Error:
                 var e = (Exception) Message;
-                Debug.LogErrorFormat("Error: {0}", e.Message );
-                Debug.LogErrorFormat("Error: {0}", e.StackTrace);
-                ServerSettingsData.LogEntries.Add(string.Format("Error: {0}", e.Message));
-                ServerSettingsData.LogEntries.Add(string.Format("Error-Stack: {0}", e.StackTrace));
+                Debug.LogErrorFormat("Status: {0}", e.Message );
+                Debug.LogErrorFormat("Status: {0}", e.StackTrace);
+                ServerSettingsData.LogEntries.Add(string.Format("Status: {0}", e.Message));
+                ServerSettingsData.LogEntries.Add(string.Format("Status-Stack: {0}", e.StackTrace));
                 break;
         }
 

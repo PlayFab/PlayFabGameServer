@@ -157,12 +157,12 @@ public class UnityNetworkManagerMediator : EventMediator {
             if (error != null)
             {
                 Logger.Dispatch(LoggerTypes.Info,
-                    string.Format("Unity Network Connection Error: code - {0}", error.errorCode));
+                    string.Format("Unity Network Connection Status: code - {0}", error.errorCode));
             }
         }
         catch (Exception)
         {
-            Logger.Dispatch(LoggerTypes.Info,"Unity Network Connection Error, but we could not get the reason, check the Unity Logs for more info.");
+            Logger.Dispatch(LoggerTypes.Info,"Unity Network Connection Status, but we could not get the reason, check the Unity Logs for more info.");
         }
         ShutDownSignal.Dispatch();
     }
