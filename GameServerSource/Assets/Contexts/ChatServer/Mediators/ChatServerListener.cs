@@ -4,9 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using PlayFab.ServerModels;
 using strange.extensions.mediation.impl;
-using UnityEditor.VersionControl;
 using UnityEngine.Networking;
-using UnityEngine.Networking.NetworkSystem;
 
 public class ChatServerListener : Mediator {
     [Inject] public ChatServerData ChatServerData { get; set; }

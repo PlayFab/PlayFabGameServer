@@ -211,7 +211,7 @@ public class ClientExampleScript : MonoBehaviour
 
         _network.RegisterHandler(GameServerMsgTypes.OnPlayStreamEventReceived, OnReceivedPlayStreamEvent);
         _network.RegisterHandler(GameServerMsgTypes.OnSendFriendsList, OnReceivedFriendList);
-        //_network.RegisterHandler(GameServerMsgTypes.OnTitleNewsUpdate, OnTitleNewsUpdate);
+        _network.RegisterHandler(GameServerMsgTypes.OnTitleNewsUpdate, OnTitleNewsUpdate);
 
         //If this fails, it will automatically disconnect from the server.
         if (IsLocalNetwork)
@@ -234,15 +234,17 @@ public class ClientExampleScript : MonoBehaviour
 
     }
 
-    //private void OnTitleNewsUpdate(NetworkMessage netMsg)
-    //{
-    //    var message = netMsg.ReadMessage<TitleNewsItemMessage>();
-    //    Debug.LogFormat("{0} New Title News '{1}' Message Received: {2}", message.NewsId, message.Title, message.Body);
+    private void OnTitleNewsUpdate(NetworkMessage netMsg)
+    {
+        /*
+        var message = netMsg.ReadMessage<TitleNewsItemMessage>();
+        Debug.LogFormat("{0} New Title News '{1}' Message Received: {2}", message.NewsId, message.Title, message.Body);
 
-    //    Header.text = message.Title;
-    //    Message.text = message.Body;
-    //    SmallWindow.SetActive(true);
-    //}
+        Header.text = message.Title;
+        Message.text = message.Body;
+        SmallWindow.SetActive(true);
+        */
+    }
 
     private void OnConnected(NetworkMessage netMsg)
     {
