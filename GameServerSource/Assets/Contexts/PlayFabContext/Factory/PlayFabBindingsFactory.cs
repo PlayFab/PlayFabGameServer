@@ -100,6 +100,12 @@ public class PlayFabBindingsFactory {
     commandBinder.Bind<GetLeaderboardAroundUserResponseSignal>(); //Create empty overrideable binding.
 
     ///<summary>
+    ///Returns whatever info is requested in the response for the user. Note that PII (like email address, facebook id)             may be returned. All parameters default to false.
+    ///</summary>
+    commandBinder.Bind<GetPlayerCombinedInfoSignal>().To<GetPlayerCombinedInfoCommand>();
+    commandBinder.Bind<GetPlayerCombinedInfoResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
     ///Retrieves the current version and values for the indicated statistics, for the local player.
     ///</summary>
     commandBinder.Bind<GetPlayerStatisticsSignal>().To<GetPlayerStatisticsCommand>();
@@ -620,6 +626,29 @@ public class PlayFabBindingsFactory {
 
 //Guilds
 #region Guilds
+
+#endregion
+
+//PlayStream
+#region PlayStream
+
+    ///<summary>
+    ///Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
+    ///</summary>
+    commandBinder.Bind<GetAllSegmentsSignal>().To<GetAllSegmentsCommand>();
+    commandBinder.Bind<GetAllSegmentsResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
+    ///List all segments that a player currently belongs to at this moment in time.
+    ///</summary>
+    commandBinder.Bind<GetPlayerSegmentsSignal>().To<GetPlayerSegmentsCommand>();
+    commandBinder.Bind<GetPlayerSegmentsResponseSignal>(); //Create empty overrideable binding.
+
+    ///<summary>
+    ///Allows for paging through all players in a given segment. This API creates a snapshot of all player profiles that match the segment definition at the time of its creation and lives through the Total Seconds to Live, refreshing its life span on each subsequent use of the Continuation Token. Profiles that change during the course of paging will not be reflected in the results. AB Test segments are currently not supported by this operation.
+    ///</summary>
+    commandBinder.Bind<GetPlayersInSegmentSignal>().To<GetPlayersInSegmentCommand>();
+    commandBinder.Bind<GetPlayersInSegmentResponseSignal>(); //Create empty overrideable binding.
 
 #endregion
 

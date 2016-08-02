@@ -60,6 +60,8 @@ public class PlayFabContext : MVCSContext
         injectionBinder.Bind<GetLeaderboardResponseSignal>().CrossContext();
         injectionBinder.Bind<GetLeaderboardAroundUserSignal>().CrossContext();
         injectionBinder.Bind<GetLeaderboardAroundUserResponseSignal>().CrossContext();
+        injectionBinder.Bind<GetPlayerCombinedInfoSignal>().CrossContext();
+        injectionBinder.Bind<GetPlayerCombinedInfoResponseSignal>().CrossContext();
         injectionBinder.Bind<GetPlayerStatisticsSignal>().CrossContext();
         injectionBinder.Bind<GetPlayerStatisticsResponseSignal>().CrossContext();
         injectionBinder.Bind<GetPlayerStatisticVersionsSignal>().CrossContext();
@@ -250,6 +252,15 @@ public class PlayFabContext : MVCSContext
         #endregion
         //Guilds
         #region Guilds
+        #endregion
+        //PlayStream
+        #region PlayStream
+        injectionBinder.Bind<GetAllSegmentsSignal>().CrossContext();
+        injectionBinder.Bind<GetAllSegmentsResponseSignal>().CrossContext();
+        injectionBinder.Bind<GetPlayerSegmentsSignal>().CrossContext();
+        injectionBinder.Bind<GetPlayerSegmentsResponseSignal>().CrossContext();
+        injectionBinder.Bind<GetPlayersInSegmentSignal>().CrossContext();
+        injectionBinder.Bind<GetPlayersInSegmentResponseSignal>().CrossContext();
         #endregion
     }
 }
