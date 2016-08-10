@@ -69,6 +69,7 @@ public class ClientExampleScript : MonoBehaviour
     {
         public string PlayFabId;
         public string AuthTicket;
+        public bool IsLocal;
     }
 
     // Use this for initialization
@@ -253,7 +254,8 @@ public class ClientExampleScript : MonoBehaviour
         _network.Send(GameServerMsgTypes.Authenticate, new AuthTicketMessage()
         {
             PlayFabId = PlayFabId,
-            AuthTicket = !string.IsNullOrEmpty(GameServerAuthTicket) ? GameServerAuthTicket : SessionTicket
+            AuthTicket = !string.IsNullOrEmpty(GameServerAuthTicket) ? GameServerAuthTicket : SessionTicket,
+            IsLocal = IsLocalNetwork
         });
     }
 
