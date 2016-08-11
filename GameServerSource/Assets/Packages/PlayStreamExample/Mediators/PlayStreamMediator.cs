@@ -17,9 +17,11 @@ public class PlayStreamMediator : Mediator
 
     public override void OnRegister()
     {
-        PlayFabPlayStreamAPI.OnPlayStreamEvents += notif =>
+        Debug.Log("Registering for PlayStream Events");
+        PlayFabPlayStreamAPI.Start();
+        PlayFabPlayStreamAPI.OnPlayStreamEvent += notif =>
         {
-            var psevent = JsonWrapper.DeserializeObject<PlayerInventoryItemAddedEvent>(notif.EventObject.EventData.ToString());
+            var psevent = JsonWrapper.DeserializeObject<PlayerInventoryItemAddedEventData>(notif.EventObject.EventData.ToString());
 
             Debug.Log("received event, entity type is " + psevent.EntityType);
             if (psevent.EntityType != "title")
@@ -61,7 +63,7 @@ public class PlayStreamMediator : Mediator
 
     private void OnTitleEventHappened(PlayStreamNotification notif)
     {
-        var psevent = JsonWrapper.DeserializeObject<PlayerInventoryItemAddedEvent>(notif.EventObject.EventData.ToString());
+        var psevent = JsonWrapper.DeserializeObject<PlayerInventoryItemAddedEventData>(notif.EventObject.EventData.ToString());
         foreach (var conn in NetworkingData.Connections)
         {
             conn.Connection.Send(PlayStreamMsgTypes.OnPlayStreamEventReceived, new PlayStreamEventMessage() { EntityType = psevent.EntityType, EventData = notif.EventObject.EventData.ToString(), EventName = psevent.EventName, EventNamespace = psevent.EventNamespace });
@@ -71,7 +73,7 @@ public class PlayStreamMediator : Mediator
     private void OnPlayerEventHappened(PlayStreamNotification notif)
     {
         var eventToSend = View.Subscriptions.Find(s => s.PlayFabId == notif.PlayerId);
-        var psevent = JsonWrapper.DeserializeObject<PlayerInventoryItemAddedEvent>(notif.EventObject.EventData.ToString());
+        var psevent = JsonWrapper.DeserializeObject<PlayerInventoryItemAddedEventData>(notif.EventObject.EventData.ToString());
         if (eventToSend != null)
         {
             var conn = NetworkingData.Connections.Find(c => c.PlayFabId == eventToSend.PlayFabId);
