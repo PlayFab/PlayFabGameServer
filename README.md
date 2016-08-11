@@ -72,7 +72,7 @@ Packages are a great way to modularize your code and make it re-usable.  While t
 
 in the above example hierarchy all gameobject children of GameServerContext load in the order listed,  whereas PlayFabServerManager loads first and ChatServerManager loads last.  You can change the load order by changing the order in the hierarchy.
 
-Creating a package is simple,  create a folder in the Packages folder,  and create a C# class file that extends StrangePackage.  You then have the option to load your mappings and bindings in this file and they will get auto-loaded at startup.
+Creating a package is simple,  create a folder in the Packages folder,  and create a C# class file that extends StrangePackage.  You then have the option to load your mappings and bindings in this file and they will get auto-loaded at startup. 
 
 **Example:**
 1. Create folder named MySample in "Packages"
@@ -102,11 +102,13 @@ Creating a package is simple,  create a folder in the Packages folder,  and crea
 
 In the example above we have declared a MapBindings, PostBindings and a Launch.   These do exactly as their names suggest.  You would bind your views to your mediators, signals to commands and inject data objects in MapBindings.  PostBindings is used when you have dependancies and you need something loaded prior to creating a binding.  So all MapBindings will happen first, and then PostBindings happens.  Finally, we have Launch, which allows you to perform startup logic for your package.  all three of these methods happen in the order they appear.   MapBindings --> PostBindings --> Launch
 
+Next create a GameObject under the GameServerContext and call it MySampleManager.  Add the MySampleManager script to it. Now it will be auto-detected.
+
 One thing to note about launch is that our GameServerContext has a signal that you can subscribe to that notifys all modules that the server has completely loaded.  from launch you can either bind directly to it.  All launch methods are called prior to this signal event firing. 
 
 ##### New Mediator and View
 To create a new Mediator you will need to do a few steps. 
-* Create a file in MainGameServerContext\Mediators,  edit the file and extend it from the Mediator class. Then override the OnRegister() method.
+* Create a file in your packages\MySample\Mediators folder (or create if does not exist) and name it NewExampleMediator.cs,  edit the file and extend it from the Mediator class. Then override the OnRegister() method.
  
 ```
 public class NewExampleMediator : Mediator {
@@ -137,7 +139,7 @@ public class NewExampleMediator : Mediator {
 }
 
 ```
-* Now you must register the mediator and view in the Main Context.  To do this, open up MainGameServerContext located in the root of MainGameServerContext folder.  To register a binding, find the section labeled. /* LOAD YOUR BINDINGS HERE */   What this does is binds the View to the Mediator.
+* Now you must register the mediator and view in the StrangePackage manager (MySample/MySampleManager.cs).    To register a binding, add the following to the MapBindings method of your PackageManager.
 ```
 mediationBinder.Bind<NewExampleView>().To<NewExampleMediator>();
 ```
