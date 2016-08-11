@@ -105,7 +105,7 @@ In the example above we have declared a MapBindings, PostBindings and a Launch. 
 
 Next create a GameObject under the GameServerContext and call it MySampleManager.  Add the MySampleManager script to it. Now it will be auto-detected.
 
-One thing to note about launch is that our GameServerContext has a signal that you can subscribe to that notifys all modules that the server has completely loaded.  from launch you can either bind directly to it.  All launch methods are called prior to this signal event firing. 
+One thing to note about launch is that our GameServerContext has a signal that you can subscribe to that notifys all modules that the server has completely loaded.  From launch you can bind directly to it.  All launch methods are called prior to this signal event firing. 
 
 ##### New Mediator and View
 To create a new Mediator you will need to do a few steps. 
