@@ -75,9 +75,9 @@ in the above example hierarchy all gameobject children of GameServerContext load
 Creating a package is simple,  create a folder in the Packages folder,  and create a C# class file that extends StrangePackage.  You then have the option to load your mappings and bindings in this file and they will get auto-loaded at startup. 
 
 **Example:**
-1. Create folder named MySample in "Packages"
-2. Create a file called MySampleManager.cs
-3. Declare the following methods.
+# Create folder named MySample in "Packages"
+# Create a file called MySampleManager.cs
+# Declare the following methods.
 
 ```
 
