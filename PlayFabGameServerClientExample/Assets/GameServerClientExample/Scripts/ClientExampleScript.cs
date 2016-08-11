@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
 using PlayFab.Json;
@@ -7,7 +6,7 @@ using PlayFab.PlayStreamModels;
 using UnityEngine.Networking;
 using UnityEngine.Networking.NetworkSystem;
 using UnityEngine.UI;
-using SimpleJson = PlayFab.SimpleJson;
+using Region = PlayFab.ClientModels.Region;
 
 public class ClientExampleScript : MonoBehaviour
 {
@@ -306,7 +305,7 @@ public class ClientExampleScript : MonoBehaviour
         var psEvent = netMsg.ReadMessage<PlayStreamEventMessage>();
         if (psEvent == null) return;
         Debug.Log("there is a event");
-        var nobodycares = JsonWrapper.DeserializeObject<PlayerInventoryItemAddedEvent>(psEvent.EventData);
+        var nobodycares = JsonWrapper.DeserializeObject<PlayerInventoryItemAddedEventData>(psEvent.EventData);
         if (nobodycares.EventName == "title_statistic_version_changed")
         {
             StartText.text = "New Tournament Season Begins!";
@@ -320,7 +319,7 @@ public class ClientExampleScript : MonoBehaviour
         }
         else if (nobodycares.EventName == "player_virtual_currency_balance_changed")
         {
-            var vcevent = JsonWrapper.DeserializeObject<PlayerVirtualCurrencyBalanceChanged>(psEvent.EventData);
+            var vcevent = JsonWrapper.DeserializeObject<PlayerVirtualCurrencyBalanceChangedEventData>(psEvent.EventData);
             if (vcevent.VirtualCurrencyBalance == 0) return;
             StartText.text = "You Virtual Currency " + vcevent.VirtualCurrencyName + " just changed from " +
                              vcevent.VirtualCurrencyPreviousBalance + " to " + vcevent.VirtualCurrencyBalance;

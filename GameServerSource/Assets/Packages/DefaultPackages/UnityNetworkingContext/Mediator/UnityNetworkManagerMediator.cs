@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-using PlayFab.ClientModels;
-using PlayFab.MatchmakerModels;
 using PlayFab.ServerModels;
 using strange.extensions.mediation.impl;
 using UnityEngine;
