@@ -23,6 +23,7 @@ Out of the Box Game Server for PlayFab.com
 * Provides PlayFab Session authorization
 * Logger
 * Local Debug Mode
+* PlayStream Event Subscriptions
 
 #### Known Issues
 NONE
@@ -228,6 +229,75 @@ however let's say you had the users Playfab Id because they were in your friends
    });
  }
 ```
+
+#### PlayStream Event Subscription
+You can now connect to the playstream events that happen for your title.  The list of available events are listed on our [documentation site](https://api.playfab.com/playstream/docs/PlayStreamEventModels)
+
+We have already setup an example of subscribing to playstream events.  You can either modify our example or start new.
+If starting new, you will want to create a new StrangePackage and create a view and mediator.  In the mediator's register method you need to call
+
+```
+PlayFabPlayStreamAPI.Start();
+```
+To subscribe to all events you would do the following
+
+```
+PlayFabPlayStreamAPI.OnPlayStreamEvent += OnPlayStreamEvent
+```
+
+Then you would want to handle what happens upon each event type.
+```
+private void OnPlayStreamEvent(PlayStreamNotification notif)
+{
+	if (psevent.EntityType != "title")
+        {
+        	//this is a player/character-specific event
+                OnPlayerEventHappened(notif);
+	}
+        else
+        {
+        	//this is a title-specific event, could broadcast
+                Debug.Log("about to send some title events");
+                OnTitleEventHappened(notif);
+	}        
+}
+```
+You can also subscribe to when you are connected to the PlayStream service endpoint and when you are disconnected or if there was some sort of an error.
+
+```
+        PlayFabPlayStreamAPI.OnSubscribed += () =>
+        {
+            Debug.Log("connected to playstream");
+        };
+        PlayFabPlayStreamAPI.OnFailed += error =>
+        {
+            Debug.Log(error.Message);
+        };
+        PlayFabPlayStreamAPI.OnDisconnected += () =>
+        {
+            Debug.Log("Disconnected");
+        };
+        PlayFabPlayStreamAPI.OnError += Debug.LogException;
+        
+```
+Once you have a playstream event notification, you can then send those to the client via Unity Networking Messages.
+
+for example this code handles a title event and just passes it to the client: 
+```
+    private void OnTitleEventHappened(PlayStreamNotification notif)
+    {
+        var psevent = JsonWrapper.DeserializeObject<PlayerInventoryItemAddedEventData>(notif.EventObject.EventData.ToString());
+        foreach (var conn in NetworkingData.Connections)
+        {
+            conn.Connection.Send(PlayStreamMsgTypes.OnPlayStreamEventReceived, new PlayStreamEventMessage() { EntityType = psevent.EntityType, EventData = notif.EventObject.EventData.ToString(), EventName = psevent.EventName, EventNamespace = psevent.EventNamespace });
+        }
+    }
+
+```
+
+However, we do advise that you filter the events on the server a bit more to minimize the amount of traffic that goes to your client.
+
+That is the basics of how to use and subscribe to PlayStream Events on the server, and use those events to send messaging to the client.
 
 #### Conclusion
 
