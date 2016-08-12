@@ -2574,7 +2574,7 @@ namespace PlayFab.ServerModels
     public class SteamPlayFabIdPair
     {
         /// <summary>
-        /// Deprecated: Please use SteamStringIDs
+        /// Deprecated: Please use SteamStringId
         /// </summary>
         public ulong SteamId { get; set;}
         /// <summary>

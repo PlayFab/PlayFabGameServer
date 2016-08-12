@@ -2072,7 +2072,7 @@ namespace PlayFab.AdminModels
     public class UpdateCloudScriptRequest : PlayFabRequestCommon
     {
         /// <summary>
-        /// Deprecated - Do not use
+        /// Deprecated - unused
         /// </summary>
         public int? Version { get; set;}
         /// <summary>
