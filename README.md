@@ -249,8 +249,8 @@ Then you would want to handle what happens upon each event type.
 ```
 private void OnPlayStreamEvent(PlayStreamNotification notif)
 {
-	var psevent = JsonWrapper.DeserializeObject<PlayerInventoryItemAddedEventData>(notif.EventObject.EventData.ToString());
-	if (psevent.EntityType != "title")
+	Debug.Log("received event, entity type is " + notif.EntityType);
+	if (notif.EntityType != "title")
         {
         	//this is a player/character-specific event
                 OnPlayerEventHappened(notif);
@@ -283,20 +283,20 @@ You can also subscribe to when you are connected to the PlayStream service endpo
 ```
 Once you have a playstream event notification, you can then send those to the client via Unity Networking Messages.
 
-for example this code handles a title event and just passes it to the client: 
+for example this code handles a title event and only passes it to the client if it is a TitleStatisticVersionChanged event: 
 ```
     private void OnTitleEventHappened(PlayStreamNotification notif)
     {
-        var psevent = JsonWrapper.DeserializeObject<PlayerInventoryItemAddedEventData>(notif.EventObject.EventData.ToString());
+	if (notif.EventName != "title_statistic_version_changed") return;
         foreach (var conn in NetworkingData.Connections)
         {
-            conn.Connection.Send(PlayStreamMsgTypes.OnPlayStreamEventReceived, new PlayStreamEventMessage() { EntityType = psevent.EntityType, EventData = notif.EventObject.EventData.ToString(), EventName = psevent.EventName, EventNamespace = psevent.EventNamespace });
+            conn.Connection.Send(PlayStreamMsgTypes.OnPlayStreamEventReceived, new PlayStreamEventMessage() { EntityType = notif.EntityType, EventData = notif.EventObject.EventData.ToString(), EventName = notif.EventName, EventNamespace = notif.EventNamespace });
         }
     }
 
 ```
 
-However, we do advise that you filter the events on the server a bit more to minimize the amount of traffic that goes to your client.
+We do advise that you filter the events on the server a bit more to minimize the amount of traffic that goes to your client.
 
 That is the basics of how to use and subscribe to PlayStream Events on the server, and use those events to send messaging to the client.
 

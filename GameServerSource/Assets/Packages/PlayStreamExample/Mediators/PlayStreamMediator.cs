@@ -21,10 +21,8 @@ public class PlayStreamMediator : Mediator
         PlayFabPlayStreamAPI.Start();
         PlayFabPlayStreamAPI.OnPlayStreamEvent += notif =>
         {
-            var psevent = JsonWrapper.DeserializeObject<PlayerInventoryItemAddedEventData>(notif.EventObject.EventData.ToString());
-
-            Debug.Log("received event, entity type is " + psevent.EntityType);
-            if (psevent.EntityType != "title")
+            Debug.Log("received event, entity type is " + notif.EntityType);
+            if (notif.EntityType != "title")
             {
                 //this is a player/character-specific event
                 OnPlayerEventHappened(notif);
@@ -63,17 +61,16 @@ public class PlayStreamMediator : Mediator
 
     private void OnTitleEventHappened(PlayStreamNotification notif)
     {
-        var psevent = JsonWrapper.DeserializeObject<PlayerInventoryItemAddedEventData>(notif.EventObject.EventData.ToString());
+        if (notif.EventName != "title_statistic_version_changed") return;
         foreach (var conn in NetworkingData.Connections)
         {
-            conn.Connection.Send(PlayStreamMsgTypes.OnPlayStreamEventReceived, new PlayStreamEventMessage() { EntityType = psevent.EntityType, EventData = notif.EventObject.EventData.ToString(), EventName = psevent.EventName, EventNamespace = psevent.EventNamespace });
+            conn.Connection.Send(PlayStreamMsgTypes.OnPlayStreamEventReceived, new PlayStreamEventMessage() { EntityType = notif.EntityType, EventData = notif.EventObject.EventData.ToString(), EventName = notif.EventName, EventNamespace = notif.EventNamespace });
         }
     }
 
     private void OnPlayerEventHappened(PlayStreamNotification notif)
     {
         var eventToSend = View.Subscriptions.Find(s => s.PlayFabId == notif.PlayerId);
-        var psevent = JsonWrapper.DeserializeObject<PlayerInventoryItemAddedEventData>(notif.EventObject.EventData.ToString());
         if (eventToSend != null)
         {
             var conn = NetworkingData.Connections.Find(c => c.PlayFabId == eventToSend.PlayFabId);
@@ -83,7 +80,7 @@ public class PlayStreamMediator : Mediator
             }
             else
             {
-                conn.Connection.Send(PlayStreamMsgTypes.OnPlayStreamEventReceived, new PlayStreamEventMessage() { EventData = notif.EventObject.EventData.ToString(), EventName = psevent.EventName, EntityType = psevent.EntityType, EventNamespace = psevent.EventNamespace });
+                conn.Connection.Send(PlayStreamMsgTypes.OnPlayStreamEventReceived, new PlayStreamEventMessage() { EventData = notif.EventObject.EventData.ToString(), EventName = notif.EventName, EntityType = notif.EntityType, EventNamespace = notif.EventNamespace });
             }
         }
     }
