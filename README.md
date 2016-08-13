@@ -249,6 +249,7 @@ Then you would want to handle what happens upon each event type.
 ```
 private void OnPlayStreamEvent(PlayStreamNotification notif)
 {
+	var psevent = JsonWrapper.DeserializeObject<PlayerInventoryItemAddedEventData>(notif.EventObject.EventData.ToString());
 	if (psevent.EntityType != "title")
         {
         	//this is a player/character-specific event
