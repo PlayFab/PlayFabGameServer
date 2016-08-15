@@ -2621,7 +2621,7 @@ namespace PlayFab.ClientModels
         /// </summary>
         public bool? CreateAccount { get; set;}
         /// <summary>
-        /// Deprecated - Do not use
+        /// Deprecated - unused
         /// </summary>
         public string PublisherId { get; set;}
         /// <summary>
@@ -2797,7 +2797,7 @@ namespace PlayFab.ClientModels
         /// </summary>
         public CollectionFilter TagFilter { get; set;}
         /// <summary>
-        /// Deprecated - Do not use
+        /// [deprecated]
         /// </summary>
         public bool? EnableQueue { get; set;}
     }
@@ -3166,7 +3166,7 @@ namespace PlayFab.ClientModels
         /// </summary>
         public string DisplayName { get; set;}
         /// <summary>
-        /// The Origination of a user is determined by the API call used to create the account. In the case of RegisterPlayFabUser, it will be Organic.
+        /// [Deprecated - The Origination of a user is determined by the API call used to create the account. In the case of RegisterPlayFabUser, it will be Organic.
         /// </summary>
         public string Origination { get; set;}
     }
@@ -3357,7 +3357,7 @@ namespace PlayFab.ClientModels
         /// </summary>
         public string TitleId { get; set;}
         /// <summary>
-        /// Deprecated - Do not use
+        /// Deprecated - unused
         /// </summary>
         public string PublisherId { get; set;}
     }
@@ -3553,7 +3553,7 @@ namespace PlayFab.ClientModels
     public class SteamPlayFabIdPair
     {
         /// <summary>
-        /// Deprecated: Please use SteamStringIDs
+        /// Deprecated: Please use SteamStringId
         /// </summary>
         public ulong SteamId { get; set;}
         /// <summary>
