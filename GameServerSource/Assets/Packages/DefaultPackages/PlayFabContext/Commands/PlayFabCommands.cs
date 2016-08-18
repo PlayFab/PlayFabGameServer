@@ -741,6 +741,22 @@ public class GetCharacterInventoryCommand : Command {
 }
 
 ///<summary>
+///Retrieves the configuration information for the specified random results tables for the title, including all ItemId values and weights
+///</summary>
+public class GetRandomResultTablesCommand : Command {
+    [Inject] public GetRandomResultTablesResponseSignal ResponseSignal {get; set;}
+    [Inject] public GetRandomResultTablesRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.GetRandomResultTables(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
 ///Retrieves the specified user's current inventory of virtual goods
 ///</summary>
 public class GetUserInventoryCommand : Command {

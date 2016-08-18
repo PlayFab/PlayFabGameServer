@@ -379,6 +379,14 @@ public class PlayFabContextManager : StrangePackage
         commandBinder.Bind<GetCharacterInventoryResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
+        /// Retrieves the configuration information for the specified random results tables for the title, including all ItemId values and weights
+        /// </summary>
+        injectionBinder.Bind<GetRandomResultTablesSignal>();
+        injectionBinder.Bind<GetRandomResultTablesResponseSignal>();
+        commandBinder.Bind<GetRandomResultTablesSignal>().To<GetRandomResultTablesCommand>();
+        commandBinder.Bind<GetRandomResultTablesResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
         /// Retrieves the specified user's current inventory of virtual goods
         /// </summary>
         injectionBinder.Bind<GetUserInventorySignal>();

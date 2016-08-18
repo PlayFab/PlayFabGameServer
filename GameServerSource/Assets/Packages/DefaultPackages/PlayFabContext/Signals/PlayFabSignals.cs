@@ -255,6 +255,11 @@ using strange.extensions.signal.impl;
     public class GetCharacterInventorySignal : Signal<GetCharacterInventoryRequest> { }
     
     ///<summary>
+    ///Retrieves the configuration information for the specified random results tables for the title, including all ItemId values and weights
+    ///</summary>
+    public class GetRandomResultTablesSignal : Signal<GetRandomResultTablesRequest> { }
+    
+    ///<summary>
     ///Retrieves the specified user's current inventory of virtual goods
     ///</summary>
     public class GetUserInventorySignal : Signal<GetUserInventoryRequest> { }
@@ -812,6 +817,11 @@ using strange.extensions.signal.impl;
     ///Retrieves the specified character's current inventory of virtual goods
     ///</summary>
     public class GetCharacterInventoryResponseSignal : Signal<GetCharacterInventoryResult> { }
+
+    ///<summary>
+    ///Retrieves the configuration information for the specified random results tables for the title, including all ItemId values and weights
+    ///</summary>
+    public class GetRandomResultTablesResponseSignal : Signal<GetRandomResultTablesResult> { }
 
     ///<summary>
     ///Retrieves the specified user's current inventory of virtual goods
