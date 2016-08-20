@@ -50,6 +50,11 @@ using strange.extensions.signal.impl;
 #region Account Management
     
     ///<summary>
+    ///Bans users by PlayFab ID with optional IP address, or MAC address for the provided game.
+    ///</summary>
+    public class BanUsersSignal : Signal<BanUsersRequest> { }
+    
+    ///<summary>
     ///Retrieves the unique PlayFab identifiers for the given set of Facebook identifiers.
     ///</summary>
     public class GetPlayFabIDsFromFacebookIDsSignal : Signal<GetPlayFabIDsFromFacebookIDsRequest> { }
@@ -65,9 +70,29 @@ using strange.extensions.signal.impl;
     public class GetUserAccountInfoSignal : Signal<GetUserAccountInfoRequest> { }
     
     ///<summary>
+    ///Gets all bans for a user.
+    ///</summary>
+    public class GetUserBansSignal : Signal<GetUserBansRequest> { }
+    
+    ///<summary>
+    ///Revoke all active bans for a user.
+    ///</summary>
+    public class RevokeAllBansForUserSignal : Signal<RevokeAllBansForUserRequest> { }
+    
+    ///<summary>
+    ///Revoke all active bans specified with BanId.
+    ///</summary>
+    public class RevokeBansSignal : Signal<RevokeBansRequest> { }
+    
+    ///<summary>
     ///Sends an iOS/Android Push Notification to a specific user, if that user's device has been configured for Push Notifications in PlayFab. If a user has linked both Android and iOS devices, both will be notified.
     ///</summary>
     public class SendPushNotificationSignal : Signal<SendPushNotificationRequest> { }
+    
+    ///<summary>
+    ///Updates information of a list of existing bans specified with Ban Ids.
+    ///</summary>
+    public class UpdateBansSignal : Signal<UpdateBansRequest> { }
     
 #endregion
     
@@ -614,6 +639,11 @@ using strange.extensions.signal.impl;
 #region Account Management
 
     ///<summary>
+    ///Bans users by PlayFab ID with optional IP address, or MAC address for the provided game.
+    ///</summary>
+    public class BanUsersResponseSignal : Signal<BanUsersResult> { }
+
+    ///<summary>
     ///Retrieves the unique PlayFab identifiers for the given set of Facebook identifiers.
     ///</summary>
     public class GetPlayFabIDsFromFacebookIDsResponseSignal : Signal<GetPlayFabIDsFromFacebookIDsResult> { }
@@ -629,9 +659,29 @@ using strange.extensions.signal.impl;
     public class GetUserAccountInfoResponseSignal : Signal<GetUserAccountInfoResult> { }
 
     ///<summary>
+    ///Gets all bans for a user.
+    ///</summary>
+    public class GetUserBansResponseSignal : Signal<GetUserBansResult> { }
+
+    ///<summary>
+    ///Revoke all active bans for a user.
+    ///</summary>
+    public class RevokeAllBansForUserResponseSignal : Signal<RevokeAllBansForUserResult> { }
+
+    ///<summary>
+    ///Revoke all active bans specified with BanId.
+    ///</summary>
+    public class RevokeBansResponseSignal : Signal<RevokeBansResult> { }
+
+    ///<summary>
     ///Sends an iOS/Android Push Notification to a specific user, if that user's device has been configured for Push Notifications in PlayFab. If a user has linked both Android and iOS devices, both will be notified.
     ///</summary>
     public class SendPushNotificationResponseSignal : Signal<SendPushNotificationResult> { }
+
+    ///<summary>
+    ///Updates information of a list of existing bans specified with Ban Ids.
+    ///</summary>
+    public class UpdateBansResponseSignal : Signal<UpdateBansResult> { }
 
 #endregion
 

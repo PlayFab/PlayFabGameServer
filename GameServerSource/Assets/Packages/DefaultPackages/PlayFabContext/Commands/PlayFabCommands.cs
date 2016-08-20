@@ -121,6 +121,22 @@ public class AuthenticateSessionTicketCommand : Command {
 #region Account Management
 
 ///<summary>
+///Bans users by PlayFab ID with optional IP address, or MAC address for the provided game.
+///</summary>
+public class BanUsersCommand : Command {
+    [Inject] public BanUsersResponseSignal ResponseSignal {get; set;}
+    [Inject] public BanUsersRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.BanUsers(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
 ///Retrieves the unique PlayFab identifiers for the given set of Facebook identifiers.
 ///</summary>
 public class GetPlayFabIDsFromFacebookIDsCommand : Command {
@@ -169,6 +185,54 @@ public class GetUserAccountInfoCommand : Command {
 }
 
 ///<summary>
+///Gets all bans for a user.
+///</summary>
+public class GetUserBansCommand : Command {
+    [Inject] public GetUserBansResponseSignal ResponseSignal {get; set;}
+    [Inject] public GetUserBansRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.GetUserBans(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
+///Revoke all active bans for a user.
+///</summary>
+public class RevokeAllBansForUserCommand : Command {
+    [Inject] public RevokeAllBansForUserResponseSignal ResponseSignal {get; set;}
+    [Inject] public RevokeAllBansForUserRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.RevokeAllBansForUser(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
+///Revoke all active bans specified with BanId.
+///</summary>
+public class RevokeBansCommand : Command {
+    [Inject] public RevokeBansResponseSignal ResponseSignal {get; set;}
+    [Inject] public RevokeBansRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.RevokeBans(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
 ///Sends an iOS/Android Push Notification to a specific user, if that user's device has been configured for Push Notifications in PlayFab. If a user has linked both Android and iOS devices, both will be notified.
 ///</summary>
 public class SendPushNotificationCommand : Command {
@@ -177,6 +241,22 @@ public class SendPushNotificationCommand : Command {
     public override void Execute(){
         Retain();
         PlayFabServerAPI.SendPushNotification(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
+///Updates information of a list of existing bans specified with Ban Ids.
+///</summary>
+public class UpdateBansCommand : Command {
+    [Inject] public UpdateBansResponseSignal ResponseSignal {get; set;}
+    [Inject] public UpdateBansRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.UpdateBans(Request,(result)=>{
             //TODO: Map Result data to PlayFabDataStore.
             Release();
             ResponseSignal.Dispatch(result);
