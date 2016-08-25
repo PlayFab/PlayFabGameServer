@@ -575,6 +575,11 @@ using strange.extensions.signal.impl;
 #region PlayStream
     
     ///<summary>
+    ///Adds a given tag to a player profile. The tag's namespace is automatically generated based on the source of the tag.
+    ///</summary>
+    public class AddPlayerTagSignal : Signal<AddPlayerTagRequest> { }
+    
+    ///<summary>
     ///Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
     ///</summary>
     public class GetAllSegmentsSignal : Signal<GetAllSegmentsRequest> { }
@@ -588,6 +593,16 @@ using strange.extensions.signal.impl;
     ///Allows for paging through all players in a given segment. This API creates a snapshot of all player profiles that match the segment definition at the time of its creation and lives through the Total Seconds to Live, refreshing its life span on each subsequent use of the Continuation Token. Profiles that change during the course of paging will not be reflected in the results. AB Test segments are currently not supported by this operation.
     ///</summary>
     public class GetPlayersInSegmentSignal : Signal<GetPlayersInSegmentRequest> { }
+    
+    ///<summary>
+    ///Get all tags with a given Namespace (optional) from a player profile.
+    ///</summary>
+    public class GetPlayerTagsSignal : Signal<GetPlayerTagsRequest> { }
+    
+    ///<summary>
+    ///Remove a given tag from a player profile. The tag's namespace is automatically generated based on the source of the tag.
+    ///</summary>
+    public class RemovePlayerTagSignal : Signal<RemovePlayerTagRequest> { }
     
 #endregion
 #endregion
@@ -1164,6 +1179,11 @@ using strange.extensions.signal.impl;
 #region PlayStream
 
     ///<summary>
+    ///Adds a given tag to a player profile. The tag's namespace is automatically generated based on the source of the tag.
+    ///</summary>
+    public class AddPlayerTagResponseSignal : Signal<AddPlayerTagResult> { }
+
+    ///<summary>
     ///Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
     ///</summary>
     public class GetAllSegmentsResponseSignal : Signal<GetAllSegmentsResult> { }
@@ -1177,6 +1197,16 @@ using strange.extensions.signal.impl;
     ///Allows for paging through all players in a given segment. This API creates a snapshot of all player profiles that match the segment definition at the time of its creation and lives through the Total Seconds to Live, refreshing its life span on each subsequent use of the Continuation Token. Profiles that change during the course of paging will not be reflected in the results. AB Test segments are currently not supported by this operation.
     ///</summary>
     public class GetPlayersInSegmentResponseSignal : Signal<GetPlayersInSegmentResult> { }
+
+    ///<summary>
+    ///Get all tags with a given Namespace (optional) from a player profile.
+    ///</summary>
+    public class GetPlayerTagsResponseSignal : Signal<GetPlayerTagsResult> { }
+
+    ///<summary>
+    ///Remove a given tag from a player profile. The tag's namespace is automatically generated based on the source of the tag.
+    ///</summary>
+    public class RemovePlayerTagResponseSignal : Signal<RemovePlayerTagResult> { }
 
 #endregion
 
