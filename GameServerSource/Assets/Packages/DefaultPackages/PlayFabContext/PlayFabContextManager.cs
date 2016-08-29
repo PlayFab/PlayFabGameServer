@@ -836,6 +836,14 @@ public class PlayFabContextManager : StrangePackage
 
         #region PlayStream
         /// <summary>
+        /// Adds a given tag to a player profile. The tag's namespace is automatically generated based on the source of the tag.
+        /// </summary>
+        injectionBinder.Bind<AddPlayerTagSignal>();
+        injectionBinder.Bind<AddPlayerTagResponseSignal>();
+        commandBinder.Bind<AddPlayerTagSignal>().To<AddPlayerTagCommand>();
+        commandBinder.Bind<AddPlayerTagResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
         /// Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
         /// </summary>
         injectionBinder.Bind<GetAllSegmentsSignal>();
@@ -858,6 +866,22 @@ public class PlayFabContextManager : StrangePackage
         injectionBinder.Bind<GetPlayersInSegmentResponseSignal>();
         commandBinder.Bind<GetPlayersInSegmentSignal>().To<GetPlayersInSegmentCommand>();
         commandBinder.Bind<GetPlayersInSegmentResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Get all tags with a given Namespace (optional) from a player profile.
+        /// </summary>
+        injectionBinder.Bind<GetPlayerTagsSignal>();
+        injectionBinder.Bind<GetPlayerTagsResponseSignal>();
+        commandBinder.Bind<GetPlayerTagsSignal>().To<GetPlayerTagsCommand>();
+        commandBinder.Bind<GetPlayerTagsResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Remove a given tag from a player profile. The tag's namespace is automatically generated based on the source of the tag.
+        /// </summary>
+        injectionBinder.Bind<RemovePlayerTagSignal>();
+        injectionBinder.Bind<RemovePlayerTagResponseSignal>();
+        commandBinder.Bind<RemovePlayerTagSignal>().To<RemovePlayerTagCommand>();
+        commandBinder.Bind<RemovePlayerTagResponseSignal>(); //Create empty overrideable binding.
 
         #endregion
     }

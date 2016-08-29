@@ -1633,6 +1633,22 @@ public class UpdateCharacterReadOnlyDataCommand : Command {
 #region PlayStream
 
 ///<summary>
+///Adds a given tag to a player profile. The tag's namespace is automatically generated based on the source of the tag.
+///</summary>
+public class AddPlayerTagCommand : Command {
+    [Inject] public AddPlayerTagResponseSignal ResponseSignal {get; set;}
+    [Inject] public AddPlayerTagRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.AddPlayerTag(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
 ///Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
 ///</summary>
 public class GetAllSegmentsCommand : Command {
@@ -1673,6 +1689,38 @@ public class GetPlayersInSegmentCommand : Command {
     public override void Execute(){
         Retain();
         PlayFabServerAPI.GetPlayersInSegment(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
+///Get all tags with a given Namespace (optional) from a player profile.
+///</summary>
+public class GetPlayerTagsCommand : Command {
+    [Inject] public GetPlayerTagsResponseSignal ResponseSignal {get; set;}
+    [Inject] public GetPlayerTagsRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.GetPlayerTags(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
+///Remove a given tag from a player profile. The tag's namespace is automatically generated based on the source of the tag.
+///</summary>
+public class RemovePlayerTagCommand : Command {
+    [Inject] public RemovePlayerTagResponseSignal ResponseSignal {get; set;}
+    [Inject] public RemovePlayerTagRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.RemovePlayerTag(Request,(result)=>{
             //TODO: Map Result data to PlayFabDataStore.
             Release();
             ResponseSignal.Dispatch(result);
