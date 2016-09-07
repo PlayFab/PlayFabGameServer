@@ -1649,6 +1649,22 @@ public class AddPlayerTagCommand : Command {
 }
 
 ///<summary>
+///Retrieve a list of all PlayStream actions groups.
+///</summary>
+public class GetAllActionGroupsCommand : Command {
+    [Inject] public GetAllActionGroupsResponseSignal ResponseSignal {get; set;}
+    [Inject] public GetAllActionGroupsRequest Request {get; set;}
+    public override void Execute(){
+        Retain();
+        PlayFabServerAPI.GetAllActionGroups(Request,(result)=>{
+            //TODO: Map Result data to PlayFabDataStore.
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+///<summary>
 ///Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
 ///</summary>
 public class GetAllSegmentsCommand : Command {

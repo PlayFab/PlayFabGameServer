@@ -580,6 +580,11 @@ using strange.extensions.signal.impl;
     public class AddPlayerTagSignal : Signal<AddPlayerTagRequest> { }
     
     ///<summary>
+    ///Retrieve a list of all PlayStream actions groups.
+    ///</summary>
+    public class GetAllActionGroupsSignal : Signal<GetAllActionGroupsRequest> { }
+    
+    ///<summary>
     ///Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
     ///</summary>
     public class GetAllSegmentsSignal : Signal<GetAllSegmentsRequest> { }
@@ -1182,6 +1187,11 @@ using strange.extensions.signal.impl;
     ///Adds a given tag to a player profile. The tag's namespace is automatically generated based on the source of the tag.
     ///</summary>
     public class AddPlayerTagResponseSignal : Signal<AddPlayerTagResult> { }
+
+    ///<summary>
+    ///Retrieve a list of all PlayStream actions groups.
+    ///</summary>
+    public class GetAllActionGroupsResponseSignal : Signal<GetAllActionGroupsResult> { }
 
     ///<summary>
     ///Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
