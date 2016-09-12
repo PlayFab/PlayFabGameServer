@@ -461,22 +461,6 @@ public class GetUserReadOnlyDataCommand : Command {
 }
 
 ///<summary>
-///Retrieves the details of all title-specific statistics for the user
-///</summary>
-public class GetUserStatisticsCommand : Command {
-    [Inject] public GetUserStatisticsResponseSignal ResponseSignal {get; set;}
-    [Inject] public GetUserStatisticsRequest Request {get; set;}
-    public override void Execute(){
-        Retain();
-        PlayFabServerAPI.GetUserStatistics(Request,(result)=>{
-            //TODO: Map Result data to PlayFabDataStore.
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-///<summary>
 ///Updates the values of the specified title-specific statistics for the user
 ///</summary>
 public class UpdatePlayerStatisticsCommand : Command {
@@ -581,22 +565,6 @@ public class UpdateUserReadOnlyDataCommand : Command {
     public override void Execute(){
         Retain();
         PlayFabServerAPI.UpdateUserReadOnlyData(Request,(result)=>{
-            //TODO: Map Result data to PlayFabDataStore.
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-///<summary>
-///Updates the values of the specified title-specific statistics for the user. By default, clients are not permitted to update statistics. Developers may override this setting in the Game Manager > Settings > API Features.
-///</summary>
-public class UpdateUserStatisticsCommand : Command {
-    [Inject] public UpdateUserStatisticsResponseSignal ResponseSignal {get; set;}
-    [Inject] public UpdateUserStatisticsRequest Request {get; set;}
-    public override void Execute(){
-        Retain();
-        PlayFabServerAPI.UpdateUserStatistics(Request,(result)=>{
             //TODO: Map Result data to PlayFabDataStore.
             Release();
             ResponseSignal.Dispatch(result);
@@ -1187,22 +1155,6 @@ public class AwardSteamAchievementCommand : Command {
 #endregion
 //Analytics
 #region Analytics
-
-///<summary>
-///Logs a custom analytics event
-///</summary>
-public class LogEventCommand : Command {
-    [Inject] public LogEventResponseSignal ResponseSignal {get; set;}
-    [Inject] public LogEventRequest Request {get; set;}
-    public override void Execute(){
-        Retain();
-        PlayFabServerAPI.LogEvent(Request,(result)=>{
-            //TODO: Map Result data to PlayFabDataStore.
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
 
 ///<summary>
 ///Writes a character-based event into PlayStream.

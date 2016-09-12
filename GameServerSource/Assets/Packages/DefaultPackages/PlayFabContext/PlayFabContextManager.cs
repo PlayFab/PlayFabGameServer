@@ -237,14 +237,6 @@ public class PlayFabContextManager : StrangePackage
         commandBinder.Bind<GetUserReadOnlyDataResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Retrieves the details of all title-specific statistics for the user
-        /// </summary>
-        injectionBinder.Bind<GetUserStatisticsSignal>();
-        injectionBinder.Bind<GetUserStatisticsResponseSignal>();
-        commandBinder.Bind<GetUserStatisticsSignal>().To<GetUserStatisticsCommand>();
-        commandBinder.Bind<GetUserStatisticsResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
         /// Updates the values of the specified title-specific statistics for the user
         /// </summary>
         injectionBinder.Bind<UpdatePlayerStatisticsSignal>();
@@ -299,14 +291,6 @@ public class PlayFabContextManager : StrangePackage
         injectionBinder.Bind<UpdateUserReadOnlyDataResponseSignal>();
         commandBinder.Bind<UpdateUserReadOnlyDataSignal>().To<UpdateUserReadOnlyDataCommand>();
         commandBinder.Bind<UpdateUserReadOnlyDataResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Updates the values of the specified title-specific statistics for the user. By default, clients are not permitted to update statistics. Developers may override this setting in the Game Manager > Settings > API Features.
-        /// </summary>
-        injectionBinder.Bind<UpdateUserStatisticsSignal>();
-        injectionBinder.Bind<UpdateUserStatisticsResponseSignal>();
-        commandBinder.Bind<UpdateUserStatisticsSignal>().To<UpdateUserStatisticsCommand>();
-        commandBinder.Bind<UpdateUserStatisticsResponseSignal>(); //Create empty overrideable binding.
 
         #endregion
 
@@ -606,14 +590,6 @@ public class PlayFabContextManager : StrangePackage
         #endregion
 
         #region Analytics
-        /// <summary>
-        /// Logs a custom analytics event
-        /// </summary>
-        injectionBinder.Bind<LogEventSignal>();
-        injectionBinder.Bind<LogEventResponseSignal>();
-        commandBinder.Bind<LogEventSignal>().To<LogEventCommand>();
-        commandBinder.Bind<LogEventResponseSignal>(); //Create empty overrideable binding.
-
         /// <summary>
         /// Writes a character-based event into PlayStream.
         /// </summary>
