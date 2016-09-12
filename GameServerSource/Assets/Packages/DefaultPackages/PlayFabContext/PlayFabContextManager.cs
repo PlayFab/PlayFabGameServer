@@ -237,14 +237,6 @@ public class PlayFabContextManager : StrangePackage
         commandBinder.Bind<GetUserReadOnlyDataResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Retrieves the details of all title-specific statistics for the user
-        /// </summary>
-        injectionBinder.Bind<GetUserStatisticsSignal>();
-        injectionBinder.Bind<GetUserStatisticsResponseSignal>();
-        commandBinder.Bind<GetUserStatisticsSignal>().To<GetUserStatisticsCommand>();
-        commandBinder.Bind<GetUserStatisticsResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
         /// Updates the values of the specified title-specific statistics for the user
         /// </summary>
         injectionBinder.Bind<UpdatePlayerStatisticsSignal>();
@@ -299,14 +291,6 @@ public class PlayFabContextManager : StrangePackage
         injectionBinder.Bind<UpdateUserReadOnlyDataResponseSignal>();
         commandBinder.Bind<UpdateUserReadOnlyDataSignal>().To<UpdateUserReadOnlyDataCommand>();
         commandBinder.Bind<UpdateUserReadOnlyDataResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Updates the values of the specified title-specific statistics for the user. By default, clients are not permitted to update statistics. Developers may override this setting in the Game Manager > Settings > API Features.
-        /// </summary>
-        injectionBinder.Bind<UpdateUserStatisticsSignal>();
-        injectionBinder.Bind<UpdateUserStatisticsResponseSignal>();
-        commandBinder.Bind<UpdateUserStatisticsSignal>().To<UpdateUserStatisticsCommand>();
-        commandBinder.Bind<UpdateUserStatisticsResponseSignal>(); //Create empty overrideable binding.
 
         #endregion
 
@@ -607,14 +591,6 @@ public class PlayFabContextManager : StrangePackage
 
         #region Analytics
         /// <summary>
-        /// Logs a custom analytics event
-        /// </summary>
-        injectionBinder.Bind<LogEventSignal>();
-        injectionBinder.Bind<LogEventResponseSignal>();
-        commandBinder.Bind<LogEventSignal>().To<LogEventCommand>();
-        commandBinder.Bind<LogEventResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
         /// Writes a character-based event into PlayStream.
         /// </summary>
         injectionBinder.Bind<WriteCharacterEventSignal>();
@@ -842,6 +818,14 @@ public class PlayFabContextManager : StrangePackage
         injectionBinder.Bind<AddPlayerTagResponseSignal>();
         commandBinder.Bind<AddPlayerTagSignal>().To<AddPlayerTagCommand>();
         commandBinder.Bind<AddPlayerTagResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Retrieve a list of all PlayStream actions groups.
+        /// </summary>
+        injectionBinder.Bind<GetAllActionGroupsSignal>();
+        injectionBinder.Bind<GetAllActionGroupsResponseSignal>();
+        commandBinder.Bind<GetAllActionGroupsSignal>().To<GetAllActionGroupsCommand>();
+        commandBinder.Bind<GetAllActionGroupsResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
         /// Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
