@@ -1177,24 +1177,6 @@ public class UpdateUserInventoryItemCustomDataCommand : Command
 #region Matchmaking APIs
 
 /// <summary>
-/// Inform the matchmaker that a Game Server Instance is removed.
-/// </summary>
-public class DeregisterGameCommand : Command
-{
-    [Inject] public DeregisterGameResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.DeregisterGameRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.DeregisterGame(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
 /// Informs the PlayFab match-making service that the user specified has left the Game Server Instance
 /// </summary>
 public class NotifyMatchmakerPlayerLeftCommand : Command
@@ -1223,24 +1205,6 @@ public class RedeemMatchmakerTicketCommand : Command
     {
         Retain();
         PlayFabServerAPI.RedeemMatchmakerTicket(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Inform the matchmaker that a new Game Server Instance is added.
-/// </summary>
-public class RegisterGameCommand : Command
-{
-    [Inject] public RegisterGameResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.RegisterGameRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.RegisterGame(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
