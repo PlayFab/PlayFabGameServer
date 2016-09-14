@@ -545,6 +545,14 @@ public class PlayFabContextManager : StrangePackage
 
         #region Matchmaking APIs
         /// <summary>
+        /// Inform the matchmaker that a Game Server Instance is removed.
+        /// </summary>
+        injectionBinder.Bind<DeregisterGameSignal>();
+        injectionBinder.Bind<DeregisterGameResponseSignal>();
+        commandBinder.Bind<DeregisterGameSignal>().To<DeregisterGameCommand>();
+        commandBinder.Bind<DeregisterGameResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
         /// Informs the PlayFab match-making service that the user specified has left the Game Server Instance
         /// </summary>
         injectionBinder.Bind<NotifyMatchmakerPlayerLeftSignal>();
@@ -559,6 +567,14 @@ public class PlayFabContextManager : StrangePackage
         injectionBinder.Bind<RedeemMatchmakerTicketResponseSignal>();
         commandBinder.Bind<RedeemMatchmakerTicketSignal>().To<RedeemMatchmakerTicketCommand>();
         commandBinder.Bind<RedeemMatchmakerTicketResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Inform the matchmaker that a new Game Server Instance is added.
+        /// </summary>
+        injectionBinder.Bind<RegisterGameSignal>();
+        injectionBinder.Bind<RegisterGameResponseSignal>();
+        commandBinder.Bind<RegisterGameSignal>().To<RegisterGameCommand>();
+        commandBinder.Bind<RegisterGameResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
         /// Sets the custom data of the indicated Game Server Instance
