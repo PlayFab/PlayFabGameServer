@@ -363,6 +363,11 @@ public class UpdateUserInventoryItemCustomDataSignal : Signal<PlayFab.ServerMode
 #region Matchmaking APIs
 
 /// <summary>
+/// Inform the matchmaker that a Game Server Instance is removed.
+/// </summary>
+public class DeregisterGameSignal : Signal<PlayFab.ServerModels.DeregisterGameRequest> { }
+
+/// <summary>
 /// Informs the PlayFab match-making service that the user specified has left the Game Server Instance
 /// </summary>
 public class NotifyMatchmakerPlayerLeftSignal : Signal<PlayFab.ServerModels.NotifyMatchmakerPlayerLeftRequest> { }
@@ -371,6 +376,11 @@ public class NotifyMatchmakerPlayerLeftSignal : Signal<PlayFab.ServerModels.Noti
 /// Validates a Game Server session ticket and returns details about the user
 /// </summary>
 public class RedeemMatchmakerTicketSignal : Signal<PlayFab.ServerModels.RedeemMatchmakerTicketRequest> { }
+
+/// <summary>
+/// Inform the matchmaker that a new Game Server Instance is added.
+/// </summary>
+public class RegisterGameSignal : Signal<PlayFab.ServerModels.RegisterGameRequest> { }
 
 /// <summary>
 /// Sets the custom data of the indicated Game Server Instance
@@ -955,6 +965,11 @@ public class UpdateUserInventoryItemCustomDataResponseSignal : Signal<PlayFab.Se
 #region Matchmaking APIs
 
 /// <summary>
+/// Inform the matchmaker that a Game Server Instance is removed.
+/// </summary>
+public class DeregisterGameResponseSignal : Signal<PlayFab.ServerModels.DeregisterGameResponse> { }
+
+/// <summary>
 /// Informs the PlayFab match-making service that the user specified has left the Game Server Instance
 /// </summary>
 public class NotifyMatchmakerPlayerLeftResponseSignal : Signal<PlayFab.ServerModels.NotifyMatchmakerPlayerLeftResult> { }
@@ -963,6 +978,11 @@ public class NotifyMatchmakerPlayerLeftResponseSignal : Signal<PlayFab.ServerMod
 /// Validates a Game Server session ticket and returns details about the user
 /// </summary>
 public class RedeemMatchmakerTicketResponseSignal : Signal<PlayFab.ServerModels.RedeemMatchmakerTicketResult> { }
+
+/// <summary>
+/// Inform the matchmaker that a new Game Server Instance is added.
+/// </summary>
+public class RegisterGameResponseSignal : Signal<PlayFab.ServerModels.RegisterGameResponse> { }
 
 /// <summary>
 /// Sets the custom data of the indicated Game Server Instance
