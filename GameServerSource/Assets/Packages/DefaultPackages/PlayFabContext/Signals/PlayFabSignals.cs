@@ -97,6 +97,11 @@ public class UpdateBansSignal : Signal<PlayFab.ServerModels.UpdateBansRequest> {
 public class DeleteUsersSignal : Signal<PlayFab.ServerModels.DeleteUsersRequest> { }
 
 /// <summary>
+/// Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the leaderboard
+/// </summary>
+public class GetFriendLeaderboardSignal : Signal<PlayFab.ServerModels.GetFriendLeaderboardRequest> { }
+
+/// <summary>
 /// Retrieves a list of ranked users for the given statistic, starting from the indicated point in the leaderboard
 /// </summary>
 public class GetLeaderboardSignal : Signal<PlayFab.ServerModels.GetLeaderboardRequest> { }
@@ -357,6 +362,21 @@ public class UpdateUserInventoryItemCustomDataSignal : Signal<PlayFab.ServerMode
 #endregion
 
 #region Friend List Management
+
+/// <summary>
+/// Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+/// </summary>
+public class AddFriendSignal : Signal<PlayFab.ServerModels.AddFriendRequest> { }
+
+/// <summary>
+/// Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+/// </summary>
+public class GetFriendsListSignal : Signal<PlayFab.ServerModels.GetFriendsListRequest> { }
+
+/// <summary>
+/// Removes the specified friend from the the user's friend list
+/// </summary>
+public class RemoveFriendSignal : Signal<PlayFab.ServerModels.RemoveFriendRequest> { }
 
 #endregion
 
@@ -699,6 +719,11 @@ public class UpdateBansResponseSignal : Signal<PlayFab.ServerModels.UpdateBansRe
 public class DeleteUsersResponseSignal : Signal<PlayFab.ServerModels.DeleteUsersResult> { }
 
 /// <summary>
+/// Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the leaderboard
+/// </summary>
+public class GetFriendLeaderboardResponseSignal : Signal<PlayFab.ServerModels.GetLeaderboardResult> { }
+
+/// <summary>
 /// Retrieves a list of ranked users for the given statistic, starting from the indicated point in the leaderboard
 /// </summary>
 public class GetLeaderboardResponseSignal : Signal<PlayFab.ServerModels.GetLeaderboardResult> { }
@@ -959,6 +984,21 @@ public class UpdateUserInventoryItemCustomDataResponseSignal : Signal<PlayFab.Se
 #endregion
 
 #region Friend List Management
+
+/// <summary>
+/// Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+/// </summary>
+public class AddFriendResponseSignal : Signal<PlayFab.ServerModels.EmptyResult> { }
+
+/// <summary>
+/// Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+/// </summary>
+public class GetFriendsListResponseSignal : Signal<PlayFab.ServerModels.GetFriendsListResult> { }
+
+/// <summary>
+/// Removes the specified friend from the the user's friend list
+/// </summary>
+public class RemoveFriendResponseSignal : Signal<PlayFab.ServerModels.EmptyResult> { }
 
 #endregion
 

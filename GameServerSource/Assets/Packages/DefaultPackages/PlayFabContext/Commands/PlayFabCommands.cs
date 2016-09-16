@@ -301,6 +301,24 @@ public class DeleteUsersCommand : Command
 }
 
 /// <summary>
+/// Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the leaderboard
+/// </summary>
+public class GetFriendLeaderboardCommand : Command
+{
+    [Inject] public GetFriendLeaderboardResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetFriendLeaderboardRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.GetFriendLeaderboard(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
 /// Retrieves a list of ranked users for the given statistic, starting from the indicated point in the leaderboard
 /// </summary>
 public class GetLeaderboardCommand : Command
@@ -1172,6 +1190,60 @@ public class UpdateUserInventoryItemCustomDataCommand : Command
 #endregion
 
 #region Friend List Management
+
+/// <summary>
+/// Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+/// </summary>
+public class AddFriendCommand : Command
+{
+    [Inject] public AddFriendResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.AddFriendRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.AddFriend(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+/// </summary>
+public class GetFriendsListCommand : Command
+{
+    [Inject] public GetFriendsListResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetFriendsListRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.GetFriendsList(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Removes the specified friend from the the user's friend list
+/// </summary>
+public class RemoveFriendCommand : Command
+{
+    [Inject] public RemoveFriendResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.RemoveFriendRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.RemoveFriend(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
 #endregion
 
 #region Matchmaking APIs

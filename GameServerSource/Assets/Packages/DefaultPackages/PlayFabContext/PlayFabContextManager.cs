@@ -149,6 +149,14 @@ public class PlayFabContextManager : StrangePackage
         commandBinder.Bind<DeleteUsersResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
+        /// Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the leaderboard
+        /// </summary>
+        injectionBinder.Bind<GetFriendLeaderboardSignal>();
+        injectionBinder.Bind<GetFriendLeaderboardResponseSignal>();
+        commandBinder.Bind<GetFriendLeaderboardSignal>().To<GetFriendLeaderboardCommand>();
+        commandBinder.Bind<GetFriendLeaderboardResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
         /// Retrieves a list of ranked users for the given statistic, starting from the indicated point in the leaderboard
         /// </summary>
         injectionBinder.Bind<GetLeaderboardSignal>();
@@ -541,6 +549,30 @@ public class PlayFabContextManager : StrangePackage
         #endregion
 
         #region Friend List Management
+        /// <summary>
+        /// Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+        /// </summary>
+        injectionBinder.Bind<AddFriendSignal>();
+        injectionBinder.Bind<AddFriendResponseSignal>();
+        commandBinder.Bind<AddFriendSignal>().To<AddFriendCommand>();
+        commandBinder.Bind<AddFriendResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+        /// </summary>
+        injectionBinder.Bind<GetFriendsListSignal>();
+        injectionBinder.Bind<GetFriendsListResponseSignal>();
+        commandBinder.Bind<GetFriendsListSignal>().To<GetFriendsListCommand>();
+        commandBinder.Bind<GetFriendsListResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Removes the specified friend from the the user's friend list
+        /// </summary>
+        injectionBinder.Bind<RemoveFriendSignal>();
+        injectionBinder.Bind<RemoveFriendResponseSignal>();
+        commandBinder.Bind<RemoveFriendSignal>().To<RemoveFriendCommand>();
+        commandBinder.Bind<RemoveFriendResponseSignal>(); //Create empty overrideable binding.
+
         #endregion
 
         #region Matchmaking APIs
