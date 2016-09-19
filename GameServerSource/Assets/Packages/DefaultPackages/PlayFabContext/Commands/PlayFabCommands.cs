@@ -1303,6 +1303,24 @@ public class RedeemMatchmakerTicketCommand : Command
 }
 
 /// <summary>
+/// Set the state of the indicated Game Server Instance. Also update the heartbeat for the instance.
+/// </summary>
+public class RefreshGameServerInstanceHeartbeatCommand : Command
+{
+    [Inject] public RefreshGameServerInstanceHeartbeatResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.RefreshGameServerInstanceHeartbeatRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.RefreshGameServerInstanceHeartbeat(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
 /// Inform the matchmaker that a new Game Server Instance is added.
 /// </summary>
 public class RegisterGameCommand : Command
@@ -1349,6 +1367,24 @@ public class SetGameServerInstanceStateCommand : Command
     {
         Retain();
         PlayFabServerAPI.SetGameServerInstanceState(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Set custom tags for the specified Game Server Instance
+/// </summary>
+public class SetGameServerInstanceTagsCommand : Command
+{
+    [Inject] public SetGameServerInstanceTagsResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.SetGameServerInstanceTagsRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.SetGameServerInstanceTags(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);

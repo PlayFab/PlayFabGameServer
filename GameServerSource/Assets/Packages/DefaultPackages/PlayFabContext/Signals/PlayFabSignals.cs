@@ -398,6 +398,11 @@ public class NotifyMatchmakerPlayerLeftSignal : Signal<PlayFab.ServerModels.Noti
 public class RedeemMatchmakerTicketSignal : Signal<PlayFab.ServerModels.RedeemMatchmakerTicketRequest> { }
 
 /// <summary>
+/// Set the state of the indicated Game Server Instance. Also update the heartbeat for the instance.
+/// </summary>
+public class RefreshGameServerInstanceHeartbeatSignal : Signal<PlayFab.ServerModels.RefreshGameServerInstanceHeartbeatRequest> { }
+
+/// <summary>
 /// Inform the matchmaker that a new Game Server Instance is added.
 /// </summary>
 public class RegisterGameSignal : Signal<PlayFab.ServerModels.RegisterGameRequest> { }
@@ -411,6 +416,11 @@ public class SetGameServerInstanceDataSignal : Signal<PlayFab.ServerModels.SetGa
 /// Set the state of the indicated Game Server Instance.
 /// </summary>
 public class SetGameServerInstanceStateSignal : Signal<PlayFab.ServerModels.SetGameServerInstanceStateRequest> { }
+
+/// <summary>
+/// Set custom tags for the specified Game Server Instance
+/// </summary>
+public class SetGameServerInstanceTagsSignal : Signal<PlayFab.ServerModels.SetGameServerInstanceTagsRequest> { }
 
 #endregion
 
@@ -1020,6 +1030,11 @@ public class NotifyMatchmakerPlayerLeftResponseSignal : Signal<PlayFab.ServerMod
 public class RedeemMatchmakerTicketResponseSignal : Signal<PlayFab.ServerModels.RedeemMatchmakerTicketResult> { }
 
 /// <summary>
+/// Set the state of the indicated Game Server Instance. Also update the heartbeat for the instance.
+/// </summary>
+public class RefreshGameServerInstanceHeartbeatResponseSignal : Signal<PlayFab.ServerModels.RefreshGameServerInstanceHeartbeatResult> { }
+
+/// <summary>
 /// Inform the matchmaker that a new Game Server Instance is added.
 /// </summary>
 public class RegisterGameResponseSignal : Signal<PlayFab.ServerModels.RegisterGameResponse> { }
@@ -1033,6 +1048,11 @@ public class SetGameServerInstanceDataResponseSignal : Signal<PlayFab.ServerMode
 /// Set the state of the indicated Game Server Instance.
 /// </summary>
 public class SetGameServerInstanceStateResponseSignal : Signal<PlayFab.ServerModels.SetGameServerInstanceStateResult> { }
+
+/// <summary>
+/// Set custom tags for the specified Game Server Instance
+/// </summary>
+public class SetGameServerInstanceTagsResponseSignal : Signal<PlayFab.ServerModels.SetGameServerInstanceTagsResult> { }
 
 #endregion
 
