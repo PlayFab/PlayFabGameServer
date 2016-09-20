@@ -354,6 +354,12 @@ namespace PlayFab.PlayStreamModels
         public AlertLevel? Level;
         public AlertStates? AlertState;
     }
+    public class TitleCronCloudScriptExecutedEventData : PlayStreamEventBase
+    {
+        public NameId Cron;
+        public string FunctionName;
+        public ExecuteCloudScriptResult CloudScriptExecutionResult;
+    }
     public class TitleExceededLimitEventData : PlayStreamEventBase
     {
         public string LimitId;
@@ -427,11 +433,6 @@ namespace PlayFab.PlayStreamModels
         public double? Value;
         public string UserId;
         public string DeveloperId;
-    }
-    public class TitleScheduledCloudScriptExecutedEventData : PlayStreamEventBase
-    {
-        public string FunctionName;
-        public ExecuteCloudScriptResult CloudScriptExecutionResult;
     }
     public class TitleStatisticVersionChangedEventData : PlayStreamEventBase
     {
@@ -942,6 +943,13 @@ namespace PlayFab.PlayStreamModels
         Day,
         Week,
         Month
+    }
+
+    [Serializable]
+    public class NameId
+    {
+        public string Name { get; set;}
+        public string Id { get; set;}
     }
 
     public enum SourceType

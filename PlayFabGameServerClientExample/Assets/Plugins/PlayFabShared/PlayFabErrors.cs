@@ -253,7 +253,11 @@ namespace PlayFab
         ActionGroupNotFound = 1250,
         MaximumSegmentBulkActionJobsRunning = 1251,
         NoActionsOnPlayersInSegmentJob = 1252,
-        DuplicateStatisticName = 1253
+        DuplicateStatisticName = 1253,
+        CronNameConflict = 1254,
+        CronCreateConflict = 1255,
+        InvalidCronName = 1256,
+        InvalidCronSchedule = 1257
     }
 
     public delegate void ErrorCallback(PlayFabError error);
