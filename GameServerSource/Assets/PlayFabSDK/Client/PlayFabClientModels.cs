@@ -3511,8 +3511,7 @@ namespace PlayFab.ClientModels
         BackEnd,
         GameClient,
         GameServer,
-        Partner,
-        Stream
+        Partner
     }
 
     [Serializable]
