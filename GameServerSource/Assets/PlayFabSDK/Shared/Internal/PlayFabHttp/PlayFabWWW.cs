@@ -176,7 +176,9 @@ namespace PlayFab.Internal
             else
             {
 #if !UNITY_WSA && !UNITY_WP8 && !UNITY_WEBGL
-                if (PlayFabSettings.CompressApiData)
+                string encoding;
+                www.responseHeaders.TryGetValue("Content-Encoding", out encoding);
+                if (encoding.ToLower() == "gzip")
                 {
                     try
                     {
@@ -206,12 +208,10 @@ namespace PlayFab.Internal
                     }
                 }
                 else
+#endif
                 {
-#endif
                     wwwSuccessCallback(www.text);
-#if !UNITY_WSA && !UNITY_WP8 && !UNITY_WEBGL
                 }
-#endif
             }
         }
 
