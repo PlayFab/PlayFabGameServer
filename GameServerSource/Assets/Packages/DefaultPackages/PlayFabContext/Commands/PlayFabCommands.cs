@@ -682,6 +682,24 @@ public class GetPublisherDataCommand : Command
 }
 
 /// <summary>
+/// Retrieves the current server time
+/// </summary>
+public class GetTimeCommand : Command
+{
+    [Inject] public GetTimeResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetTimeRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.GetTime(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
 /// Retrieves the key-value store of custom title settings
 /// </summary>
 public class GetTitleDataCommand : Command

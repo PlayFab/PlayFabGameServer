@@ -254,10 +254,10 @@ namespace PlayFab
         MaximumSegmentBulkActionJobsRunning = 1251,
         NoActionsOnPlayersInSegmentJob = 1252,
         DuplicateStatisticName = 1253,
-        CronNameConflict = 1254,
-        CronCreateConflict = 1255,
-        InvalidCronName = 1256,
-        InvalidCronSchedule = 1257
+        ScheduledTaskNameConflict = 1254,
+        ScheduledTaskCreateConflict = 1255,
+        InvalidScheduledTaskName = 1256,
+        InvalidTaskSchedule = 1257
     }
 
     public delegate void ErrorCallback(PlayFabError error);

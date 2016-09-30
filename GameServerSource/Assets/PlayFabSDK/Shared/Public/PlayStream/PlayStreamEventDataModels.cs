@@ -354,12 +354,6 @@ namespace PlayFab.PlayStreamModels
         public AlertLevel? Level;
         public AlertStates? AlertState;
     }
-    public class TitleCronCloudScriptExecutedEventData : PlayStreamEventBase
-    {
-        public NameId Cron;
-        public string FunctionName;
-        public ExecuteCloudScriptResult CloudScriptExecutionResult;
-    }
     public class TitleExceededLimitEventData : PlayStreamEventBase
     {
         public string LimitId;
@@ -433,6 +427,12 @@ namespace PlayFab.PlayStreamModels
         public double? Value;
         public string UserId;
         public string DeveloperId;
+    }
+    public class TitleScheduledCloudScriptExecutedEventData : PlayStreamEventBase
+    {
+        public NameId ScheduledTask;
+        public string FunctionName;
+        public ExecuteCloudScriptResult CloudScriptExecutionResult;
     }
     public class TitleStatisticVersionChangedEventData : PlayStreamEventBase
     {
