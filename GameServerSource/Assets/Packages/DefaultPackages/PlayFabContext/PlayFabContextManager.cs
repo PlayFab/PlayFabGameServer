@@ -320,6 +320,14 @@ public class PlayFabContextManager : StrangePackage
         commandBinder.Bind<GetPublisherDataResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
+        /// Retrieves the current server time
+        /// </summary>
+        injectionBinder.Bind<GetTimeSignal>();
+        injectionBinder.Bind<GetTimeResponseSignal>();
+        commandBinder.Bind<GetTimeSignal>().To<GetTimeCommand>();
+        commandBinder.Bind<GetTimeResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
         /// Retrieves the key-value store of custom title settings
         /// </summary>
         injectionBinder.Bind<GetTitleDataSignal>();

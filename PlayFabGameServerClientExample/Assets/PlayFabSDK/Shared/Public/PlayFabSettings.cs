@@ -28,6 +28,7 @@ namespace PlayFab
         public const string SdkVersion = "";
         public const string BuildIdentifier = "";
         public const string VersionString = "UnitySDK-";
+        public const string DefaultPlayFabApiUrl = ".playfabapi.com";
 
         public static PlayFabSharedSettings GetSharedSettingsObject()
         {
@@ -69,7 +70,7 @@ namespace PlayFab
 
         public static string ProductionEnvironmentUrl
         {
-            get { return !string.IsNullOrEmpty(PlayFabShared.ProductionEnvironmentUrl) ? PlayFabShared.ProductionEnvironmentUrl : ".playfabapi.com"; }
+            get { return !string.IsNullOrEmpty(PlayFabShared.ProductionEnvironmentUrl) ? PlayFabShared.ProductionEnvironmentUrl : DefaultPlayFabApiUrl; }
             set { PlayFabShared.ProductionEnvironmentUrl = value; }
         }
 
@@ -111,12 +112,6 @@ namespace PlayFab
             set { PlayFabShared.CompressApiData = value; }
         }
 
-        public static bool IsTesting
-        {
-            get { return PlayFabShared.IsTesting; }
-            set { PlayFabShared.IsTesting = value; }
-        }
-
         public static string LoggerHost
         {
             get { return PlayFabShared.LoggerHost; }
@@ -144,17 +139,13 @@ namespace PlayFab
 
         public static string GetFullUrl(string apiCall)
         {
-            if (!IsTesting)
-            {
-                string baseUrl = ProductionEnvironmentUrl;
-                if (baseUrl.StartsWith("http"))
-                    return baseUrl;
-                return "https://" + TitleId + baseUrl + apiCall;
-            }
+            string output;
+            var baseUrl = ProductionEnvironmentUrl;
+            if (baseUrl.StartsWith("http"))
+                output = baseUrl + apiCall;
             else
-            {
-                return "http://localhost:11289/" + apiCall;
-            }
+                output = "https://" + TitleId + baseUrl + apiCall;
+            return output;
         }
     }
 }

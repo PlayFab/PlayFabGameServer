@@ -216,6 +216,11 @@ public class GetCatalogItemsSignal : Signal<PlayFab.ServerModels.GetCatalogItems
 public class GetPublisherDataSignal : Signal<PlayFab.ServerModels.GetPublisherDataRequest> { }
 
 /// <summary>
+/// Retrieves the current server time
+/// </summary>
+public class GetTimeSignal : Signal<PlayFab.ServerModels.GetTimeRequest> { }
+
+/// <summary>
 /// Retrieves the key-value store of custom title settings
 /// </summary>
 public class GetTitleDataSignal : Signal<PlayFab.ServerModels.GetTitleDataRequest> { }
@@ -846,6 +851,11 @@ public class GetCatalogItemsResponseSignal : Signal<PlayFab.ServerModels.GetCata
 /// Retrieves the key-value store of custom publisher settings
 /// </summary>
 public class GetPublisherDataResponseSignal : Signal<PlayFab.ServerModels.GetPublisherDataResult> { }
+
+/// <summary>
+/// Retrieves the current server time
+/// </summary>
+public class GetTimeResponseSignal : Signal<PlayFab.ServerModels.GetTimeResult> { }
 
 /// <summary>
 /// Retrieves the key-value store of custom title settings
