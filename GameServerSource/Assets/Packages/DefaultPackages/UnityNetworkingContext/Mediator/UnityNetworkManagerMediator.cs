@@ -73,7 +73,8 @@ public class UnityNetworkManagerMediator : EventMediator {
                 RedeemMatchmakerTicketResponseSignal.AddOnce(OnAuthUserResponse);
                 RedeemMatchmakerTicketSignal.Dispatch(new RedeemMatchmakerTicketRequest()
                 {
-                    Ticket = message.AuthTicket
+                    Ticket = message.AuthTicket,
+                    LobbyId = ServerSettingsData.GameId.ToString()
                 });
             }
             else
