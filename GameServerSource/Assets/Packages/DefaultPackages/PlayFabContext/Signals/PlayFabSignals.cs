@@ -157,11 +157,6 @@ public class GetUserPublisherReadOnlyDataSignal : Signal<PlayFab.ServerModels.Ge
 public class GetUserReadOnlyDataSignal : Signal<PlayFab.ServerModels.GetUserDataRequest> { }
 
 /// <summary>
-/// Retrieves the details of all title-specific statistics for the user
-/// </summary>
-public class GetUserStatisticsSignal : Signal<PlayFab.ServerModels.GetUserStatisticsRequest> { }
-
-/// <summary>
 /// Updates the values of the specified title-specific statistics for the user
 /// </summary>
 public class UpdatePlayerStatisticsSignal : Signal<PlayFab.ServerModels.UpdatePlayerStatisticsRequest> { }
@@ -195,11 +190,6 @@ public class UpdateUserPublisherReadOnlyDataSignal : Signal<PlayFab.ServerModels
 /// Updates the title-specific custom data for the user which can only be read by the client
 /// </summary>
 public class UpdateUserReadOnlyDataSignal : Signal<PlayFab.ServerModels.UpdateUserDataRequest> { }
-
-/// <summary>
-/// Updates the values of the specified title-specific statistics for the user. By default, clients are not permitted to update statistics. Developers may override this setting in the Game Manager > Settings > API Features.
-/// </summary>
-public class UpdateUserStatisticsSignal : Signal<PlayFab.ServerModels.UpdateUserStatisticsRequest> { }
 
 #endregion
 
@@ -439,11 +429,6 @@ public class AwardSteamAchievementSignal : Signal<PlayFab.ServerModels.AwardStea
 #endregion
 
 #region Analytics
-
-/// <summary>
-/// Logs a custom analytics event
-/// </summary>
-public class LogEventSignal : Signal<PlayFab.ServerModels.LogEventRequest> { }
 
 /// <summary>
 /// Writes a character-based event into PlayStream.
@@ -794,11 +779,6 @@ public class GetUserPublisherReadOnlyDataResponseSignal : Signal<PlayFab.ServerM
 public class GetUserReadOnlyDataResponseSignal : Signal<PlayFab.ServerModels.GetUserDataResult> { }
 
 /// <summary>
-/// Retrieves the details of all title-specific statistics for the user
-/// </summary>
-public class GetUserStatisticsResponseSignal : Signal<PlayFab.ServerModels.GetUserStatisticsResult> { }
-
-/// <summary>
 /// Updates the values of the specified title-specific statistics for the user
 /// </summary>
 public class UpdatePlayerStatisticsResponseSignal : Signal<PlayFab.ServerModels.UpdatePlayerStatisticsResult> { }
@@ -832,11 +812,6 @@ public class UpdateUserPublisherReadOnlyDataResponseSignal : Signal<PlayFab.Serv
 /// Updates the title-specific custom data for the user which can only be read by the client
 /// </summary>
 public class UpdateUserReadOnlyDataResponseSignal : Signal<PlayFab.ServerModels.UpdateUserDataResult> { }
-
-/// <summary>
-/// Updates the values of the specified title-specific statistics for the user. By default, clients are not permitted to update statistics. Developers may override this setting in the Game Manager > Settings > API Features.
-/// </summary>
-public class UpdateUserStatisticsResponseSignal : Signal<PlayFab.ServerModels.UpdateUserStatisticsResult> { }
 
 #endregion
 
@@ -1076,11 +1051,6 @@ public class AwardSteamAchievementResponseSignal : Signal<PlayFab.ServerModels.A
 #endregion
 
 #region Analytics
-
-/// <summary>
-/// Logs a custom analytics event
-/// </summary>
-public class LogEventResponseSignal : Signal<PlayFab.ServerModels.LogEventResult> { }
 
 /// <summary>
 /// Writes a character-based event into PlayStream.
