@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using PlayFab.Internal;
 using PlayFab.ServerModels;
 using UnityEngine;
 using strange.extensions.mediation.impl;
@@ -25,6 +26,22 @@ public class NewPromoExampleMediator : Mediator {
         public string NewsId;
         public string Title;
         public string Body;
+        public override void Serialize(NetworkWriter writer)
+        {
+            var json = PlayFab.Json.JsonWrapper.SerializeObject(Timestamp, PlayFabUtil.ApiSerializerStrategy);
+            writer.Write(json);
+            writer.Write(NewsId);
+            writer.Write(Title);
+            writer.Write(Body);
+        }
+
+        public override void Deserialize(NetworkReader reader)
+        {
+            Timestamp = PlayFab.Json.JsonWrapper.DeserializeObject<DateTime>(reader.ReadString());
+            NewsId = reader.ReadString();
+            Title = reader.ReadString();
+            Body = reader.ReadString();
+        }
     }
 
 
