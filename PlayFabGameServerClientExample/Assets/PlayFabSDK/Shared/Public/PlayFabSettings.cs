@@ -24,6 +24,8 @@ namespace PlayFab
 
     public static partial class PlayFabSettings
     {
+        static PlayFabSettings() { }
+
         public static PlayFabSharedSettings PlayFabShared = GetSharedSettingsObject();
         public const string SdkVersion = "";
         public const string BuildIdentifier = "";
