@@ -130,6 +130,14 @@ public class PlayFabContextManager : StrangePackage
         commandBinder.Bind<SendPushNotificationResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
+        /// Update the avatar URL of the specified player
+        /// </summary>
+        injectionBinder.Bind<UpdateAvatarUrlSignal>();
+        injectionBinder.Bind<UpdateAvatarUrlResponseSignal>();
+        commandBinder.Bind<UpdateAvatarUrlSignal>().To<UpdateAvatarUrlCommand>();
+        commandBinder.Bind<UpdateAvatarUrlResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
         /// Updates information of a list of existing bans specified with Ban Ids.
         /// </summary>
         injectionBinder.Bind<UpdateBansSignal>();
@@ -580,6 +588,14 @@ public class PlayFabContextManager : StrangePackage
         injectionBinder.Bind<RemoveFriendResponseSignal>();
         commandBinder.Bind<RemoveFriendSignal>().To<RemoveFriendCommand>();
         commandBinder.Bind<RemoveFriendResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Updates the tag list for a specified user in the friend list of another user
+        /// </summary>
+        injectionBinder.Bind<SetFriendTagsSignal>();
+        injectionBinder.Bind<SetFriendTagsResponseSignal>();
+        commandBinder.Bind<SetFriendTagsSignal>().To<SetFriendTagsCommand>();
+        commandBinder.Bind<SetFriendTagsResponseSignal>(); //Create empty overrideable binding.
 
         #endregion
 

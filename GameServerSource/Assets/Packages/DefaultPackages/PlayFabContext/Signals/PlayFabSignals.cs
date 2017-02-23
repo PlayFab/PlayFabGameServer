@@ -83,6 +83,11 @@ public class RevokeBansSignal : Signal<PlayFab.ServerModels.RevokeBansRequest> {
 public class SendPushNotificationSignal : Signal<PlayFab.ServerModels.SendPushNotificationRequest> { }
 
 /// <summary>
+/// Update the avatar URL of the specified player
+/// </summary>
+public class UpdateAvatarUrlSignal : Signal<PlayFab.ServerModels.UpdateAvatarUrlRequest> { }
+
+/// <summary>
 /// Updates information of a list of existing bans specified with Ban Ids.
 /// </summary>
 public class UpdateBansSignal : Signal<PlayFab.ServerModels.UpdateBansRequest> { }
@@ -372,6 +377,11 @@ public class GetFriendsListSignal : Signal<PlayFab.ServerModels.GetFriendsListRe
 /// Removes the specified friend from the the user's friend list
 /// </summary>
 public class RemoveFriendSignal : Signal<PlayFab.ServerModels.RemoveFriendRequest> { }
+
+/// <summary>
+/// Updates the tag list for a specified user in the friend list of another user
+/// </summary>
+public class SetFriendTagsSignal : Signal<PlayFab.ServerModels.SetFriendTagsRequest> { }
 
 #endregion
 
@@ -705,6 +715,11 @@ public class RevokeBansResponseSignal : Signal<PlayFab.ServerModels.RevokeBansRe
 public class SendPushNotificationResponseSignal : Signal<PlayFab.ServerModels.SendPushNotificationResult> { }
 
 /// <summary>
+/// Update the avatar URL of the specified player
+/// </summary>
+public class UpdateAvatarUrlResponseSignal : Signal<PlayFab.ServerModels.EmptyResult> { }
+
+/// <summary>
 /// Updates information of a list of existing bans specified with Ban Ids.
 /// </summary>
 public class UpdateBansResponseSignal : Signal<PlayFab.ServerModels.UpdateBansResult> { }
@@ -994,6 +1009,11 @@ public class GetFriendsListResponseSignal : Signal<PlayFab.ServerModels.GetFrien
 /// Removes the specified friend from the the user's friend list
 /// </summary>
 public class RemoveFriendResponseSignal : Signal<PlayFab.ServerModels.EmptyResult> { }
+
+/// <summary>
+/// Updates the tag list for a specified user in the friend list of another user
+/// </summary>
+public class SetFriendTagsResponseSignal : Signal<PlayFab.ServerModels.EmptyResult> { }
 
 #endregion
 

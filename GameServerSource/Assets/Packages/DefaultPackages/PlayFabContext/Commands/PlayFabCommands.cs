@@ -262,6 +262,24 @@ public class SendPushNotificationCommand : Command
 }
 
 /// <summary>
+/// Update the avatar URL of the specified player
+/// </summary>
+public class UpdateAvatarUrlCommand : Command
+{
+    [Inject] public UpdateAvatarUrlResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.UpdateAvatarUrlRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.UpdateAvatarUrl(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
 /// Updates information of a list of existing bans specified with Ban Ids.
 /// </summary>
 public class UpdateBansCommand : Command
@@ -1256,6 +1274,24 @@ public class RemoveFriendCommand : Command
     {
         Retain();
         PlayFabServerAPI.RemoveFriend(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Updates the tag list for a specified user in the friend list of another user
+/// </summary>
+public class SetFriendTagsCommand : Command
+{
+    [Inject] public SetFriendTagsResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.SetFriendTagsRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.SetFriendTags(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
