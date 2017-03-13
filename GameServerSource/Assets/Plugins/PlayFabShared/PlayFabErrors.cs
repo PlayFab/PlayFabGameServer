@@ -275,7 +275,17 @@ namespace PlayFab
         UserNotFriend = 1272,
         InvalidSignature = 1273,
         InvalidPublicKey = 1274,
-        GoogleOAuthNoIdTokenIncludedInResponse = 1275
+        GoogleOAuthNoIdTokenIncludedInResponse = 1275,
+        StatisticUpdateInProgress = 1276,
+        LeaderboardVersionNotAvailable = 1277,
+        StatisticAlreadyHasPrizeTable = 1279,
+        PrizeTableHasOverlappingRanks = 1280,
+        PrizeTableHasMissingRanks = 1281,
+        PrizeTableRankStartsAtZero = 1282,
+        InvalidStatistic = 1283,
+        ExpressionParseFailure = 1284,
+        ExpressionInvokeFailure = 1285,
+        ExpressionTooLong = 1286
     }
 
     public delegate void ErrorCallback(PlayFabError error);

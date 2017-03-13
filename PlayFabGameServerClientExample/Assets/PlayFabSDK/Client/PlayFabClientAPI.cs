@@ -1231,7 +1231,7 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Accepts an open trade. If the call is successful, the offered and accepted items will be swapped between the two players' inventories.
+        /// Accepts an open trade (one that has not yet been accepted or cancelled), if the locally signed-in player is in the  allowed player list for the trade, or it is open to all players. If the call is successful, the offered and accepted items will be swapped  between the two players' inventories.
         /// </summary>
         public static void AcceptTrade(AcceptTradeRequest request, Action<AcceptTradeResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null)
         {
@@ -1241,7 +1241,7 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Cancels an open trade.
+        /// Cancels an open trade (one that has not yet been accepted or cancelled). Note that only the player who created the trade  can cancel it via this API call, to prevent griefing of the trade system (cancelling trades in order to prevent other players from accepting  them, for trades that can be claimed by more than one player).
         /// </summary>
         public static void CancelTrade(CancelTradeRequest request, Action<CancelTradeResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null)
         {
@@ -1271,7 +1271,7 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Opens a new outstanding trade.
+        /// Opens a new outstanding trade. Note that a given item instance may only be in one open trade at a time.
         /// </summary>
         public static void OpenTrade(OpenTradeRequest request, Action<OpenTradeResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null)
         {
