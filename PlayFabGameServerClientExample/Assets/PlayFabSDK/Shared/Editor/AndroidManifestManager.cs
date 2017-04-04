@@ -17,7 +17,7 @@ public class AndroidManifestManager
 
     public static void CustomizeManifest()
     {
-        string appId = PlayerSettings.bundleIdentifier;
+        string appId = PlayerSettings.applicationIdentifier;
 
         if (String.IsNullOrEmpty(appId) || appId == "com.Company.ProductName")
         {

@@ -42,15 +42,6 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Link Windows Hello to the current PlayFab Account
-        /// </summary>
-        public static void LinkWindowsHello(LinkWindowsHelloAccountRequest request, Action<LinkWindowsHelloAccountResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null)
-        {
-
-            PlayFabHttp.MakeApiCall("/Client/LinkWindowsHello", request, AuthType.None, resultCallback, errorCallback, customData);
-        }
-
-        /// <summary>
         /// Signs the user in using the Android device identifier, returning a session identifier that can subsequently be used for API calls which require an authenticated user
         /// </summary>
         public static void LoginWithAndroidDeviceID(LoginWithAndroidDeviceIDRequest request, Action<LoginResult> resultCallback, Action<PlayFabError> errorCallback, object customData = null)
@@ -73,7 +64,7 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Signs the user into the PlayFab account, returning a session identifier that can subsequently be used for API calls which require an authenticated user
+        /// Signs the user into the PlayFab account, returning a session identifier that can subsequently be used for API calls which require an authenticated user. Unlike most other login API calls, LoginWithEmailAddress does not permit the  creation of new accounts via the CreateAccountFlag. Email addresses may be used to create accounts via RegisterPlayFabUser.
         /// </summary>
         public static void LoginWithEmailAddress(LoginWithEmailAddressRequest request, Action<LoginResult> resultCallback, Action<PlayFabError> errorCallback, object customData = null)
         {
@@ -139,7 +130,7 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Signs the user into the PlayFab account, returning a session identifier that can subsequently be used for API calls which require an authenticated user. Unlike other login API calls, LoginWithEmailAddress does not permit the creation of new accounts via the CreateAccountFlag. Email accounts must be created using the RegisterPlayFabUser API or added to existing accounts using AddUsernamePassword.
+        /// Signs the user into the PlayFab account, returning a session identifier that can subsequently be used for API calls which require an authenticated user. Unlike most other login API calls, LoginWithPlayFab does not permit the  creation of new accounts via the CreateAccountFlag. Username/Password credentials may be used to create accounts via  RegisterPlayFabUser, or added to existing accounts using AddUsernamePassword.
         /// </summary>
         public static void LoginWithPlayFab(LoginWithPlayFabRequest request, Action<LoginResult> resultCallback, Action<PlayFabError> errorCallback, object customData = null)
         {
@@ -194,7 +185,7 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Register using Windows Hello authentication. Before a user can request a challenge or perform a signin the user must first either register or link a Windows Hello account.
+        /// Registers a new PlayFab user account using Windows Hello authentication, returning a session ticket  that can subsequently be used for API calls which require an authenticated user
         /// </summary>
         public static void RegisterWithWindowsHello(RegisterWithWindowsHelloRequest request, Action<LoginResult> resultCallback, Action<PlayFabError> errorCallback, object customData = null)
         {
@@ -202,15 +193,6 @@ namespace PlayFab
             if (request.TitleId == null) throw new Exception("Must be have PlayFabSettings.TitleId set to call this method");
 
             PlayFabHttp.MakeApiCall("/Client/RegisterWithWindowsHello", request, AuthType.None, resultCallback, errorCallback, customData);
-        }
-
-        /// <summary>
-        /// Unlink Windows Hello from the current PlayFab Account
-        /// </summary>
-        public static void UnlinkWindowsHello(UnlinkWindowsHelloAccountRequest request, Action<UnlinkWindowsHelloAccountResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null)
-        {
-
-            PlayFabHttp.MakeApiCall("/Client/UnlinkWindowsHello", request, AuthType.None, resultCallback, errorCallback, customData);
         }
 
         /// <summary>
@@ -414,6 +396,15 @@ namespace PlayFab
         }
 
         /// <summary>
+        /// Link Windows Hello authentication to the current PlayFab Account
+        /// </summary>
+        public static void LinkWindowsHello(LinkWindowsHelloAccountRequest request, Action<LinkWindowsHelloAccountResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null)
+        {
+
+            PlayFabHttp.MakeApiCall("/Client/LinkWindowsHello", request, AuthType.None, resultCallback, errorCallback, customData);
+        }
+
+        /// <summary>
         /// Removes the specified generic service identifier from the player's PlayFab account.
         /// </summary>
         public static void RemoveGenericID(RemoveGenericIDRequest request, Action<RemoveGenericIDResult> resultCallback, Action<PlayFabError> errorCallback, object customData = null)
@@ -530,6 +521,15 @@ namespace PlayFab
             if (!IsClientLoggedIn()) throw new Exception("Must be logged in to call this method");
 
             PlayFabHttp.MakeApiCall("/Client/UnlinkTwitch", request, AuthType.LoginSession, resultCallback, errorCallback, customData);
+        }
+
+        /// <summary>
+        /// Unlink Windows Hello authentication from the current PlayFab Account
+        /// </summary>
+        public static void UnlinkWindowsHello(UnlinkWindowsHelloAccountRequest request, Action<UnlinkWindowsHelloAccountResponse> resultCallback, Action<PlayFabError> errorCallback, object customData = null)
+        {
+
+            PlayFabHttp.MakeApiCall("/Client/UnlinkWindowsHello", request, AuthType.None, resultCallback, errorCallback, customData);
         }
 
         /// <summary>
@@ -783,7 +783,7 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Retrieves a completed purchase along with its current PlayFab status.
+        /// Retrieves a purchase along with its current PlayFab status.
         /// </summary>
         public static void GetPurchase(GetPurchaseRequest request, Action<GetPurchaseResult> resultCallback, Action<PlayFabError> errorCallback, object customData = null)
         {
@@ -923,7 +923,7 @@ namespace PlayFab
         }
 
         /// <summary>
-        /// Restores all in-app purchases based on the given refresh receipt.
+        /// Restores all in-app purchases based on the given restore receipt
         /// </summary>
         public static void RestoreIOSPurchases(RestoreIOSPurchasesRequest request, Action<RestoreIOSPurchasesResult> resultCallback, Action<PlayFabError> errorCallback, object customData = null)
         {
