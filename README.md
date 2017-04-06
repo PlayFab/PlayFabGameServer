@@ -300,6 +300,19 @@ We do advise that you filter the events on the server a bit more to minimize the
 
 That is the basics of how to use and subscribe to PlayStream Events on the server, and use those events to send messaging to the client.
 
+### Uploading a build and Logfiles for Unity Game Servers
+This last topic is for when you upload the server to PlayFab.  
+In [Game Manager](https://developer.playfab.com) under the Multiplayer --> Builds Tab, this is where you upload your build.  First you would build your game server in unity as a Win or Win64 build.  Zip the gameserver.exe & gameserver_data folder, and you would upload your build on this tab.  Once you have uploaded the build, click on the Build ID that you specified for your build.  Here you will find several settings for your build.  
+
+For the logs to function properly, meaning that they show up in the Game Manager, you will need to append the following to the Command-line arguments.  This tells the game server where to send the Unity Log file.
+
+```
+-logFile <log_file_path>
+```
+
+If set correctly, you should see these logs under the Multiplayer --> Archived Games --> Logs (column).
+
+ 
 #### Conclusion
 
 Well I think you now have the basics of how the custom game server works.  This document gave you the barebone basics of working with the game server, Getting data from the PlayFab Server API and and how to overall get started with the Custom Game Server.  Keep an eye out on the documentation site for new tutorials on advanced topics realated to the game server at  https://api.playfab.com  and if you have questions please feel free to post in our forums at  https://api.playfab.com/community
