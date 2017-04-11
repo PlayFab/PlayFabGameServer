@@ -3037,7 +3037,7 @@ namespace PlayFab.ServerModels
         /// </summary>
         public bool ShowBannedUntil;
         /// <summary>
-        /// Whether to show statistics, the most recent version of each stat. Defaults to false
+        /// Reserved for future development
         /// </summary>
         public bool ShowStatistics;
         /// <summary>
