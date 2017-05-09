@@ -1,5 +1,4 @@
-strange-core
-============
+# strange-core
 
 StrangeIoC.
 v0.7.0
