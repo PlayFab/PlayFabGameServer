@@ -136,6 +136,24 @@ public class BanUsersCommand : Command
 }
 
 /// <summary>
+/// Retrieves the player's profile
+/// </summary>
+public class GetPlayerProfileCommand : Command
+{
+    [Inject] public GetPlayerProfileResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetPlayerProfileRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.GetPlayerProfile(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
 /// Retrieves the unique PlayFab identifiers for the given set of Facebook identifiers.
 /// </summary>
 public class GetPlayFabIDsFromFacebookIDsCommand : Command

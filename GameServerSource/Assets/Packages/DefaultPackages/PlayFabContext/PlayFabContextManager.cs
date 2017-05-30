@@ -74,6 +74,14 @@ public class PlayFabContextManager : StrangePackage
         commandBinder.Bind<BanUsersResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
+        /// Retrieves the player's profile
+        /// </summary>
+        injectionBinder.Bind<GetPlayerProfileSignal>();
+        injectionBinder.Bind<GetPlayerProfileResponseSignal>();
+        commandBinder.Bind<GetPlayerProfileSignal>().To<GetPlayerProfileCommand>();
+        commandBinder.Bind<GetPlayerProfileResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
         /// Retrieves the unique PlayFab identifiers for the given set of Facebook identifiers.
         /// </summary>
         injectionBinder.Bind<GetPlayFabIDsFromFacebookIDsSignal>();

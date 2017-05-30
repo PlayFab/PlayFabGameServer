@@ -48,6 +48,11 @@ public class AuthenticateSessionTicketSignal : Signal<PlayFab.ServerModels.Authe
 public class BanUsersSignal : Signal<PlayFab.ServerModels.BanUsersRequest> { }
 
 /// <summary>
+/// Retrieves the player's profile
+/// </summary>
+public class GetPlayerProfileSignal : Signal<PlayFab.ServerModels.GetPlayerProfileRequest> { }
+
+/// <summary>
 /// Retrieves the unique PlayFab identifiers for the given set of Facebook identifiers.
 /// </summary>
 public class GetPlayFabIDsFromFacebookIDsSignal : Signal<PlayFab.ServerModels.GetPlayFabIDsFromFacebookIDsRequest> { }
@@ -678,6 +683,11 @@ public class AuthenticateSessionTicketResponseSignal : Signal<PlayFab.ServerMode
 /// Bans users by PlayFab ID with optional IP address, or MAC address for the provided game.
 /// </summary>
 public class BanUsersResponseSignal : Signal<PlayFab.ServerModels.BanUsersResult> { }
+
+/// <summary>
+/// Retrieves the player's profile
+/// </summary>
+public class GetPlayerProfileResponseSignal : Signal<PlayFab.ServerModels.GetPlayerProfileResult> { }
 
 /// <summary>
 /// Retrieves the unique PlayFab identifiers for the given set of Facebook identifiers.
