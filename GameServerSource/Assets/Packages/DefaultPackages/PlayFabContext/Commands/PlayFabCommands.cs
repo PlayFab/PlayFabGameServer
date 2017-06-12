@@ -1,7 +1,7 @@
 using PlayFab;
 using strange.extensions.command.impl;
 
-#region Matchmaking APIs
+#region Matchmaking
 
 /// <summary>
 /// Validates a user with the PlayFab service
@@ -1318,7 +1318,7 @@ public class SetFriendTagsCommand : Command
 }
 #endregion
 
-#region Matchmaking APIs
+#region Matchmaking
 
 /// <summary>
 /// Inform the matchmaker that a Game Server Instance is removed.
@@ -1457,27 +1457,6 @@ public class SetGameServerInstanceTagsCommand : Command
     {
         Retain();
         PlayFabServerAPI.SetGameServerInstanceTags(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-#endregion
-
-#region Steam-Specific APIs
-
-/// <summary>
-/// Awards the specified users the specified Steam achievements
-/// </summary>
-public class AwardSteamAchievementCommand : Command
-{
-    [Inject] public AwardSteamAchievementResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.AwardSteamAchievementRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.AwardSteamAchievement(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
@@ -2078,6 +2057,27 @@ public class RemovePlayerTagCommand : Command
     {
         Retain();
         PlayFabServerAPI.RemovePlayerTag(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+#endregion
+
+#region Platform Specific Methods
+
+/// <summary>
+/// Awards the specified users the specified Steam achievements
+/// </summary>
+public class AwardSteamAchievementCommand : Command
+{
+    [Inject] public AwardSteamAchievementResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.AwardSteamAchievementRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.AwardSteamAchievement(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);

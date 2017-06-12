@@ -2,7 +2,7 @@ using strange.extensions.signal.impl;
 
 #region Base Signals
 
-#region Matchmaking APIs
+#region Matchmaking
 
 /// <summary>
 /// Validates a user with the PlayFab service
@@ -390,7 +390,7 @@ public class SetFriendTagsSignal : Signal<PlayFab.ServerModels.SetFriendTagsRequ
 
 #endregion
 
-#region Matchmaking APIs
+#region Matchmaking
 
 /// <summary>
 /// Inform the matchmaker that a Game Server Instance is removed.
@@ -431,15 +431,6 @@ public class SetGameServerInstanceStateSignal : Signal<PlayFab.ServerModels.SetG
 /// Set custom tags for the specified Game Server Instance
 /// </summary>
 public class SetGameServerInstanceTagsSignal : Signal<PlayFab.ServerModels.SetGameServerInstanceTagsRequest> { }
-
-#endregion
-
-#region Steam-Specific APIs
-
-/// <summary>
-/// Awards the specified users the specified Steam achievements
-/// </summary>
-public class AwardSteamAchievementSignal : Signal<PlayFab.ServerModels.AwardSteamAchievementRequest> { }
 
 #endregion
 
@@ -635,11 +626,20 @@ public class RemovePlayerTagSignal : Signal<PlayFab.ServerModels.RemovePlayerTag
 
 #endregion
 
+#region Platform Specific Methods
+
+/// <summary>
+/// Awards the specified users the specified Steam achievements
+/// </summary>
+public class AwardSteamAchievementSignal : Signal<PlayFab.ServerModels.AwardSteamAchievementRequest> { }
+
+#endregion
+
 #endregion
 
 #region Response Signals
 
-#region Matchmaking APIs
+#region Matchmaking
 
 /// <summary>
 /// Validates a user with the PlayFab service
@@ -1027,7 +1027,7 @@ public class SetFriendTagsResponseSignal : Signal<PlayFab.ServerModels.EmptyResu
 
 #endregion
 
-#region Matchmaking APIs
+#region Matchmaking
 
 /// <summary>
 /// Inform the matchmaker that a Game Server Instance is removed.
@@ -1068,15 +1068,6 @@ public class SetGameServerInstanceStateResponseSignal : Signal<PlayFab.ServerMod
 /// Set custom tags for the specified Game Server Instance
 /// </summary>
 public class SetGameServerInstanceTagsResponseSignal : Signal<PlayFab.ServerModels.SetGameServerInstanceTagsResult> { }
-
-#endregion
-
-#region Steam-Specific APIs
-
-/// <summary>
-/// Awards the specified users the specified Steam achievements
-/// </summary>
-public class AwardSteamAchievementResponseSignal : Signal<PlayFab.ServerModels.AwardSteamAchievementResult> { }
 
 #endregion
 
@@ -1269,6 +1260,15 @@ public class GetPlayerTagsResponseSignal : Signal<PlayFab.ServerModels.GetPlayer
 /// Remove a given tag from a player profile. The tag's namespace is automatically generated based on the source of the tag.
 /// </summary>
 public class RemovePlayerTagResponseSignal : Signal<PlayFab.ServerModels.RemovePlayerTagResult> { }
+
+#endregion
+
+#region Platform Specific Methods
+
+/// <summary>
+/// Awards the specified users the specified Steam achievements
+/// </summary>
+public class AwardSteamAchievementResponseSignal : Signal<PlayFab.ServerModels.AwardSteamAchievementResult> { }
 
 #endregion
 

@@ -10,7 +10,7 @@ public class PlayFabContextManager : StrangePackage
     {
         // Bind Context & Commands
 
-        #region Matchmaking APIs
+        #region Matchmaking
         /// <summary>
         /// Validates a user with the PlayFab service
         /// </summary>
@@ -607,7 +607,7 @@ public class PlayFabContextManager : StrangePackage
 
         #endregion
 
-        #region Matchmaking APIs
+        #region Matchmaking
         /// <summary>
         /// Inform the matchmaker that a Game Server Instance is removed.
         /// </summary>
@@ -671,17 +671,6 @@ public class PlayFabContextManager : StrangePackage
         injectionBinder.Bind<SetGameServerInstanceTagsResponseSignal>();
         commandBinder.Bind<SetGameServerInstanceTagsSignal>().To<SetGameServerInstanceTagsCommand>();
         commandBinder.Bind<SetGameServerInstanceTagsResponseSignal>(); //Create empty overrideable binding.
-
-        #endregion
-
-        #region Steam-Specific APIs
-        /// <summary>
-        /// Awards the specified users the specified Steam achievements
-        /// </summary>
-        injectionBinder.Bind<AwardSteamAchievementSignal>();
-        injectionBinder.Bind<AwardSteamAchievementResponseSignal>();
-        commandBinder.Bind<AwardSteamAchievementSignal>().To<AwardSteamAchievementCommand>();
-        commandBinder.Bind<AwardSteamAchievementResponseSignal>(); //Create empty overrideable binding.
 
         #endregion
 
@@ -962,6 +951,17 @@ public class PlayFabContextManager : StrangePackage
         injectionBinder.Bind<RemovePlayerTagResponseSignal>();
         commandBinder.Bind<RemovePlayerTagSignal>().To<RemovePlayerTagCommand>();
         commandBinder.Bind<RemovePlayerTagResponseSignal>(); //Create empty overrideable binding.
+
+        #endregion
+
+        #region Platform Specific Methods
+        /// <summary>
+        /// Awards the specified users the specified Steam achievements
+        /// </summary>
+        injectionBinder.Bind<AwardSteamAchievementSignal>();
+        injectionBinder.Bind<AwardSteamAchievementResponseSignal>();
+        commandBinder.Bind<AwardSteamAchievementSignal>().To<AwardSteamAchievementCommand>();
+        commandBinder.Bind<AwardSteamAchievementResponseSignal>(); //Create empty overrideable binding.
 
         #endregion
     }

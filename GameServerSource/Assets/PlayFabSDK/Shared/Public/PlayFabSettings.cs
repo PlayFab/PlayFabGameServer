@@ -41,7 +41,7 @@ namespace PlayFab
             var settingsList = Resources.LoadAll<PlayFabSharedSettings>("PlayFabSharedSettings");
             if (settingsList.Length != 1)
             {
-                throw new Exception("Either Missing PlayFabSharedSettings data file or multiple data files exist.");
+                throw new Exception("The number of PlayFabSharedSettings objects should be 1: " + settingsList.Length);
             }
             return settingsList[0];
         }
