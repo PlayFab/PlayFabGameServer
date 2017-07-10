@@ -62,6 +62,14 @@ public class PlayFabContextManager : StrangePackage
         commandBinder.Bind<AuthenticateSessionTicketSignal>().To<AuthenticateSessionTicketCommand>();
         commandBinder.Bind<AuthenticateSessionTicketResponseSignal>(); //Create empty overrideable binding.
 
+        /// <summary>
+        /// Sets the player's secret if it is not already set. Player secrets are used to sign API requests. To reset a player's secret use the Admin or Server API method SetPlayerSecret.
+        /// </summary>
+        injectionBinder.Bind<SetPlayerSecretSignal>();
+        injectionBinder.Bind<SetPlayerSecretResponseSignal>();
+        commandBinder.Bind<SetPlayerSecretSignal>().To<SetPlayerSecretCommand>();
+        commandBinder.Bind<SetPlayerSecretResponseSignal>(); //Create empty overrideable binding.
+
         #endregion
 
         #region Account Management

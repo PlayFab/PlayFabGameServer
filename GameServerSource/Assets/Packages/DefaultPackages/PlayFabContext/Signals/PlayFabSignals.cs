@@ -38,6 +38,11 @@ public class UserInfoSignal : Signal<PlayFab.MatchmakerModels.UserInfoRequest> {
 /// </summary>
 public class AuthenticateSessionTicketSignal : Signal<PlayFab.ServerModels.AuthenticateSessionTicketRequest> { }
 
+/// <summary>
+/// Sets the player's secret if it is not already set. Player secrets are used to sign API requests. To reset a player's secret use the Admin or Server API method SetPlayerSecret.
+/// </summary>
+public class SetPlayerSecretSignal : Signal<PlayFab.ServerModels.SetPlayerSecretRequest> { }
+
 #endregion
 
 #region Account Management
@@ -674,6 +679,11 @@ public class UserInfoResponseSignal : Signal<PlayFab.MatchmakerModels.UserInfoRe
 /// Validated a client's session ticket, and if successful, returns details for that user
 /// </summary>
 public class AuthenticateSessionTicketResponseSignal : Signal<PlayFab.ServerModels.AuthenticateSessionTicketResult> { }
+
+/// <summary>
+/// Sets the player's secret if it is not already set. Player secrets are used to sign API requests. To reset a player's secret use the Admin or Server API method SetPlayerSecret.
+/// </summary>
+public class SetPlayerSecretResponseSignal : Signal<PlayFab.ServerModels.SetPlayerSecretResult> { }
 
 #endregion
 

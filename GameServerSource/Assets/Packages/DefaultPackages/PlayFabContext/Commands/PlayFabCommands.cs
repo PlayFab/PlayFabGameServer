@@ -113,6 +113,24 @@ public class AuthenticateSessionTicketCommand : Command
         }, PlayFabErrorHandler.HandlePlayFabError);
     }
 }
+
+/// <summary>
+/// Sets the player's secret if it is not already set. Player secrets are used to sign API requests. To reset a player's secret use the Admin or Server API method SetPlayerSecret.
+/// </summary>
+public class SetPlayerSecretCommand : Command
+{
+    [Inject] public SetPlayerSecretResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.SetPlayerSecretRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.SetPlayerSecret(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
 #endregion
 
 #region Account Management

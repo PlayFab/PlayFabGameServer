@@ -341,14 +341,14 @@ public class ClientExampleScript : MonoBehaviour
             if (go == null) continue;
             go.transform.SetParent(FriendListContent, false);
 
-            var playerIdGo = go.transform.FindChild("PlayerId");
+            var playerIdGo = go.transform.Find("PlayerId");
             if (playerIdGo != null)
             {
                 var playerIdText = playerIdGo.GetComponent<Text>();
                 playerIdText.text = player;
             }
 
-            var addFriendGo = go.transform.FindChild("AddFriendButton");
+            var addFriendGo = go.transform.Find("AddFriendButton");
             if (addFriendGo != null)
             {
                 addFriendGo.name = player;
