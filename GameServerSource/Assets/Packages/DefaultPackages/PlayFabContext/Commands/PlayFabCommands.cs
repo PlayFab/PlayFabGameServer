@@ -1897,7 +1897,7 @@ public class GetCharacterReadOnlyDataCommand : Command
 }
 
 /// <summary>
-/// Updates the title-specific custom data for the user's chjaracter which is readable and writable by the client
+/// Updates the title-specific custom data for the user's character which is readable and writable by the client
 /// </summary>
 public class UpdateCharacterDataCommand : Command
 {

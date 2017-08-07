@@ -572,7 +572,7 @@ public class GetCharacterInternalDataSignal : Signal<PlayFab.ServerModels.GetCha
 public class GetCharacterReadOnlyDataSignal : Signal<PlayFab.ServerModels.GetCharacterDataRequest> { }
 
 /// <summary>
-/// Updates the title-specific custom data for the user's chjaracter which is readable and writable by the client
+/// Updates the title-specific custom data for the user's character which is readable and writable by the client
 /// </summary>
 public class UpdateCharacterDataSignal : Signal<PlayFab.ServerModels.UpdateCharacterDataRequest> { }
 
@@ -1214,7 +1214,7 @@ public class GetCharacterInternalDataResponseSignal : Signal<PlayFab.ServerModel
 public class GetCharacterReadOnlyDataResponseSignal : Signal<PlayFab.ServerModels.GetCharacterDataResult> { }
 
 /// <summary>
-/// Updates the title-specific custom data for the user's chjaracter which is readable and writable by the client
+/// Updates the title-specific custom data for the user's character which is readable and writable by the client
 /// </summary>
 public class UpdateCharacterDataResponseSignal : Signal<PlayFab.ServerModels.UpdateCharacterDataResult> { }
 

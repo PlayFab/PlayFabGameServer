@@ -875,7 +875,7 @@ public class PlayFabContextManager : StrangePackage
         commandBinder.Bind<GetCharacterReadOnlyDataResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Updates the title-specific custom data for the user's chjaracter which is readable and writable by the client
+        /// Updates the title-specific custom data for the user's character which is readable and writable by the client
         /// </summary>
         injectionBinder.Bind<UpdateCharacterDataSignal>();
         injectionBinder.Bind<UpdateCharacterDataResponseSignal>();
