@@ -711,7 +711,7 @@ public class PlayFabContextManager : StrangePackage
 
         #region Shared Group Data
         /// <summary>
-        /// Adds users to the set of those able to update both the shared data, as well as the set of users in the group. Only users in the group (and the server) can add new members.
+        /// Adds users to the set of those able to update both the shared data, as well as the set of users  in the group. Only users in the group (and the server) can add new members. Shared Groups are designed for sharing data  between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
         /// </summary>
         injectionBinder.Bind<AddSharedGroupMembersSignal>();
         injectionBinder.Bind<AddSharedGroupMembersResponseSignal>();
@@ -719,7 +719,7 @@ public class PlayFabContextManager : StrangePackage
         commandBinder.Bind<AddSharedGroupMembersResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Requests the creation of a shared group object, containing key/value pairs which may be updated by all members of the group. When created by a server, the group will initially have no members.
+        /// Requests the creation of a shared group object, containing key/value pairs which may  be updated by all members of the group. When created by a server, the group will initially have no members.  Shared Groups are designed for sharing data between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
         /// </summary>
         injectionBinder.Bind<CreateSharedGroupSignal>();
         injectionBinder.Bind<CreateSharedGroupResponseSignal>();
@@ -727,7 +727,7 @@ public class PlayFabContextManager : StrangePackage
         commandBinder.Bind<CreateSharedGroupResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Deletes a shared group, freeing up the shared group ID to be reused for a new group
+        /// Deletes a shared group, freeing up the shared group ID to be reused for a new group.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
         /// </summary>
         injectionBinder.Bind<DeleteSharedGroupSignal>();
         injectionBinder.Bind<DeleteSharedGroupResponseSignal>();
@@ -735,7 +735,7 @@ public class PlayFabContextManager : StrangePackage
         commandBinder.Bind<DeleteSharedGroupResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Retrieves data stored in a shared group object, as well as the list of members in the group. The server can access all public and private group data.
+        /// Retrieves data stored in a shared group object, as well as the list of members in the group.  The server can access all public and private group data. Shared Groups are designed for sharing data between a very  small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
         /// </summary>
         injectionBinder.Bind<GetSharedGroupDataSignal>();
         injectionBinder.Bind<GetSharedGroupDataResponseSignal>();
@@ -743,7 +743,7 @@ public class PlayFabContextManager : StrangePackage
         commandBinder.Bind<GetSharedGroupDataResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Removes users from the set of those able to update the shared data and the set of users in the group. Only users in the group can remove members. If as a result of the call, zero users remain with access, the group and its associated data will be deleted.
+        /// Removes users from the set of those able to update the shared data and the set of users in the group. Only users in the group can remove members. If as a result of the call, zero users remain with access, the group and its associated data will be deleted. Shared Groups are designed for sharing data between a very small number of players,  please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
         /// </summary>
         injectionBinder.Bind<RemoveSharedGroupMembersSignal>();
         injectionBinder.Bind<RemoveSharedGroupMembersResponseSignal>();
@@ -751,7 +751,7 @@ public class PlayFabContextManager : StrangePackage
         commandBinder.Bind<RemoveSharedGroupMembersResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated or added in this call will be readable by users not in the group. By default, data permissions are set to Private. Regardless of the permission setting, only members of the group (and the server) can update the data.
+        /// Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated or added in this call will be readable by users not in the group. By default, data permissions are set to Private. Regardless of the permission setting, only members of the group (and the server) can update the data.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
         /// </summary>
         injectionBinder.Bind<UpdateSharedGroupDataSignal>();
         injectionBinder.Bind<UpdateSharedGroupDataResponseSignal>();
@@ -911,14 +911,6 @@ public class PlayFabContextManager : StrangePackage
         injectionBinder.Bind<AddPlayerTagResponseSignal>();
         commandBinder.Bind<AddPlayerTagSignal>().To<AddPlayerTagCommand>();
         commandBinder.Bind<AddPlayerTagResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Retrieve a list of all PlayStream actions groups.
-        /// </summary>
-        injectionBinder.Bind<GetAllActionGroupsSignal>();
-        injectionBinder.Bind<GetAllActionGroupsResponseSignal>();
-        commandBinder.Bind<GetAllActionGroupsSignal>().To<GetAllActionGroupsCommand>();
-        commandBinder.Bind<GetAllActionGroupsResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
         /// Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.

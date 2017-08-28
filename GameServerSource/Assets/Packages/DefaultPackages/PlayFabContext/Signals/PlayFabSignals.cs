@@ -461,32 +461,32 @@ public class WriteTitleEventSignal : Signal<PlayFab.ServerModels.WriteTitleEvent
 #region Shared Group Data
 
 /// <summary>
-/// Adds users to the set of those able to update both the shared data, as well as the set of users in the group. Only users in the group (and the server) can add new members.
+/// Adds users to the set of those able to update both the shared data, as well as the set of users  in the group. Only users in the group (and the server) can add new members. Shared Groups are designed for sharing data  between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class AddSharedGroupMembersSignal : Signal<PlayFab.ServerModels.AddSharedGroupMembersRequest> { }
 
 /// <summary>
-/// Requests the creation of a shared group object, containing key/value pairs which may be updated by all members of the group. When created by a server, the group will initially have no members.
+/// Requests the creation of a shared group object, containing key/value pairs which may  be updated by all members of the group. When created by a server, the group will initially have no members.  Shared Groups are designed for sharing data between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class CreateSharedGroupSignal : Signal<PlayFab.ServerModels.CreateSharedGroupRequest> { }
 
 /// <summary>
-/// Deletes a shared group, freeing up the shared group ID to be reused for a new group
+/// Deletes a shared group, freeing up the shared group ID to be reused for a new group.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class DeleteSharedGroupSignal : Signal<PlayFab.ServerModels.DeleteSharedGroupRequest> { }
 
 /// <summary>
-/// Retrieves data stored in a shared group object, as well as the list of members in the group. The server can access all public and private group data.
+/// Retrieves data stored in a shared group object, as well as the list of members in the group.  The server can access all public and private group data. Shared Groups are designed for sharing data between a very  small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class GetSharedGroupDataSignal : Signal<PlayFab.ServerModels.GetSharedGroupDataRequest> { }
 
 /// <summary>
-/// Removes users from the set of those able to update the shared data and the set of users in the group. Only users in the group can remove members. If as a result of the call, zero users remain with access, the group and its associated data will be deleted.
+/// Removes users from the set of those able to update the shared data and the set of users in the group. Only users in the group can remove members. If as a result of the call, zero users remain with access, the group and its associated data will be deleted. Shared Groups are designed for sharing data between a very small number of players,  please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class RemoveSharedGroupMembersSignal : Signal<PlayFab.ServerModels.RemoveSharedGroupMembersRequest> { }
 
 /// <summary>
-/// Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated or added in this call will be readable by users not in the group. By default, data permissions are set to Private. Regardless of the permission setting, only members of the group (and the server) can update the data.
+/// Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated or added in this call will be readable by users not in the group. By default, data permissions are set to Private. Regardless of the permission setting, only members of the group (and the server) can update the data.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class UpdateSharedGroupDataSignal : Signal<PlayFab.ServerModels.UpdateSharedGroupDataRequest> { }
 
@@ -1103,32 +1103,32 @@ public class WriteTitleEventResponseSignal : Signal<PlayFab.ServerModels.WriteEv
 #region Shared Group Data
 
 /// <summary>
-/// Adds users to the set of those able to update both the shared data, as well as the set of users in the group. Only users in the group (and the server) can add new members.
+/// Adds users to the set of those able to update both the shared data, as well as the set of users  in the group. Only users in the group (and the server) can add new members. Shared Groups are designed for sharing data  between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class AddSharedGroupMembersResponseSignal : Signal<PlayFab.ServerModels.AddSharedGroupMembersResult> { }
 
 /// <summary>
-/// Requests the creation of a shared group object, containing key/value pairs which may be updated by all members of the group. When created by a server, the group will initially have no members.
+/// Requests the creation of a shared group object, containing key/value pairs which may  be updated by all members of the group. When created by a server, the group will initially have no members.  Shared Groups are designed for sharing data between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class CreateSharedGroupResponseSignal : Signal<PlayFab.ServerModels.CreateSharedGroupResult> { }
 
 /// <summary>
-/// Deletes a shared group, freeing up the shared group ID to be reused for a new group
+/// Deletes a shared group, freeing up the shared group ID to be reused for a new group.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class DeleteSharedGroupResponseSignal : Signal<PlayFab.ServerModels.EmptyResult> { }
 
 /// <summary>
-/// Retrieves data stored in a shared group object, as well as the list of members in the group. The server can access all public and private group data.
+/// Retrieves data stored in a shared group object, as well as the list of members in the group.  The server can access all public and private group data. Shared Groups are designed for sharing data between a very  small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class GetSharedGroupDataResponseSignal : Signal<PlayFab.ServerModels.GetSharedGroupDataResult> { }
 
 /// <summary>
-/// Removes users from the set of those able to update the shared data and the set of users in the group. Only users in the group can remove members. If as a result of the call, zero users remain with access, the group and its associated data will be deleted.
+/// Removes users from the set of those able to update the shared data and the set of users in the group. Only users in the group can remove members. If as a result of the call, zero users remain with access, the group and its associated data will be deleted. Shared Groups are designed for sharing data between a very small number of players,  please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class RemoveSharedGroupMembersResponseSignal : Signal<PlayFab.ServerModels.RemoveSharedGroupMembersResult> { }
 
 /// <summary>
-/// Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated or added in this call will be readable by users not in the group. By default, data permissions are set to Private. Regardless of the permission setting, only members of the group (and the server) can update the data.
+/// Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated or added in this call will be readable by users not in the group. By default, data permissions are set to Private. Regardless of the permission setting, only members of the group (and the server) can update the data.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class UpdateSharedGroupDataResponseSignal : Signal<PlayFab.ServerModels.UpdateSharedGroupDataResult> { }
 

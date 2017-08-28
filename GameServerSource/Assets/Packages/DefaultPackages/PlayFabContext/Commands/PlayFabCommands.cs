@@ -1543,7 +1543,7 @@ public class WriteTitleEventCommand : Command
 #region Shared Group Data
 
 /// <summary>
-/// Adds users to the set of those able to update both the shared data, as well as the set of users in the group. Only users in the group (and the server) can add new members.
+/// Adds users to the set of those able to update both the shared data, as well as the set of users  in the group. Only users in the group (and the server) can add new members. Shared Groups are designed for sharing data  between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class AddSharedGroupMembersCommand : Command
 {
@@ -1561,7 +1561,7 @@ public class AddSharedGroupMembersCommand : Command
 }
 
 /// <summary>
-/// Requests the creation of a shared group object, containing key/value pairs which may be updated by all members of the group. When created by a server, the group will initially have no members.
+/// Requests the creation of a shared group object, containing key/value pairs which may  be updated by all members of the group. When created by a server, the group will initially have no members.  Shared Groups are designed for sharing data between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class CreateSharedGroupCommand : Command
 {
@@ -1579,7 +1579,7 @@ public class CreateSharedGroupCommand : Command
 }
 
 /// <summary>
-/// Deletes a shared group, freeing up the shared group ID to be reused for a new group
+/// Deletes a shared group, freeing up the shared group ID to be reused for a new group.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class DeleteSharedGroupCommand : Command
 {
@@ -1597,7 +1597,7 @@ public class DeleteSharedGroupCommand : Command
 }
 
 /// <summary>
-/// Retrieves data stored in a shared group object, as well as the list of members in the group. The server can access all public and private group data.
+/// Retrieves data stored in a shared group object, as well as the list of members in the group.  The server can access all public and private group data. Shared Groups are designed for sharing data between a very  small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class GetSharedGroupDataCommand : Command
 {
@@ -1615,7 +1615,7 @@ public class GetSharedGroupDataCommand : Command
 }
 
 /// <summary>
-/// Removes users from the set of those able to update the shared data and the set of users in the group. Only users in the group can remove members. If as a result of the call, zero users remain with access, the group and its associated data will be deleted.
+/// Removes users from the set of those able to update the shared data and the set of users in the group. Only users in the group can remove members. If as a result of the call, zero users remain with access, the group and its associated data will be deleted. Shared Groups are designed for sharing data between a very small number of players,  please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class RemoveSharedGroupMembersCommand : Command
 {
@@ -1633,7 +1633,7 @@ public class RemoveSharedGroupMembersCommand : Command
 }
 
 /// <summary>
-/// Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated or added in this call will be readable by users not in the group. By default, data permissions are set to Private. Regardless of the permission setting, only members of the group (and the server) can update the data.
+/// Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated or added in this call will be readable by users not in the group. By default, data permissions are set to Private. Regardless of the permission setting, only members of the group (and the server) can update the data.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class UpdateSharedGroupDataCommand : Command
 {
@@ -1967,24 +1967,6 @@ public class AddPlayerTagCommand : Command
     {
         Retain();
         PlayFabServerAPI.AddPlayerTag(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Retrieve a list of all PlayStream actions groups.
-/// </summary>
-public class GetAllActionGroupsCommand : Command
-{
-    [Inject] public GetAllActionGroupsResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetAllActionGroupsRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.GetAllActionGroups(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
