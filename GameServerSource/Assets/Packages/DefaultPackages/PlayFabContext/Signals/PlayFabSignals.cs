@@ -31,20 +31,6 @@ public class UserInfoSignal : Signal<PlayFab.MatchmakerModels.UserInfoRequest> {
 
 #endregion
 
-#region Authentication
-
-/// <summary>
-/// Validated a client's session ticket, and if successful, returns details for that user
-/// </summary>
-public class AuthenticateSessionTicketSignal : Signal<PlayFab.ServerModels.AuthenticateSessionTicketRequest> { }
-
-/// <summary>
-/// Sets the player's secret if it is not already set. Player secrets are used to sign API requests. To reset a player's secret use the Admin or Server API method SetPlayerSecret.
-/// </summary>
-public class SetPlayerSecretSignal : Signal<PlayFab.ServerModels.SetPlayerSecretRequest> { }
-
-#endregion
-
 #region Account Management
 
 /// <summary>
@@ -101,6 +87,207 @@ public class UpdateAvatarUrlSignal : Signal<PlayFab.ServerModels.UpdateAvatarUrl
 /// Updates information of a list of existing bans specified with Ban Ids.
 /// </summary>
 public class UpdateBansSignal : Signal<PlayFab.ServerModels.UpdateBansRequest> { }
+
+#endregion
+
+#region Analytics
+
+/// <summary>
+/// Writes a character-based event into PlayStream.
+/// </summary>
+public class WriteCharacterEventSignal : Signal<PlayFab.ServerModels.WriteServerCharacterEventRequest> { }
+
+/// <summary>
+/// Writes a player-based event into PlayStream.
+/// </summary>
+public class WritePlayerEventSignal : Signal<PlayFab.ServerModels.WriteServerPlayerEventRequest> { }
+
+/// <summary>
+/// Writes a title-based event into PlayStream.
+/// </summary>
+public class WriteTitleEventSignal : Signal<PlayFab.ServerModels.WriteTitleEventRequest> { }
+
+#endregion
+
+#region Authentication
+
+/// <summary>
+/// Validated a client's session ticket, and if successful, returns details for that user
+/// </summary>
+public class AuthenticateSessionTicketSignal : Signal<PlayFab.ServerModels.AuthenticateSessionTicketRequest> { }
+
+/// <summary>
+/// Sets the player's secret if it is not already set. Player secrets are used to sign API requests. To reset a player's secret use the Admin or Server API method SetPlayerSecret.
+/// </summary>
+public class SetPlayerSecretSignal : Signal<PlayFab.ServerModels.SetPlayerSecretRequest> { }
+
+#endregion
+
+#region Character Data
+
+/// <summary>
+/// Retrieves the title-specific custom data for the user which is readable and writable by the client
+/// </summary>
+public class GetCharacterDataSignal : Signal<PlayFab.ServerModels.GetCharacterDataRequest> { }
+
+/// <summary>
+/// Retrieves the title-specific custom data for the user's character which cannot be accessed by the client
+/// </summary>
+public class GetCharacterInternalDataSignal : Signal<PlayFab.ServerModels.GetCharacterDataRequest> { }
+
+/// <summary>
+/// Retrieves the title-specific custom data for the user's character which can only be read by the client
+/// </summary>
+public class GetCharacterReadOnlyDataSignal : Signal<PlayFab.ServerModels.GetCharacterDataRequest> { }
+
+/// <summary>
+/// Updates the title-specific custom data for the user's character which is readable and writable by the client
+/// </summary>
+public class UpdateCharacterDataSignal : Signal<PlayFab.ServerModels.UpdateCharacterDataRequest> { }
+
+/// <summary>
+/// Updates the title-specific custom data for the user's character which cannot  be accessed by the client
+/// </summary>
+public class UpdateCharacterInternalDataSignal : Signal<PlayFab.ServerModels.UpdateCharacterDataRequest> { }
+
+/// <summary>
+/// Updates the title-specific custom data for the user's character which can only be read by the client
+/// </summary>
+public class UpdateCharacterReadOnlyDataSignal : Signal<PlayFab.ServerModels.UpdateCharacterDataRequest> { }
+
+#endregion
+
+#region Characters
+
+/// <summary>
+/// Deletes the specific character ID from the specified user.
+/// </summary>
+public class DeleteCharacterFromUserSignal : Signal<PlayFab.ServerModels.DeleteCharacterFromUserRequest> { }
+
+/// <summary>
+/// Lists all of the characters that belong to a specific user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
+/// </summary>
+public class GetAllUsersCharactersSignal : Signal<PlayFab.ServerModels.ListUsersCharactersRequest> { }
+
+/// <summary>
+/// Retrieves a list of ranked characters for the given statistic, starting from the indicated point in the leaderboard
+/// </summary>
+public class GetCharacterLeaderboardSignal : Signal<PlayFab.ServerModels.GetCharacterLeaderboardRequest> { }
+
+/// <summary>
+/// Retrieves the details of all title-specific statistics for the specific character
+/// </summary>
+public class GetCharacterStatisticsSignal : Signal<PlayFab.ServerModels.GetCharacterStatisticsRequest> { }
+
+/// <summary>
+/// Retrieves a list of ranked characters for the given statistic, centered on the requested user
+/// </summary>
+public class GetLeaderboardAroundCharacterSignal : Signal<PlayFab.ServerModels.GetLeaderboardAroundCharacterRequest> { }
+
+/// <summary>
+/// Retrieves a list of all of the user's characters for the given statistic.
+/// </summary>
+public class GetLeaderboardForUserCharactersSignal : Signal<PlayFab.ServerModels.GetLeaderboardForUsersCharactersRequest> { }
+
+/// <summary>
+/// Grants the specified character type to the user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
+/// </summary>
+public class GrantCharacterToUserSignal : Signal<PlayFab.ServerModels.GrantCharacterToUserRequest> { }
+
+/// <summary>
+/// Updates the values of the specified title-specific statistics for the specific character
+/// </summary>
+public class UpdateCharacterStatisticsSignal : Signal<PlayFab.ServerModels.UpdateCharacterStatisticsRequest> { }
+
+#endregion
+
+#region Content
+
+/// <summary>
+/// This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded, the query to retrieve the data will fail. See this post for more information:  https://community.playfab.com/hc/en-us/community/posts/205469488-How-to-upload-files-to-PlayFab-s-Content-Service.  Also, please be aware that the Content service is specifically PlayFab's CDN offering, for which standard CDN rates apply.
+/// </summary>
+public class GetContentDownloadUrlSignal : Signal<PlayFab.ServerModels.GetContentDownloadUrlRequest> { }
+
+#endregion
+
+#region Friend List Management
+
+/// <summary>
+/// Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+/// </summary>
+public class AddFriendSignal : Signal<PlayFab.ServerModels.AddFriendRequest> { }
+
+/// <summary>
+/// Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+/// </summary>
+public class GetFriendsListSignal : Signal<PlayFab.ServerModels.GetFriendsListRequest> { }
+
+/// <summary>
+/// Removes the specified friend from the the user's friend list
+/// </summary>
+public class RemoveFriendSignal : Signal<PlayFab.ServerModels.RemoveFriendRequest> { }
+
+/// <summary>
+/// Updates the tag list for a specified user in the friend list of another user
+/// </summary>
+public class SetFriendTagsSignal : Signal<PlayFab.ServerModels.SetFriendTagsRequest> { }
+
+#endregion
+
+#region Guilds
+
+#endregion
+
+#region Matchmaking
+
+/// <summary>
+/// Inform the matchmaker that a Game Server Instance is removed.
+/// </summary>
+public class DeregisterGameSignal : Signal<PlayFab.ServerModels.DeregisterGameRequest> { }
+
+/// <summary>
+/// Informs the PlayFab match-making service that the user specified has left the Game Server Instance
+/// </summary>
+public class NotifyMatchmakerPlayerLeftSignal : Signal<PlayFab.ServerModels.NotifyMatchmakerPlayerLeftRequest> { }
+
+/// <summary>
+/// Validates a Game Server session ticket and returns details about the user
+/// </summary>
+public class RedeemMatchmakerTicketSignal : Signal<PlayFab.ServerModels.RedeemMatchmakerTicketRequest> { }
+
+/// <summary>
+/// Set the state of the indicated Game Server Instance. Also update the heartbeat for the instance.
+/// </summary>
+public class RefreshGameServerInstanceHeartbeatSignal : Signal<PlayFab.ServerModels.RefreshGameServerInstanceHeartbeatRequest> { }
+
+/// <summary>
+/// Inform the matchmaker that a new Game Server Instance is added.
+/// </summary>
+public class RegisterGameSignal : Signal<PlayFab.ServerModels.RegisterGameRequest> { }
+
+/// <summary>
+/// Sets the custom data of the indicated Game Server Instance
+/// </summary>
+public class SetGameServerInstanceDataSignal : Signal<PlayFab.ServerModels.SetGameServerInstanceDataRequest> { }
+
+/// <summary>
+/// Set the state of the indicated Game Server Instance.
+/// </summary>
+public class SetGameServerInstanceStateSignal : Signal<PlayFab.ServerModels.SetGameServerInstanceStateRequest> { }
+
+/// <summary>
+/// Set custom tags for the specified Game Server Instance
+/// </summary>
+public class SetGameServerInstanceTagsSignal : Signal<PlayFab.ServerModels.SetGameServerInstanceTagsRequest> { }
+
+#endregion
+
+#region Platform Specific Methods
+
+/// <summary>
+/// Awards the specified users the specified Steam achievements
+/// </summary>
+public class AwardSteamAchievementSignal : Signal<PlayFab.ServerModels.AwardSteamAchievementRequest> { }
 
 #endregion
 
@@ -205,55 +392,6 @@ public class UpdateUserPublisherReadOnlyDataSignal : Signal<PlayFab.ServerModels
 /// Updates the title-specific custom data for the user which can only be read by the client
 /// </summary>
 public class UpdateUserReadOnlyDataSignal : Signal<PlayFab.ServerModels.UpdateUserDataRequest> { }
-
-#endregion
-
-#region Title-Wide Data Management
-
-/// <summary>
-/// Retrieves the specified version of the title's catalog of virtual goods, including all defined properties
-/// </summary>
-public class GetCatalogItemsSignal : Signal<PlayFab.ServerModels.GetCatalogItemsRequest> { }
-
-/// <summary>
-/// Retrieves the key-value store of custom publisher settings
-/// </summary>
-public class GetPublisherDataSignal : Signal<PlayFab.ServerModels.GetPublisherDataRequest> { }
-
-/// <summary>
-/// Retrieves the current server time
-/// </summary>
-public class GetTimeSignal : Signal<PlayFab.ServerModels.GetTimeRequest> { }
-
-/// <summary>
-/// Retrieves the key-value store of custom title settings
-/// </summary>
-public class GetTitleDataSignal : Signal<PlayFab.ServerModels.GetTitleDataRequest> { }
-
-/// <summary>
-/// Retrieves the key-value store of custom internal title settings
-/// </summary>
-public class GetTitleInternalDataSignal : Signal<PlayFab.ServerModels.GetTitleDataRequest> { }
-
-/// <summary>
-/// Retrieves the title news feed, as configured in the developer portal
-/// </summary>
-public class GetTitleNewsSignal : Signal<PlayFab.ServerModels.GetTitleNewsRequest> { }
-
-/// <summary>
-/// Updates the key-value store of custom publisher settings
-/// </summary>
-public class SetPublisherDataSignal : Signal<PlayFab.ServerModels.SetPublisherDataRequest> { }
-
-/// <summary>
-/// Updates the key-value store of custom title settings
-/// </summary>
-public class SetTitleDataSignal : Signal<PlayFab.ServerModels.SetTitleDataRequest> { }
-
-/// <summary>
-/// Updates the key-value store of custom title settings
-/// </summary>
-public class SetTitleInternalDataSignal : Signal<PlayFab.ServerModels.SetTitleDataRequest> { }
 
 #endregion
 
@@ -371,227 +509,6 @@ public class UpdateUserInventoryItemCustomDataSignal : Signal<PlayFab.ServerMode
 
 #endregion
 
-#region Friend List Management
-
-/// <summary>
-/// Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
-/// </summary>
-public class AddFriendSignal : Signal<PlayFab.ServerModels.AddFriendRequest> { }
-
-/// <summary>
-/// Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
-/// </summary>
-public class GetFriendsListSignal : Signal<PlayFab.ServerModels.GetFriendsListRequest> { }
-
-/// <summary>
-/// Removes the specified friend from the the user's friend list
-/// </summary>
-public class RemoveFriendSignal : Signal<PlayFab.ServerModels.RemoveFriendRequest> { }
-
-/// <summary>
-/// Updates the tag list for a specified user in the friend list of another user
-/// </summary>
-public class SetFriendTagsSignal : Signal<PlayFab.ServerModels.SetFriendTagsRequest> { }
-
-#endregion
-
-#region Matchmaking
-
-/// <summary>
-/// Inform the matchmaker that a Game Server Instance is removed.
-/// </summary>
-public class DeregisterGameSignal : Signal<PlayFab.ServerModels.DeregisterGameRequest> { }
-
-/// <summary>
-/// Informs the PlayFab match-making service that the user specified has left the Game Server Instance
-/// </summary>
-public class NotifyMatchmakerPlayerLeftSignal : Signal<PlayFab.ServerModels.NotifyMatchmakerPlayerLeftRequest> { }
-
-/// <summary>
-/// Validates a Game Server session ticket and returns details about the user
-/// </summary>
-public class RedeemMatchmakerTicketSignal : Signal<PlayFab.ServerModels.RedeemMatchmakerTicketRequest> { }
-
-/// <summary>
-/// Set the state of the indicated Game Server Instance. Also update the heartbeat for the instance.
-/// </summary>
-public class RefreshGameServerInstanceHeartbeatSignal : Signal<PlayFab.ServerModels.RefreshGameServerInstanceHeartbeatRequest> { }
-
-/// <summary>
-/// Inform the matchmaker that a new Game Server Instance is added.
-/// </summary>
-public class RegisterGameSignal : Signal<PlayFab.ServerModels.RegisterGameRequest> { }
-
-/// <summary>
-/// Sets the custom data of the indicated Game Server Instance
-/// </summary>
-public class SetGameServerInstanceDataSignal : Signal<PlayFab.ServerModels.SetGameServerInstanceDataRequest> { }
-
-/// <summary>
-/// Set the state of the indicated Game Server Instance.
-/// </summary>
-public class SetGameServerInstanceStateSignal : Signal<PlayFab.ServerModels.SetGameServerInstanceStateRequest> { }
-
-/// <summary>
-/// Set custom tags for the specified Game Server Instance
-/// </summary>
-public class SetGameServerInstanceTagsSignal : Signal<PlayFab.ServerModels.SetGameServerInstanceTagsRequest> { }
-
-#endregion
-
-#region Analytics
-
-/// <summary>
-/// Writes a character-based event into PlayStream.
-/// </summary>
-public class WriteCharacterEventSignal : Signal<PlayFab.ServerModels.WriteServerCharacterEventRequest> { }
-
-/// <summary>
-/// Writes a player-based event into PlayStream.
-/// </summary>
-public class WritePlayerEventSignal : Signal<PlayFab.ServerModels.WriteServerPlayerEventRequest> { }
-
-/// <summary>
-/// Writes a title-based event into PlayStream.
-/// </summary>
-public class WriteTitleEventSignal : Signal<PlayFab.ServerModels.WriteTitleEventRequest> { }
-
-#endregion
-
-#region Shared Group Data
-
-/// <summary>
-/// Adds users to the set of those able to update both the shared data, as well as the set of users  in the group. Only users in the group (and the server) can add new members. Shared Groups are designed for sharing data  between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
-/// </summary>
-public class AddSharedGroupMembersSignal : Signal<PlayFab.ServerModels.AddSharedGroupMembersRequest> { }
-
-/// <summary>
-/// Requests the creation of a shared group object, containing key/value pairs which may  be updated by all members of the group. When created by a server, the group will initially have no members.  Shared Groups are designed for sharing data between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
-/// </summary>
-public class CreateSharedGroupSignal : Signal<PlayFab.ServerModels.CreateSharedGroupRequest> { }
-
-/// <summary>
-/// Deletes a shared group, freeing up the shared group ID to be reused for a new group.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
-/// </summary>
-public class DeleteSharedGroupSignal : Signal<PlayFab.ServerModels.DeleteSharedGroupRequest> { }
-
-/// <summary>
-/// Retrieves data stored in a shared group object, as well as the list of members in the group.  The server can access all public and private group data. Shared Groups are designed for sharing data between a very  small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
-/// </summary>
-public class GetSharedGroupDataSignal : Signal<PlayFab.ServerModels.GetSharedGroupDataRequest> { }
-
-/// <summary>
-/// Removes users from the set of those able to update the shared data and the set of users in the group. Only users in the group can remove members. If as a result of the call, zero users remain with access, the group and its associated data will be deleted. Shared Groups are designed for sharing data between a very small number of players,  please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
-/// </summary>
-public class RemoveSharedGroupMembersSignal : Signal<PlayFab.ServerModels.RemoveSharedGroupMembersRequest> { }
-
-/// <summary>
-/// Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated or added in this call will be readable by users not in the group. By default, data permissions are set to Private. Regardless of the permission setting, only members of the group (and the server) can update the data.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
-/// </summary>
-public class UpdateSharedGroupDataSignal : Signal<PlayFab.ServerModels.UpdateSharedGroupDataRequest> { }
-
-#endregion
-
-#region Server-Side Cloud Script
-
-/// <summary>
-/// Executes a CloudScript function, with the 'currentPlayerId' variable set to the specified PlayFabId parameter value.
-/// </summary>
-public class ExecuteCloudScriptSignal : Signal<PlayFab.ServerModels.ExecuteCloudScriptServerRequest> { }
-
-#endregion
-
-#region Content
-
-/// <summary>
-/// This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded, the query to retrieve the data will fail. See this post for more information:  https://community.playfab.com/hc/en-us/community/posts/205469488-How-to-upload-files-to-PlayFab-s-Content-Service.  Also, please be aware that the Content service is specifically PlayFab's CDN offering, for which standard CDN rates apply.
-/// </summary>
-public class GetContentDownloadUrlSignal : Signal<PlayFab.ServerModels.GetContentDownloadUrlRequest> { }
-
-#endregion
-
-#region Characters
-
-/// <summary>
-/// Deletes the specific character ID from the specified user.
-/// </summary>
-public class DeleteCharacterFromUserSignal : Signal<PlayFab.ServerModels.DeleteCharacterFromUserRequest> { }
-
-/// <summary>
-/// Lists all of the characters that belong to a specific user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
-/// </summary>
-public class GetAllUsersCharactersSignal : Signal<PlayFab.ServerModels.ListUsersCharactersRequest> { }
-
-/// <summary>
-/// Retrieves a list of ranked characters for the given statistic, starting from the indicated point in the leaderboard
-/// </summary>
-public class GetCharacterLeaderboardSignal : Signal<PlayFab.ServerModels.GetCharacterLeaderboardRequest> { }
-
-/// <summary>
-/// Retrieves the details of all title-specific statistics for the specific character
-/// </summary>
-public class GetCharacterStatisticsSignal : Signal<PlayFab.ServerModels.GetCharacterStatisticsRequest> { }
-
-/// <summary>
-/// Retrieves a list of ranked characters for the given statistic, centered on the requested user
-/// </summary>
-public class GetLeaderboardAroundCharacterSignal : Signal<PlayFab.ServerModels.GetLeaderboardAroundCharacterRequest> { }
-
-/// <summary>
-/// Retrieves a list of all of the user's characters for the given statistic.
-/// </summary>
-public class GetLeaderboardForUserCharactersSignal : Signal<PlayFab.ServerModels.GetLeaderboardForUsersCharactersRequest> { }
-
-/// <summary>
-/// Grants the specified character type to the user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
-/// </summary>
-public class GrantCharacterToUserSignal : Signal<PlayFab.ServerModels.GrantCharacterToUserRequest> { }
-
-/// <summary>
-/// Updates the values of the specified title-specific statistics for the specific character
-/// </summary>
-public class UpdateCharacterStatisticsSignal : Signal<PlayFab.ServerModels.UpdateCharacterStatisticsRequest> { }
-
-#endregion
-
-#region Character Data
-
-/// <summary>
-/// Retrieves the title-specific custom data for the user which is readable and writable by the client
-/// </summary>
-public class GetCharacterDataSignal : Signal<PlayFab.ServerModels.GetCharacterDataRequest> { }
-
-/// <summary>
-/// Retrieves the title-specific custom data for the user's character which cannot be accessed by the client
-/// </summary>
-public class GetCharacterInternalDataSignal : Signal<PlayFab.ServerModels.GetCharacterDataRequest> { }
-
-/// <summary>
-/// Retrieves the title-specific custom data for the user's character which can only be read by the client
-/// </summary>
-public class GetCharacterReadOnlyDataSignal : Signal<PlayFab.ServerModels.GetCharacterDataRequest> { }
-
-/// <summary>
-/// Updates the title-specific custom data for the user's character which is readable and writable by the client
-/// </summary>
-public class UpdateCharacterDataSignal : Signal<PlayFab.ServerModels.UpdateCharacterDataRequest> { }
-
-/// <summary>
-/// Updates the title-specific custom data for the user's character which cannot  be accessed by the client
-/// </summary>
-public class UpdateCharacterInternalDataSignal : Signal<PlayFab.ServerModels.UpdateCharacterDataRequest> { }
-
-/// <summary>
-/// Updates the title-specific custom data for the user's character which can only be read by the client
-/// </summary>
-public class UpdateCharacterReadOnlyDataSignal : Signal<PlayFab.ServerModels.UpdateCharacterDataRequest> { }
-
-#endregion
-
-#region Guilds
-
-#endregion
-
 #region PlayStream
 
 /// <summary>
@@ -631,12 +548,95 @@ public class RemovePlayerTagSignal : Signal<PlayFab.ServerModels.RemovePlayerTag
 
 #endregion
 
-#region Platform Specific Methods
+#region Server-Side Cloud Script
 
 /// <summary>
-/// Awards the specified users the specified Steam achievements
+/// Executes a CloudScript function, with the 'currentPlayerId' variable set to the specified PlayFabId parameter value.
 /// </summary>
-public class AwardSteamAchievementSignal : Signal<PlayFab.ServerModels.AwardSteamAchievementRequest> { }
+public class ExecuteCloudScriptSignal : Signal<PlayFab.ServerModels.ExecuteCloudScriptServerRequest> { }
+
+#endregion
+
+#region Shared Group Data
+
+/// <summary>
+/// Adds users to the set of those able to update both the shared data, as well as the set of users  in the group. Only users in the group (and the server) can add new members. Shared Groups are designed for sharing data  between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// </summary>
+public class AddSharedGroupMembersSignal : Signal<PlayFab.ServerModels.AddSharedGroupMembersRequest> { }
+
+/// <summary>
+/// Requests the creation of a shared group object, containing key/value pairs which may  be updated by all members of the group. When created by a server, the group will initially have no members.  Shared Groups are designed for sharing data between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// </summary>
+public class CreateSharedGroupSignal : Signal<PlayFab.ServerModels.CreateSharedGroupRequest> { }
+
+/// <summary>
+/// Deletes a shared group, freeing up the shared group ID to be reused for a new group.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// </summary>
+public class DeleteSharedGroupSignal : Signal<PlayFab.ServerModels.DeleteSharedGroupRequest> { }
+
+/// <summary>
+/// Retrieves data stored in a shared group object, as well as the list of members in the group.  The server can access all public and private group data. Shared Groups are designed for sharing data between a very  small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// </summary>
+public class GetSharedGroupDataSignal : Signal<PlayFab.ServerModels.GetSharedGroupDataRequest> { }
+
+/// <summary>
+/// Removes users from the set of those able to update the shared data and the set of users in the group. Only users in the group can remove members. If as a result of the call, zero users remain with access, the group and its associated data will be deleted. Shared Groups are designed for sharing data between a very small number of players,  please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// </summary>
+public class RemoveSharedGroupMembersSignal : Signal<PlayFab.ServerModels.RemoveSharedGroupMembersRequest> { }
+
+/// <summary>
+/// Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated or added in this call will be readable by users not in the group. By default, data permissions are set to Private. Regardless of the permission setting, only members of the group (and the server) can update the data.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// </summary>
+public class UpdateSharedGroupDataSignal : Signal<PlayFab.ServerModels.UpdateSharedGroupDataRequest> { }
+
+#endregion
+
+#region Title-Wide Data Management
+
+/// <summary>
+/// Retrieves the specified version of the title's catalog of virtual goods, including all defined properties
+/// </summary>
+public class GetCatalogItemsSignal : Signal<PlayFab.ServerModels.GetCatalogItemsRequest> { }
+
+/// <summary>
+/// Retrieves the key-value store of custom publisher settings
+/// </summary>
+public class GetPublisherDataSignal : Signal<PlayFab.ServerModels.GetPublisherDataRequest> { }
+
+/// <summary>
+/// Retrieves the current server time
+/// </summary>
+public class GetTimeSignal : Signal<PlayFab.ServerModels.GetTimeRequest> { }
+
+/// <summary>
+/// Retrieves the key-value store of custom title settings
+/// </summary>
+public class GetTitleDataSignal : Signal<PlayFab.ServerModels.GetTitleDataRequest> { }
+
+/// <summary>
+/// Retrieves the key-value store of custom internal title settings
+/// </summary>
+public class GetTitleInternalDataSignal : Signal<PlayFab.ServerModels.GetTitleDataRequest> { }
+
+/// <summary>
+/// Retrieves the title news feed, as configured in the developer portal
+/// </summary>
+public class GetTitleNewsSignal : Signal<PlayFab.ServerModels.GetTitleNewsRequest> { }
+
+/// <summary>
+/// Updates the key-value store of custom publisher settings
+/// </summary>
+public class SetPublisherDataSignal : Signal<PlayFab.ServerModels.SetPublisherDataRequest> { }
+
+/// <summary>
+/// Updates the key-value store of custom title settings
+/// </summary>
+public class SetTitleDataSignal : Signal<PlayFab.ServerModels.SetTitleDataRequest> { }
+
+/// <summary>
+/// Updates the key-value store of custom title settings
+/// </summary>
+public class SetTitleInternalDataSignal : Signal<PlayFab.ServerModels.SetTitleDataRequest> { }
 
 #endregion
 
@@ -670,20 +670,6 @@ public class StartGameResponseSignal : Signal<PlayFab.MatchmakerModels.StartGame
 /// Retrieves the relevant details for a specified user, which the external match-making service can then use to compute effective matches
 /// </summary>
 public class UserInfoResponseSignal : Signal<PlayFab.MatchmakerModels.UserInfoResponse> { }
-
-#endregion
-
-#region Authentication
-
-/// <summary>
-/// Validated a client's session ticket, and if successful, returns details for that user
-/// </summary>
-public class AuthenticateSessionTicketResponseSignal : Signal<PlayFab.ServerModels.AuthenticateSessionTicketResult> { }
-
-/// <summary>
-/// Sets the player's secret if it is not already set. Player secrets are used to sign API requests. To reset a player's secret use the Admin or Server API method SetPlayerSecret.
-/// </summary>
-public class SetPlayerSecretResponseSignal : Signal<PlayFab.ServerModels.SetPlayerSecretResult> { }
 
 #endregion
 
@@ -743,6 +729,207 @@ public class UpdateAvatarUrlResponseSignal : Signal<PlayFab.ServerModels.EmptyRe
 /// Updates information of a list of existing bans specified with Ban Ids.
 /// </summary>
 public class UpdateBansResponseSignal : Signal<PlayFab.ServerModels.UpdateBansResult> { }
+
+#endregion
+
+#region Analytics
+
+/// <summary>
+/// Writes a character-based event into PlayStream.
+/// </summary>
+public class WriteCharacterEventResponseSignal : Signal<PlayFab.ServerModels.WriteEventResponse> { }
+
+/// <summary>
+/// Writes a player-based event into PlayStream.
+/// </summary>
+public class WritePlayerEventResponseSignal : Signal<PlayFab.ServerModels.WriteEventResponse> { }
+
+/// <summary>
+/// Writes a title-based event into PlayStream.
+/// </summary>
+public class WriteTitleEventResponseSignal : Signal<PlayFab.ServerModels.WriteEventResponse> { }
+
+#endregion
+
+#region Authentication
+
+/// <summary>
+/// Validated a client's session ticket, and if successful, returns details for that user
+/// </summary>
+public class AuthenticateSessionTicketResponseSignal : Signal<PlayFab.ServerModels.AuthenticateSessionTicketResult> { }
+
+/// <summary>
+/// Sets the player's secret if it is not already set. Player secrets are used to sign API requests. To reset a player's secret use the Admin or Server API method SetPlayerSecret.
+/// </summary>
+public class SetPlayerSecretResponseSignal : Signal<PlayFab.ServerModels.SetPlayerSecretResult> { }
+
+#endregion
+
+#region Character Data
+
+/// <summary>
+/// Retrieves the title-specific custom data for the user which is readable and writable by the client
+/// </summary>
+public class GetCharacterDataResponseSignal : Signal<PlayFab.ServerModels.GetCharacterDataResult> { }
+
+/// <summary>
+/// Retrieves the title-specific custom data for the user's character which cannot be accessed by the client
+/// </summary>
+public class GetCharacterInternalDataResponseSignal : Signal<PlayFab.ServerModels.GetCharacterDataResult> { }
+
+/// <summary>
+/// Retrieves the title-specific custom data for the user's character which can only be read by the client
+/// </summary>
+public class GetCharacterReadOnlyDataResponseSignal : Signal<PlayFab.ServerModels.GetCharacterDataResult> { }
+
+/// <summary>
+/// Updates the title-specific custom data for the user's character which is readable and writable by the client
+/// </summary>
+public class UpdateCharacterDataResponseSignal : Signal<PlayFab.ServerModels.UpdateCharacterDataResult> { }
+
+/// <summary>
+/// Updates the title-specific custom data for the user's character which cannot  be accessed by the client
+/// </summary>
+public class UpdateCharacterInternalDataResponseSignal : Signal<PlayFab.ServerModels.UpdateCharacterDataResult> { }
+
+/// <summary>
+/// Updates the title-specific custom data for the user's character which can only be read by the client
+/// </summary>
+public class UpdateCharacterReadOnlyDataResponseSignal : Signal<PlayFab.ServerModels.UpdateCharacterDataResult> { }
+
+#endregion
+
+#region Characters
+
+/// <summary>
+/// Deletes the specific character ID from the specified user.
+/// </summary>
+public class DeleteCharacterFromUserResponseSignal : Signal<PlayFab.ServerModels.DeleteCharacterFromUserResult> { }
+
+/// <summary>
+/// Lists all of the characters that belong to a specific user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
+/// </summary>
+public class GetAllUsersCharactersResponseSignal : Signal<PlayFab.ServerModels.ListUsersCharactersResult> { }
+
+/// <summary>
+/// Retrieves a list of ranked characters for the given statistic, starting from the indicated point in the leaderboard
+/// </summary>
+public class GetCharacterLeaderboardResponseSignal : Signal<PlayFab.ServerModels.GetCharacterLeaderboardResult> { }
+
+/// <summary>
+/// Retrieves the details of all title-specific statistics for the specific character
+/// </summary>
+public class GetCharacterStatisticsResponseSignal : Signal<PlayFab.ServerModels.GetCharacterStatisticsResult> { }
+
+/// <summary>
+/// Retrieves a list of ranked characters for the given statistic, centered on the requested user
+/// </summary>
+public class GetLeaderboardAroundCharacterResponseSignal : Signal<PlayFab.ServerModels.GetLeaderboardAroundCharacterResult> { }
+
+/// <summary>
+/// Retrieves a list of all of the user's characters for the given statistic.
+/// </summary>
+public class GetLeaderboardForUserCharactersResponseSignal : Signal<PlayFab.ServerModels.GetLeaderboardForUsersCharactersResult> { }
+
+/// <summary>
+/// Grants the specified character type to the user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
+/// </summary>
+public class GrantCharacterToUserResponseSignal : Signal<PlayFab.ServerModels.GrantCharacterToUserResult> { }
+
+/// <summary>
+/// Updates the values of the specified title-specific statistics for the specific character
+/// </summary>
+public class UpdateCharacterStatisticsResponseSignal : Signal<PlayFab.ServerModels.UpdateCharacterStatisticsResult> { }
+
+#endregion
+
+#region Content
+
+/// <summary>
+/// This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded, the query to retrieve the data will fail. See this post for more information:  https://community.playfab.com/hc/en-us/community/posts/205469488-How-to-upload-files-to-PlayFab-s-Content-Service.  Also, please be aware that the Content service is specifically PlayFab's CDN offering, for which standard CDN rates apply.
+/// </summary>
+public class GetContentDownloadUrlResponseSignal : Signal<PlayFab.ServerModels.GetContentDownloadUrlResult> { }
+
+#endregion
+
+#region Friend List Management
+
+/// <summary>
+/// Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+/// </summary>
+public class AddFriendResponseSignal : Signal<PlayFab.ServerModels.EmptyResult> { }
+
+/// <summary>
+/// Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+/// </summary>
+public class GetFriendsListResponseSignal : Signal<PlayFab.ServerModels.GetFriendsListResult> { }
+
+/// <summary>
+/// Removes the specified friend from the the user's friend list
+/// </summary>
+public class RemoveFriendResponseSignal : Signal<PlayFab.ServerModels.EmptyResult> { }
+
+/// <summary>
+/// Updates the tag list for a specified user in the friend list of another user
+/// </summary>
+public class SetFriendTagsResponseSignal : Signal<PlayFab.ServerModels.EmptyResult> { }
+
+#endregion
+
+#region Guilds
+
+#endregion
+
+#region Matchmaking
+
+/// <summary>
+/// Inform the matchmaker that a Game Server Instance is removed.
+/// </summary>
+public class DeregisterGameResponseSignal : Signal<PlayFab.ServerModels.DeregisterGameResponse> { }
+
+/// <summary>
+/// Informs the PlayFab match-making service that the user specified has left the Game Server Instance
+/// </summary>
+public class NotifyMatchmakerPlayerLeftResponseSignal : Signal<PlayFab.ServerModels.NotifyMatchmakerPlayerLeftResult> { }
+
+/// <summary>
+/// Validates a Game Server session ticket and returns details about the user
+/// </summary>
+public class RedeemMatchmakerTicketResponseSignal : Signal<PlayFab.ServerModels.RedeemMatchmakerTicketResult> { }
+
+/// <summary>
+/// Set the state of the indicated Game Server Instance. Also update the heartbeat for the instance.
+/// </summary>
+public class RefreshGameServerInstanceHeartbeatResponseSignal : Signal<PlayFab.ServerModels.RefreshGameServerInstanceHeartbeatResult> { }
+
+/// <summary>
+/// Inform the matchmaker that a new Game Server Instance is added.
+/// </summary>
+public class RegisterGameResponseSignal : Signal<PlayFab.ServerModels.RegisterGameResponse> { }
+
+/// <summary>
+/// Sets the custom data of the indicated Game Server Instance
+/// </summary>
+public class SetGameServerInstanceDataResponseSignal : Signal<PlayFab.ServerModels.SetGameServerInstanceDataResult> { }
+
+/// <summary>
+/// Set the state of the indicated Game Server Instance.
+/// </summary>
+public class SetGameServerInstanceStateResponseSignal : Signal<PlayFab.ServerModels.SetGameServerInstanceStateResult> { }
+
+/// <summary>
+/// Set custom tags for the specified Game Server Instance
+/// </summary>
+public class SetGameServerInstanceTagsResponseSignal : Signal<PlayFab.ServerModels.SetGameServerInstanceTagsResult> { }
+
+#endregion
+
+#region Platform Specific Methods
+
+/// <summary>
+/// Awards the specified users the specified Steam achievements
+/// </summary>
+public class AwardSteamAchievementResponseSignal : Signal<PlayFab.ServerModels.AwardSteamAchievementResult> { }
 
 #endregion
 
@@ -847,55 +1034,6 @@ public class UpdateUserPublisherReadOnlyDataResponseSignal : Signal<PlayFab.Serv
 /// Updates the title-specific custom data for the user which can only be read by the client
 /// </summary>
 public class UpdateUserReadOnlyDataResponseSignal : Signal<PlayFab.ServerModels.UpdateUserDataResult> { }
-
-#endregion
-
-#region Title-Wide Data Management
-
-/// <summary>
-/// Retrieves the specified version of the title's catalog of virtual goods, including all defined properties
-/// </summary>
-public class GetCatalogItemsResponseSignal : Signal<PlayFab.ServerModels.GetCatalogItemsResult> { }
-
-/// <summary>
-/// Retrieves the key-value store of custom publisher settings
-/// </summary>
-public class GetPublisherDataResponseSignal : Signal<PlayFab.ServerModels.GetPublisherDataResult> { }
-
-/// <summary>
-/// Retrieves the current server time
-/// </summary>
-public class GetTimeResponseSignal : Signal<PlayFab.ServerModels.GetTimeResult> { }
-
-/// <summary>
-/// Retrieves the key-value store of custom title settings
-/// </summary>
-public class GetTitleDataResponseSignal : Signal<PlayFab.ServerModels.GetTitleDataResult> { }
-
-/// <summary>
-/// Retrieves the key-value store of custom internal title settings
-/// </summary>
-public class GetTitleInternalDataResponseSignal : Signal<PlayFab.ServerModels.GetTitleDataResult> { }
-
-/// <summary>
-/// Retrieves the title news feed, as configured in the developer portal
-/// </summary>
-public class GetTitleNewsResponseSignal : Signal<PlayFab.ServerModels.GetTitleNewsResult> { }
-
-/// <summary>
-/// Updates the key-value store of custom publisher settings
-/// </summary>
-public class SetPublisherDataResponseSignal : Signal<PlayFab.ServerModels.SetPublisherDataResult> { }
-
-/// <summary>
-/// Updates the key-value store of custom title settings
-/// </summary>
-public class SetTitleDataResponseSignal : Signal<PlayFab.ServerModels.SetTitleDataResult> { }
-
-/// <summary>
-/// Updates the key-value store of custom title settings
-/// </summary>
-public class SetTitleInternalDataResponseSignal : Signal<PlayFab.ServerModels.SetTitleDataResult> { }
 
 #endregion
 
@@ -1013,227 +1151,6 @@ public class UpdateUserInventoryItemCustomDataResponseSignal : Signal<PlayFab.Se
 
 #endregion
 
-#region Friend List Management
-
-/// <summary>
-/// Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
-/// </summary>
-public class AddFriendResponseSignal : Signal<PlayFab.ServerModels.EmptyResult> { }
-
-/// <summary>
-/// Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
-/// </summary>
-public class GetFriendsListResponseSignal : Signal<PlayFab.ServerModels.GetFriendsListResult> { }
-
-/// <summary>
-/// Removes the specified friend from the the user's friend list
-/// </summary>
-public class RemoveFriendResponseSignal : Signal<PlayFab.ServerModels.EmptyResult> { }
-
-/// <summary>
-/// Updates the tag list for a specified user in the friend list of another user
-/// </summary>
-public class SetFriendTagsResponseSignal : Signal<PlayFab.ServerModels.EmptyResult> { }
-
-#endregion
-
-#region Matchmaking
-
-/// <summary>
-/// Inform the matchmaker that a Game Server Instance is removed.
-/// </summary>
-public class DeregisterGameResponseSignal : Signal<PlayFab.ServerModels.DeregisterGameResponse> { }
-
-/// <summary>
-/// Informs the PlayFab match-making service that the user specified has left the Game Server Instance
-/// </summary>
-public class NotifyMatchmakerPlayerLeftResponseSignal : Signal<PlayFab.ServerModels.NotifyMatchmakerPlayerLeftResult> { }
-
-/// <summary>
-/// Validates a Game Server session ticket and returns details about the user
-/// </summary>
-public class RedeemMatchmakerTicketResponseSignal : Signal<PlayFab.ServerModels.RedeemMatchmakerTicketResult> { }
-
-/// <summary>
-/// Set the state of the indicated Game Server Instance. Also update the heartbeat for the instance.
-/// </summary>
-public class RefreshGameServerInstanceHeartbeatResponseSignal : Signal<PlayFab.ServerModels.RefreshGameServerInstanceHeartbeatResult> { }
-
-/// <summary>
-/// Inform the matchmaker that a new Game Server Instance is added.
-/// </summary>
-public class RegisterGameResponseSignal : Signal<PlayFab.ServerModels.RegisterGameResponse> { }
-
-/// <summary>
-/// Sets the custom data of the indicated Game Server Instance
-/// </summary>
-public class SetGameServerInstanceDataResponseSignal : Signal<PlayFab.ServerModels.SetGameServerInstanceDataResult> { }
-
-/// <summary>
-/// Set the state of the indicated Game Server Instance.
-/// </summary>
-public class SetGameServerInstanceStateResponseSignal : Signal<PlayFab.ServerModels.SetGameServerInstanceStateResult> { }
-
-/// <summary>
-/// Set custom tags for the specified Game Server Instance
-/// </summary>
-public class SetGameServerInstanceTagsResponseSignal : Signal<PlayFab.ServerModels.SetGameServerInstanceTagsResult> { }
-
-#endregion
-
-#region Analytics
-
-/// <summary>
-/// Writes a character-based event into PlayStream.
-/// </summary>
-public class WriteCharacterEventResponseSignal : Signal<PlayFab.ServerModels.WriteEventResponse> { }
-
-/// <summary>
-/// Writes a player-based event into PlayStream.
-/// </summary>
-public class WritePlayerEventResponseSignal : Signal<PlayFab.ServerModels.WriteEventResponse> { }
-
-/// <summary>
-/// Writes a title-based event into PlayStream.
-/// </summary>
-public class WriteTitleEventResponseSignal : Signal<PlayFab.ServerModels.WriteEventResponse> { }
-
-#endregion
-
-#region Shared Group Data
-
-/// <summary>
-/// Adds users to the set of those able to update both the shared data, as well as the set of users  in the group. Only users in the group (and the server) can add new members. Shared Groups are designed for sharing data  between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
-/// </summary>
-public class AddSharedGroupMembersResponseSignal : Signal<PlayFab.ServerModels.AddSharedGroupMembersResult> { }
-
-/// <summary>
-/// Requests the creation of a shared group object, containing key/value pairs which may  be updated by all members of the group. When created by a server, the group will initially have no members.  Shared Groups are designed for sharing data between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
-/// </summary>
-public class CreateSharedGroupResponseSignal : Signal<PlayFab.ServerModels.CreateSharedGroupResult> { }
-
-/// <summary>
-/// Deletes a shared group, freeing up the shared group ID to be reused for a new group.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
-/// </summary>
-public class DeleteSharedGroupResponseSignal : Signal<PlayFab.ServerModels.EmptyResult> { }
-
-/// <summary>
-/// Retrieves data stored in a shared group object, as well as the list of members in the group.  The server can access all public and private group data. Shared Groups are designed for sharing data between a very  small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
-/// </summary>
-public class GetSharedGroupDataResponseSignal : Signal<PlayFab.ServerModels.GetSharedGroupDataResult> { }
-
-/// <summary>
-/// Removes users from the set of those able to update the shared data and the set of users in the group. Only users in the group can remove members. If as a result of the call, zero users remain with access, the group and its associated data will be deleted. Shared Groups are designed for sharing data between a very small number of players,  please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
-/// </summary>
-public class RemoveSharedGroupMembersResponseSignal : Signal<PlayFab.ServerModels.RemoveSharedGroupMembersResult> { }
-
-/// <summary>
-/// Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated or added in this call will be readable by users not in the group. By default, data permissions are set to Private. Regardless of the permission setting, only members of the group (and the server) can update the data.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
-/// </summary>
-public class UpdateSharedGroupDataResponseSignal : Signal<PlayFab.ServerModels.UpdateSharedGroupDataResult> { }
-
-#endregion
-
-#region Server-Side Cloud Script
-
-/// <summary>
-/// Executes a CloudScript function, with the 'currentPlayerId' variable set to the specified PlayFabId parameter value.
-/// </summary>
-public class ExecuteCloudScriptResponseSignal : Signal<PlayFab.ServerModels.ExecuteCloudScriptResult> { }
-
-#endregion
-
-#region Content
-
-/// <summary>
-/// This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded, the query to retrieve the data will fail. See this post for more information:  https://community.playfab.com/hc/en-us/community/posts/205469488-How-to-upload-files-to-PlayFab-s-Content-Service.  Also, please be aware that the Content service is specifically PlayFab's CDN offering, for which standard CDN rates apply.
-/// </summary>
-public class GetContentDownloadUrlResponseSignal : Signal<PlayFab.ServerModels.GetContentDownloadUrlResult> { }
-
-#endregion
-
-#region Characters
-
-/// <summary>
-/// Deletes the specific character ID from the specified user.
-/// </summary>
-public class DeleteCharacterFromUserResponseSignal : Signal<PlayFab.ServerModels.DeleteCharacterFromUserResult> { }
-
-/// <summary>
-/// Lists all of the characters that belong to a specific user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
-/// </summary>
-public class GetAllUsersCharactersResponseSignal : Signal<PlayFab.ServerModels.ListUsersCharactersResult> { }
-
-/// <summary>
-/// Retrieves a list of ranked characters for the given statistic, starting from the indicated point in the leaderboard
-/// </summary>
-public class GetCharacterLeaderboardResponseSignal : Signal<PlayFab.ServerModels.GetCharacterLeaderboardResult> { }
-
-/// <summary>
-/// Retrieves the details of all title-specific statistics for the specific character
-/// </summary>
-public class GetCharacterStatisticsResponseSignal : Signal<PlayFab.ServerModels.GetCharacterStatisticsResult> { }
-
-/// <summary>
-/// Retrieves a list of ranked characters for the given statistic, centered on the requested user
-/// </summary>
-public class GetLeaderboardAroundCharacterResponseSignal : Signal<PlayFab.ServerModels.GetLeaderboardAroundCharacterResult> { }
-
-/// <summary>
-/// Retrieves a list of all of the user's characters for the given statistic.
-/// </summary>
-public class GetLeaderboardForUserCharactersResponseSignal : Signal<PlayFab.ServerModels.GetLeaderboardForUsersCharactersResult> { }
-
-/// <summary>
-/// Grants the specified character type to the user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
-/// </summary>
-public class GrantCharacterToUserResponseSignal : Signal<PlayFab.ServerModels.GrantCharacterToUserResult> { }
-
-/// <summary>
-/// Updates the values of the specified title-specific statistics for the specific character
-/// </summary>
-public class UpdateCharacterStatisticsResponseSignal : Signal<PlayFab.ServerModels.UpdateCharacterStatisticsResult> { }
-
-#endregion
-
-#region Character Data
-
-/// <summary>
-/// Retrieves the title-specific custom data for the user which is readable and writable by the client
-/// </summary>
-public class GetCharacterDataResponseSignal : Signal<PlayFab.ServerModels.GetCharacterDataResult> { }
-
-/// <summary>
-/// Retrieves the title-specific custom data for the user's character which cannot be accessed by the client
-/// </summary>
-public class GetCharacterInternalDataResponseSignal : Signal<PlayFab.ServerModels.GetCharacterDataResult> { }
-
-/// <summary>
-/// Retrieves the title-specific custom data for the user's character which can only be read by the client
-/// </summary>
-public class GetCharacterReadOnlyDataResponseSignal : Signal<PlayFab.ServerModels.GetCharacterDataResult> { }
-
-/// <summary>
-/// Updates the title-specific custom data for the user's character which is readable and writable by the client
-/// </summary>
-public class UpdateCharacterDataResponseSignal : Signal<PlayFab.ServerModels.UpdateCharacterDataResult> { }
-
-/// <summary>
-/// Updates the title-specific custom data for the user's character which cannot  be accessed by the client
-/// </summary>
-public class UpdateCharacterInternalDataResponseSignal : Signal<PlayFab.ServerModels.UpdateCharacterDataResult> { }
-
-/// <summary>
-/// Updates the title-specific custom data for the user's character which can only be read by the client
-/// </summary>
-public class UpdateCharacterReadOnlyDataResponseSignal : Signal<PlayFab.ServerModels.UpdateCharacterDataResult> { }
-
-#endregion
-
-#region Guilds
-
-#endregion
-
 #region PlayStream
 
 /// <summary>
@@ -1273,12 +1190,95 @@ public class RemovePlayerTagResponseSignal : Signal<PlayFab.ServerModels.RemoveP
 
 #endregion
 
-#region Platform Specific Methods
+#region Server-Side Cloud Script
 
 /// <summary>
-/// Awards the specified users the specified Steam achievements
+/// Executes a CloudScript function, with the 'currentPlayerId' variable set to the specified PlayFabId parameter value.
 /// </summary>
-public class AwardSteamAchievementResponseSignal : Signal<PlayFab.ServerModels.AwardSteamAchievementResult> { }
+public class ExecuteCloudScriptResponseSignal : Signal<PlayFab.ServerModels.ExecuteCloudScriptResult> { }
+
+#endregion
+
+#region Shared Group Data
+
+/// <summary>
+/// Adds users to the set of those able to update both the shared data, as well as the set of users  in the group. Only users in the group (and the server) can add new members. Shared Groups are designed for sharing data  between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// </summary>
+public class AddSharedGroupMembersResponseSignal : Signal<PlayFab.ServerModels.AddSharedGroupMembersResult> { }
+
+/// <summary>
+/// Requests the creation of a shared group object, containing key/value pairs which may  be updated by all members of the group. When created by a server, the group will initially have no members.  Shared Groups are designed for sharing data between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// </summary>
+public class CreateSharedGroupResponseSignal : Signal<PlayFab.ServerModels.CreateSharedGroupResult> { }
+
+/// <summary>
+/// Deletes a shared group, freeing up the shared group ID to be reused for a new group.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// </summary>
+public class DeleteSharedGroupResponseSignal : Signal<PlayFab.ServerModels.EmptyResult> { }
+
+/// <summary>
+/// Retrieves data stored in a shared group object, as well as the list of members in the group.  The server can access all public and private group data. Shared Groups are designed for sharing data between a very  small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// </summary>
+public class GetSharedGroupDataResponseSignal : Signal<PlayFab.ServerModels.GetSharedGroupDataResult> { }
+
+/// <summary>
+/// Removes users from the set of those able to update the shared data and the set of users in the group. Only users in the group can remove members. If as a result of the call, zero users remain with access, the group and its associated data will be deleted. Shared Groups are designed for sharing data between a very small number of players,  please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// </summary>
+public class RemoveSharedGroupMembersResponseSignal : Signal<PlayFab.ServerModels.RemoveSharedGroupMembersResult> { }
+
+/// <summary>
+/// Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated or added in this call will be readable by users not in the group. By default, data permissions are set to Private. Regardless of the permission setting, only members of the group (and the server) can update the data.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// </summary>
+public class UpdateSharedGroupDataResponseSignal : Signal<PlayFab.ServerModels.UpdateSharedGroupDataResult> { }
+
+#endregion
+
+#region Title-Wide Data Management
+
+/// <summary>
+/// Retrieves the specified version of the title's catalog of virtual goods, including all defined properties
+/// </summary>
+public class GetCatalogItemsResponseSignal : Signal<PlayFab.ServerModels.GetCatalogItemsResult> { }
+
+/// <summary>
+/// Retrieves the key-value store of custom publisher settings
+/// </summary>
+public class GetPublisherDataResponseSignal : Signal<PlayFab.ServerModels.GetPublisherDataResult> { }
+
+/// <summary>
+/// Retrieves the current server time
+/// </summary>
+public class GetTimeResponseSignal : Signal<PlayFab.ServerModels.GetTimeResult> { }
+
+/// <summary>
+/// Retrieves the key-value store of custom title settings
+/// </summary>
+public class GetTitleDataResponseSignal : Signal<PlayFab.ServerModels.GetTitleDataResult> { }
+
+/// <summary>
+/// Retrieves the key-value store of custom internal title settings
+/// </summary>
+public class GetTitleInternalDataResponseSignal : Signal<PlayFab.ServerModels.GetTitleDataResult> { }
+
+/// <summary>
+/// Retrieves the title news feed, as configured in the developer portal
+/// </summary>
+public class GetTitleNewsResponseSignal : Signal<PlayFab.ServerModels.GetTitleNewsResult> { }
+
+/// <summary>
+/// Updates the key-value store of custom publisher settings
+/// </summary>
+public class SetPublisherDataResponseSignal : Signal<PlayFab.ServerModels.SetPublisherDataResult> { }
+
+/// <summary>
+/// Updates the key-value store of custom title settings
+/// </summary>
+public class SetTitleDataResponseSignal : Signal<PlayFab.ServerModels.SetTitleDataResult> { }
+
+/// <summary>
+/// Updates the key-value store of custom title settings
+/// </summary>
+public class SetTitleInternalDataResponseSignal : Signal<PlayFab.ServerModels.SetTitleDataResult> { }
 
 #endregion
 

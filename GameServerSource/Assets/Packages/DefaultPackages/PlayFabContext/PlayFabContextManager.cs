@@ -53,25 +53,6 @@ public class PlayFabContextManager : StrangePackage
 
         #endregion
 
-        #region Authentication
-        /// <summary>
-        /// Validated a client's session ticket, and if successful, returns details for that user
-        /// </summary>
-        injectionBinder.Bind<AuthenticateSessionTicketSignal>();
-        injectionBinder.Bind<AuthenticateSessionTicketResponseSignal>();
-        commandBinder.Bind<AuthenticateSessionTicketSignal>().To<AuthenticateSessionTicketCommand>();
-        commandBinder.Bind<AuthenticateSessionTicketResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Sets the player's secret if it is not already set. Player secrets are used to sign API requests. To reset a player's secret use the Admin or Server API method SetPlayerSecret.
-        /// </summary>
-        injectionBinder.Bind<SetPlayerSecretSignal>();
-        injectionBinder.Bind<SetPlayerSecretResponseSignal>();
-        commandBinder.Bind<SetPlayerSecretSignal>().To<SetPlayerSecretCommand>();
-        commandBinder.Bind<SetPlayerSecretResponseSignal>(); //Create empty overrideable binding.
-
-        #endregion
-
         #region Account Management
         /// <summary>
         /// Bans users by PlayFab ID with optional IP address, or MAC address for the provided game.
@@ -160,6 +141,297 @@ public class PlayFabContextManager : StrangePackage
         injectionBinder.Bind<UpdateBansResponseSignal>();
         commandBinder.Bind<UpdateBansSignal>().To<UpdateBansCommand>();
         commandBinder.Bind<UpdateBansResponseSignal>(); //Create empty overrideable binding.
+
+        #endregion
+
+        #region Analytics
+        /// <summary>
+        /// Writes a character-based event into PlayStream.
+        /// </summary>
+        injectionBinder.Bind<WriteCharacterEventSignal>();
+        injectionBinder.Bind<WriteCharacterEventResponseSignal>();
+        commandBinder.Bind<WriteCharacterEventSignal>().To<WriteCharacterEventCommand>();
+        commandBinder.Bind<WriteCharacterEventResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Writes a player-based event into PlayStream.
+        /// </summary>
+        injectionBinder.Bind<WritePlayerEventSignal>();
+        injectionBinder.Bind<WritePlayerEventResponseSignal>();
+        commandBinder.Bind<WritePlayerEventSignal>().To<WritePlayerEventCommand>();
+        commandBinder.Bind<WritePlayerEventResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Writes a title-based event into PlayStream.
+        /// </summary>
+        injectionBinder.Bind<WriteTitleEventSignal>();
+        injectionBinder.Bind<WriteTitleEventResponseSignal>();
+        commandBinder.Bind<WriteTitleEventSignal>().To<WriteTitleEventCommand>();
+        commandBinder.Bind<WriteTitleEventResponseSignal>(); //Create empty overrideable binding.
+
+        #endregion
+
+        #region Authentication
+        /// <summary>
+        /// Validated a client's session ticket, and if successful, returns details for that user
+        /// </summary>
+        injectionBinder.Bind<AuthenticateSessionTicketSignal>();
+        injectionBinder.Bind<AuthenticateSessionTicketResponseSignal>();
+        commandBinder.Bind<AuthenticateSessionTicketSignal>().To<AuthenticateSessionTicketCommand>();
+        commandBinder.Bind<AuthenticateSessionTicketResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Sets the player's secret if it is not already set. Player secrets are used to sign API requests. To reset a player's secret use the Admin or Server API method SetPlayerSecret.
+        /// </summary>
+        injectionBinder.Bind<SetPlayerSecretSignal>();
+        injectionBinder.Bind<SetPlayerSecretResponseSignal>();
+        commandBinder.Bind<SetPlayerSecretSignal>().To<SetPlayerSecretCommand>();
+        commandBinder.Bind<SetPlayerSecretResponseSignal>(); //Create empty overrideable binding.
+
+        #endregion
+
+        #region Character Data
+        /// <summary>
+        /// Retrieves the title-specific custom data for the user which is readable and writable by the client
+        /// </summary>
+        injectionBinder.Bind<GetCharacterDataSignal>();
+        injectionBinder.Bind<GetCharacterDataResponseSignal>();
+        commandBinder.Bind<GetCharacterDataSignal>().To<GetCharacterDataCommand>();
+        commandBinder.Bind<GetCharacterDataResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Retrieves the title-specific custom data for the user's character which cannot be accessed by the client
+        /// </summary>
+        injectionBinder.Bind<GetCharacterInternalDataSignal>();
+        injectionBinder.Bind<GetCharacterInternalDataResponseSignal>();
+        commandBinder.Bind<GetCharacterInternalDataSignal>().To<GetCharacterInternalDataCommand>();
+        commandBinder.Bind<GetCharacterInternalDataResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Retrieves the title-specific custom data for the user's character which can only be read by the client
+        /// </summary>
+        injectionBinder.Bind<GetCharacterReadOnlyDataSignal>();
+        injectionBinder.Bind<GetCharacterReadOnlyDataResponseSignal>();
+        commandBinder.Bind<GetCharacterReadOnlyDataSignal>().To<GetCharacterReadOnlyDataCommand>();
+        commandBinder.Bind<GetCharacterReadOnlyDataResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Updates the title-specific custom data for the user's character which is readable and writable by the client
+        /// </summary>
+        injectionBinder.Bind<UpdateCharacterDataSignal>();
+        injectionBinder.Bind<UpdateCharacterDataResponseSignal>();
+        commandBinder.Bind<UpdateCharacterDataSignal>().To<UpdateCharacterDataCommand>();
+        commandBinder.Bind<UpdateCharacterDataResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Updates the title-specific custom data for the user's character which cannot  be accessed by the client
+        /// </summary>
+        injectionBinder.Bind<UpdateCharacterInternalDataSignal>();
+        injectionBinder.Bind<UpdateCharacterInternalDataResponseSignal>();
+        commandBinder.Bind<UpdateCharacterInternalDataSignal>().To<UpdateCharacterInternalDataCommand>();
+        commandBinder.Bind<UpdateCharacterInternalDataResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Updates the title-specific custom data for the user's character which can only be read by the client
+        /// </summary>
+        injectionBinder.Bind<UpdateCharacterReadOnlyDataSignal>();
+        injectionBinder.Bind<UpdateCharacterReadOnlyDataResponseSignal>();
+        commandBinder.Bind<UpdateCharacterReadOnlyDataSignal>().To<UpdateCharacterReadOnlyDataCommand>();
+        commandBinder.Bind<UpdateCharacterReadOnlyDataResponseSignal>(); //Create empty overrideable binding.
+
+        #endregion
+
+        #region Characters
+        /// <summary>
+        /// Deletes the specific character ID from the specified user.
+        /// </summary>
+        injectionBinder.Bind<DeleteCharacterFromUserSignal>();
+        injectionBinder.Bind<DeleteCharacterFromUserResponseSignal>();
+        commandBinder.Bind<DeleteCharacterFromUserSignal>().To<DeleteCharacterFromUserCommand>();
+        commandBinder.Bind<DeleteCharacterFromUserResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Lists all of the characters that belong to a specific user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
+        /// </summary>
+        injectionBinder.Bind<GetAllUsersCharactersSignal>();
+        injectionBinder.Bind<GetAllUsersCharactersResponseSignal>();
+        commandBinder.Bind<GetAllUsersCharactersSignal>().To<GetAllUsersCharactersCommand>();
+        commandBinder.Bind<GetAllUsersCharactersResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Retrieves a list of ranked characters for the given statistic, starting from the indicated point in the leaderboard
+        /// </summary>
+        injectionBinder.Bind<GetCharacterLeaderboardSignal>();
+        injectionBinder.Bind<GetCharacterLeaderboardResponseSignal>();
+        commandBinder.Bind<GetCharacterLeaderboardSignal>().To<GetCharacterLeaderboardCommand>();
+        commandBinder.Bind<GetCharacterLeaderboardResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Retrieves the details of all title-specific statistics for the specific character
+        /// </summary>
+        injectionBinder.Bind<GetCharacterStatisticsSignal>();
+        injectionBinder.Bind<GetCharacterStatisticsResponseSignal>();
+        commandBinder.Bind<GetCharacterStatisticsSignal>().To<GetCharacterStatisticsCommand>();
+        commandBinder.Bind<GetCharacterStatisticsResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Retrieves a list of ranked characters for the given statistic, centered on the requested user
+        /// </summary>
+        injectionBinder.Bind<GetLeaderboardAroundCharacterSignal>();
+        injectionBinder.Bind<GetLeaderboardAroundCharacterResponseSignal>();
+        commandBinder.Bind<GetLeaderboardAroundCharacterSignal>().To<GetLeaderboardAroundCharacterCommand>();
+        commandBinder.Bind<GetLeaderboardAroundCharacterResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Retrieves a list of all of the user's characters for the given statistic.
+        /// </summary>
+        injectionBinder.Bind<GetLeaderboardForUserCharactersSignal>();
+        injectionBinder.Bind<GetLeaderboardForUserCharactersResponseSignal>();
+        commandBinder.Bind<GetLeaderboardForUserCharactersSignal>().To<GetLeaderboardForUserCharactersCommand>();
+        commandBinder.Bind<GetLeaderboardForUserCharactersResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Grants the specified character type to the user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
+        /// </summary>
+        injectionBinder.Bind<GrantCharacterToUserSignal>();
+        injectionBinder.Bind<GrantCharacterToUserResponseSignal>();
+        commandBinder.Bind<GrantCharacterToUserSignal>().To<GrantCharacterToUserCommand>();
+        commandBinder.Bind<GrantCharacterToUserResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Updates the values of the specified title-specific statistics for the specific character
+        /// </summary>
+        injectionBinder.Bind<UpdateCharacterStatisticsSignal>();
+        injectionBinder.Bind<UpdateCharacterStatisticsResponseSignal>();
+        commandBinder.Bind<UpdateCharacterStatisticsSignal>().To<UpdateCharacterStatisticsCommand>();
+        commandBinder.Bind<UpdateCharacterStatisticsResponseSignal>(); //Create empty overrideable binding.
+
+        #endregion
+
+        #region Content
+        /// <summary>
+        /// This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded, the query to retrieve the data will fail. See this post for more information:  https://community.playfab.com/hc/en-us/community/posts/205469488-How-to-upload-files-to-PlayFab-s-Content-Service.  Also, please be aware that the Content service is specifically PlayFab's CDN offering, for which standard CDN rates apply.
+        /// </summary>
+        injectionBinder.Bind<GetContentDownloadUrlSignal>();
+        injectionBinder.Bind<GetContentDownloadUrlResponseSignal>();
+        commandBinder.Bind<GetContentDownloadUrlSignal>().To<GetContentDownloadUrlCommand>();
+        commandBinder.Bind<GetContentDownloadUrlResponseSignal>(); //Create empty overrideable binding.
+
+        #endregion
+
+        #region Friend List Management
+        /// <summary>
+        /// Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+        /// </summary>
+        injectionBinder.Bind<AddFriendSignal>();
+        injectionBinder.Bind<AddFriendResponseSignal>();
+        commandBinder.Bind<AddFriendSignal>().To<AddFriendCommand>();
+        commandBinder.Bind<AddFriendResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+        /// </summary>
+        injectionBinder.Bind<GetFriendsListSignal>();
+        injectionBinder.Bind<GetFriendsListResponseSignal>();
+        commandBinder.Bind<GetFriendsListSignal>().To<GetFriendsListCommand>();
+        commandBinder.Bind<GetFriendsListResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Removes the specified friend from the the user's friend list
+        /// </summary>
+        injectionBinder.Bind<RemoveFriendSignal>();
+        injectionBinder.Bind<RemoveFriendResponseSignal>();
+        commandBinder.Bind<RemoveFriendSignal>().To<RemoveFriendCommand>();
+        commandBinder.Bind<RemoveFriendResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Updates the tag list for a specified user in the friend list of another user
+        /// </summary>
+        injectionBinder.Bind<SetFriendTagsSignal>();
+        injectionBinder.Bind<SetFriendTagsResponseSignal>();
+        commandBinder.Bind<SetFriendTagsSignal>().To<SetFriendTagsCommand>();
+        commandBinder.Bind<SetFriendTagsResponseSignal>(); //Create empty overrideable binding.
+
+        #endregion
+
+        #region Guilds
+        #endregion
+
+        #region Matchmaking
+        /// <summary>
+        /// Inform the matchmaker that a Game Server Instance is removed.
+        /// </summary>
+        injectionBinder.Bind<DeregisterGameSignal>();
+        injectionBinder.Bind<DeregisterGameResponseSignal>();
+        commandBinder.Bind<DeregisterGameSignal>().To<DeregisterGameCommand>();
+        commandBinder.Bind<DeregisterGameResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Informs the PlayFab match-making service that the user specified has left the Game Server Instance
+        /// </summary>
+        injectionBinder.Bind<NotifyMatchmakerPlayerLeftSignal>();
+        injectionBinder.Bind<NotifyMatchmakerPlayerLeftResponseSignal>();
+        commandBinder.Bind<NotifyMatchmakerPlayerLeftSignal>().To<NotifyMatchmakerPlayerLeftCommand>();
+        commandBinder.Bind<NotifyMatchmakerPlayerLeftResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Validates a Game Server session ticket and returns details about the user
+        /// </summary>
+        injectionBinder.Bind<RedeemMatchmakerTicketSignal>();
+        injectionBinder.Bind<RedeemMatchmakerTicketResponseSignal>();
+        commandBinder.Bind<RedeemMatchmakerTicketSignal>().To<RedeemMatchmakerTicketCommand>();
+        commandBinder.Bind<RedeemMatchmakerTicketResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Set the state of the indicated Game Server Instance. Also update the heartbeat for the instance.
+        /// </summary>
+        injectionBinder.Bind<RefreshGameServerInstanceHeartbeatSignal>();
+        injectionBinder.Bind<RefreshGameServerInstanceHeartbeatResponseSignal>();
+        commandBinder.Bind<RefreshGameServerInstanceHeartbeatSignal>().To<RefreshGameServerInstanceHeartbeatCommand>();
+        commandBinder.Bind<RefreshGameServerInstanceHeartbeatResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Inform the matchmaker that a new Game Server Instance is added.
+        /// </summary>
+        injectionBinder.Bind<RegisterGameSignal>();
+        injectionBinder.Bind<RegisterGameResponseSignal>();
+        commandBinder.Bind<RegisterGameSignal>().To<RegisterGameCommand>();
+        commandBinder.Bind<RegisterGameResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Sets the custom data of the indicated Game Server Instance
+        /// </summary>
+        injectionBinder.Bind<SetGameServerInstanceDataSignal>();
+        injectionBinder.Bind<SetGameServerInstanceDataResponseSignal>();
+        commandBinder.Bind<SetGameServerInstanceDataSignal>().To<SetGameServerInstanceDataCommand>();
+        commandBinder.Bind<SetGameServerInstanceDataResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Set the state of the indicated Game Server Instance.
+        /// </summary>
+        injectionBinder.Bind<SetGameServerInstanceStateSignal>();
+        injectionBinder.Bind<SetGameServerInstanceStateResponseSignal>();
+        commandBinder.Bind<SetGameServerInstanceStateSignal>().To<SetGameServerInstanceStateCommand>();
+        commandBinder.Bind<SetGameServerInstanceStateResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Set custom tags for the specified Game Server Instance
+        /// </summary>
+        injectionBinder.Bind<SetGameServerInstanceTagsSignal>();
+        injectionBinder.Bind<SetGameServerInstanceTagsResponseSignal>();
+        commandBinder.Bind<SetGameServerInstanceTagsSignal>().To<SetGameServerInstanceTagsCommand>();
+        commandBinder.Bind<SetGameServerInstanceTagsResponseSignal>(); //Create empty overrideable binding.
+
+        #endregion
+
+        #region Platform Specific Methods
+        /// <summary>
+        /// Awards the specified users the specified Steam achievements
+        /// </summary>
+        injectionBinder.Bind<AwardSteamAchievementSignal>();
+        injectionBinder.Bind<AwardSteamAchievementResponseSignal>();
+        commandBinder.Bind<AwardSteamAchievementSignal>().To<AwardSteamAchievementCommand>();
+        commandBinder.Bind<AwardSteamAchievementResponseSignal>(); //Create empty overrideable binding.
 
         #endregion
 
@@ -323,81 +595,6 @@ public class PlayFabContextManager : StrangePackage
         injectionBinder.Bind<UpdateUserReadOnlyDataResponseSignal>();
         commandBinder.Bind<UpdateUserReadOnlyDataSignal>().To<UpdateUserReadOnlyDataCommand>();
         commandBinder.Bind<UpdateUserReadOnlyDataResponseSignal>(); //Create empty overrideable binding.
-
-        #endregion
-
-        #region Title-Wide Data Management
-        /// <summary>
-        /// Retrieves the specified version of the title's catalog of virtual goods, including all defined properties
-        /// </summary>
-        injectionBinder.Bind<GetCatalogItemsSignal>();
-        injectionBinder.Bind<GetCatalogItemsResponseSignal>();
-        commandBinder.Bind<GetCatalogItemsSignal>().To<GetCatalogItemsCommand>();
-        commandBinder.Bind<GetCatalogItemsResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Retrieves the key-value store of custom publisher settings
-        /// </summary>
-        injectionBinder.Bind<GetPublisherDataSignal>();
-        injectionBinder.Bind<GetPublisherDataResponseSignal>();
-        commandBinder.Bind<GetPublisherDataSignal>().To<GetPublisherDataCommand>();
-        commandBinder.Bind<GetPublisherDataResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Retrieves the current server time
-        /// </summary>
-        injectionBinder.Bind<GetTimeSignal>();
-        injectionBinder.Bind<GetTimeResponseSignal>();
-        commandBinder.Bind<GetTimeSignal>().To<GetTimeCommand>();
-        commandBinder.Bind<GetTimeResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Retrieves the key-value store of custom title settings
-        /// </summary>
-        injectionBinder.Bind<GetTitleDataSignal>();
-        injectionBinder.Bind<GetTitleDataResponseSignal>();
-        commandBinder.Bind<GetTitleDataSignal>().To<GetTitleDataCommand>();
-        commandBinder.Bind<GetTitleDataResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Retrieves the key-value store of custom internal title settings
-        /// </summary>
-        injectionBinder.Bind<GetTitleInternalDataSignal>();
-        injectionBinder.Bind<GetTitleInternalDataResponseSignal>();
-        commandBinder.Bind<GetTitleInternalDataSignal>().To<GetTitleInternalDataCommand>();
-        commandBinder.Bind<GetTitleInternalDataResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Retrieves the title news feed, as configured in the developer portal
-        /// </summary>
-        injectionBinder.Bind<GetTitleNewsSignal>();
-        injectionBinder.Bind<GetTitleNewsResponseSignal>();
-        commandBinder.Bind<GetTitleNewsSignal>().To<GetTitleNewsCommand>();
-        commandBinder.Bind<GetTitleNewsResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Updates the key-value store of custom publisher settings
-        /// </summary>
-        injectionBinder.Bind<SetPublisherDataSignal>();
-        injectionBinder.Bind<SetPublisherDataResponseSignal>();
-        commandBinder.Bind<SetPublisherDataSignal>().To<SetPublisherDataCommand>();
-        commandBinder.Bind<SetPublisherDataResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Updates the key-value store of custom title settings
-        /// </summary>
-        injectionBinder.Bind<SetTitleDataSignal>();
-        injectionBinder.Bind<SetTitleDataResponseSignal>();
-        commandBinder.Bind<SetTitleDataSignal>().To<SetTitleDataCommand>();
-        commandBinder.Bind<SetTitleDataResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Updates the key-value store of custom title settings
-        /// </summary>
-        injectionBinder.Bind<SetTitleInternalDataSignal>();
-        injectionBinder.Bind<SetTitleInternalDataResponseSignal>();
-        commandBinder.Bind<SetTitleInternalDataSignal>().To<SetTitleInternalDataCommand>();
-        commandBinder.Bind<SetTitleInternalDataResponseSignal>(); //Create empty overrideable binding.
 
         #endregion
 
@@ -580,132 +777,65 @@ public class PlayFabContextManager : StrangePackage
 
         #endregion
 
-        #region Friend List Management
+        #region PlayStream
         /// <summary>
-        /// Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+        /// Adds a given tag to a player profile. The tag's namespace is automatically generated based on the source of the tag.
         /// </summary>
-        injectionBinder.Bind<AddFriendSignal>();
-        injectionBinder.Bind<AddFriendResponseSignal>();
-        commandBinder.Bind<AddFriendSignal>().To<AddFriendCommand>();
-        commandBinder.Bind<AddFriendResponseSignal>(); //Create empty overrideable binding.
+        injectionBinder.Bind<AddPlayerTagSignal>();
+        injectionBinder.Bind<AddPlayerTagResponseSignal>();
+        commandBinder.Bind<AddPlayerTagSignal>().To<AddPlayerTagCommand>();
+        commandBinder.Bind<AddPlayerTagResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+        /// Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
         /// </summary>
-        injectionBinder.Bind<GetFriendsListSignal>();
-        injectionBinder.Bind<GetFriendsListResponseSignal>();
-        commandBinder.Bind<GetFriendsListSignal>().To<GetFriendsListCommand>();
-        commandBinder.Bind<GetFriendsListResponseSignal>(); //Create empty overrideable binding.
+        injectionBinder.Bind<GetAllSegmentsSignal>();
+        injectionBinder.Bind<GetAllSegmentsResponseSignal>();
+        commandBinder.Bind<GetAllSegmentsSignal>().To<GetAllSegmentsCommand>();
+        commandBinder.Bind<GetAllSegmentsResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Removes the specified friend from the the user's friend list
+        /// List all segments that a player currently belongs to at this moment in time.
         /// </summary>
-        injectionBinder.Bind<RemoveFriendSignal>();
-        injectionBinder.Bind<RemoveFriendResponseSignal>();
-        commandBinder.Bind<RemoveFriendSignal>().To<RemoveFriendCommand>();
-        commandBinder.Bind<RemoveFriendResponseSignal>(); //Create empty overrideable binding.
+        injectionBinder.Bind<GetPlayerSegmentsSignal>();
+        injectionBinder.Bind<GetPlayerSegmentsResponseSignal>();
+        commandBinder.Bind<GetPlayerSegmentsSignal>().To<GetPlayerSegmentsCommand>();
+        commandBinder.Bind<GetPlayerSegmentsResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Updates the tag list for a specified user in the friend list of another user
+        /// Allows for paging through all players in a given segment. This API creates a snapshot of all player profiles that match the segment definition at the time of its creation and lives through the Total Seconds to Live, refreshing its life span on each subsequent use of the Continuation Token. Profiles that change during the course of paging will not be reflected in the results. AB Test segments are currently not supported by this operation.
         /// </summary>
-        injectionBinder.Bind<SetFriendTagsSignal>();
-        injectionBinder.Bind<SetFriendTagsResponseSignal>();
-        commandBinder.Bind<SetFriendTagsSignal>().To<SetFriendTagsCommand>();
-        commandBinder.Bind<SetFriendTagsResponseSignal>(); //Create empty overrideable binding.
+        injectionBinder.Bind<GetPlayersInSegmentSignal>();
+        injectionBinder.Bind<GetPlayersInSegmentResponseSignal>();
+        commandBinder.Bind<GetPlayersInSegmentSignal>().To<GetPlayersInSegmentCommand>();
+        commandBinder.Bind<GetPlayersInSegmentResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Get all tags with a given Namespace (optional) from a player profile.
+        /// </summary>
+        injectionBinder.Bind<GetPlayerTagsSignal>();
+        injectionBinder.Bind<GetPlayerTagsResponseSignal>();
+        commandBinder.Bind<GetPlayerTagsSignal>().To<GetPlayerTagsCommand>();
+        commandBinder.Bind<GetPlayerTagsResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
+        /// Remove a given tag from a player profile. The tag's namespace is automatically generated based on the source of the tag.
+        /// </summary>
+        injectionBinder.Bind<RemovePlayerTagSignal>();
+        injectionBinder.Bind<RemovePlayerTagResponseSignal>();
+        commandBinder.Bind<RemovePlayerTagSignal>().To<RemovePlayerTagCommand>();
+        commandBinder.Bind<RemovePlayerTagResponseSignal>(); //Create empty overrideable binding.
 
         #endregion
 
-        #region Matchmaking
+        #region Server-Side Cloud Script
         /// <summary>
-        /// Inform the matchmaker that a Game Server Instance is removed.
+        /// Executes a CloudScript function, with the 'currentPlayerId' variable set to the specified PlayFabId parameter value.
         /// </summary>
-        injectionBinder.Bind<DeregisterGameSignal>();
-        injectionBinder.Bind<DeregisterGameResponseSignal>();
-        commandBinder.Bind<DeregisterGameSignal>().To<DeregisterGameCommand>();
-        commandBinder.Bind<DeregisterGameResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Informs the PlayFab match-making service that the user specified has left the Game Server Instance
-        /// </summary>
-        injectionBinder.Bind<NotifyMatchmakerPlayerLeftSignal>();
-        injectionBinder.Bind<NotifyMatchmakerPlayerLeftResponseSignal>();
-        commandBinder.Bind<NotifyMatchmakerPlayerLeftSignal>().To<NotifyMatchmakerPlayerLeftCommand>();
-        commandBinder.Bind<NotifyMatchmakerPlayerLeftResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Validates a Game Server session ticket and returns details about the user
-        /// </summary>
-        injectionBinder.Bind<RedeemMatchmakerTicketSignal>();
-        injectionBinder.Bind<RedeemMatchmakerTicketResponseSignal>();
-        commandBinder.Bind<RedeemMatchmakerTicketSignal>().To<RedeemMatchmakerTicketCommand>();
-        commandBinder.Bind<RedeemMatchmakerTicketResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Set the state of the indicated Game Server Instance. Also update the heartbeat for the instance.
-        /// </summary>
-        injectionBinder.Bind<RefreshGameServerInstanceHeartbeatSignal>();
-        injectionBinder.Bind<RefreshGameServerInstanceHeartbeatResponseSignal>();
-        commandBinder.Bind<RefreshGameServerInstanceHeartbeatSignal>().To<RefreshGameServerInstanceHeartbeatCommand>();
-        commandBinder.Bind<RefreshGameServerInstanceHeartbeatResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Inform the matchmaker that a new Game Server Instance is added.
-        /// </summary>
-        injectionBinder.Bind<RegisterGameSignal>();
-        injectionBinder.Bind<RegisterGameResponseSignal>();
-        commandBinder.Bind<RegisterGameSignal>().To<RegisterGameCommand>();
-        commandBinder.Bind<RegisterGameResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Sets the custom data of the indicated Game Server Instance
-        /// </summary>
-        injectionBinder.Bind<SetGameServerInstanceDataSignal>();
-        injectionBinder.Bind<SetGameServerInstanceDataResponseSignal>();
-        commandBinder.Bind<SetGameServerInstanceDataSignal>().To<SetGameServerInstanceDataCommand>();
-        commandBinder.Bind<SetGameServerInstanceDataResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Set the state of the indicated Game Server Instance.
-        /// </summary>
-        injectionBinder.Bind<SetGameServerInstanceStateSignal>();
-        injectionBinder.Bind<SetGameServerInstanceStateResponseSignal>();
-        commandBinder.Bind<SetGameServerInstanceStateSignal>().To<SetGameServerInstanceStateCommand>();
-        commandBinder.Bind<SetGameServerInstanceStateResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Set custom tags for the specified Game Server Instance
-        /// </summary>
-        injectionBinder.Bind<SetGameServerInstanceTagsSignal>();
-        injectionBinder.Bind<SetGameServerInstanceTagsResponseSignal>();
-        commandBinder.Bind<SetGameServerInstanceTagsSignal>().To<SetGameServerInstanceTagsCommand>();
-        commandBinder.Bind<SetGameServerInstanceTagsResponseSignal>(); //Create empty overrideable binding.
-
-        #endregion
-
-        #region Analytics
-        /// <summary>
-        /// Writes a character-based event into PlayStream.
-        /// </summary>
-        injectionBinder.Bind<WriteCharacterEventSignal>();
-        injectionBinder.Bind<WriteCharacterEventResponseSignal>();
-        commandBinder.Bind<WriteCharacterEventSignal>().To<WriteCharacterEventCommand>();
-        commandBinder.Bind<WriteCharacterEventResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Writes a player-based event into PlayStream.
-        /// </summary>
-        injectionBinder.Bind<WritePlayerEventSignal>();
-        injectionBinder.Bind<WritePlayerEventResponseSignal>();
-        commandBinder.Bind<WritePlayerEventSignal>().To<WritePlayerEventCommand>();
-        commandBinder.Bind<WritePlayerEventResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Writes a title-based event into PlayStream.
-        /// </summary>
-        injectionBinder.Bind<WriteTitleEventSignal>();
-        injectionBinder.Bind<WriteTitleEventResponseSignal>();
-        commandBinder.Bind<WriteTitleEventSignal>().To<WriteTitleEventCommand>();
-        commandBinder.Bind<WriteTitleEventResponseSignal>(); //Create empty overrideable binding.
+        injectionBinder.Bind<ExecuteCloudScriptSignal>();
+        injectionBinder.Bind<ExecuteCloudScriptResponseSignal>();
+        commandBinder.Bind<ExecuteCloudScriptSignal>().To<ExecuteCloudScriptCommand>();
+        commandBinder.Bind<ExecuteCloudScriptResponseSignal>(); //Create empty overrideable binding.
 
         #endregion
 
@@ -760,208 +890,78 @@ public class PlayFabContextManager : StrangePackage
 
         #endregion
 
-        #region Server-Side Cloud Script
+        #region Title-Wide Data Management
         /// <summary>
-        /// Executes a CloudScript function, with the 'currentPlayerId' variable set to the specified PlayFabId parameter value.
+        /// Retrieves the specified version of the title's catalog of virtual goods, including all defined properties
         /// </summary>
-        injectionBinder.Bind<ExecuteCloudScriptSignal>();
-        injectionBinder.Bind<ExecuteCloudScriptResponseSignal>();
-        commandBinder.Bind<ExecuteCloudScriptSignal>().To<ExecuteCloudScriptCommand>();
-        commandBinder.Bind<ExecuteCloudScriptResponseSignal>(); //Create empty overrideable binding.
-
-        #endregion
-
-        #region Content
-        /// <summary>
-        /// This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded, the query to retrieve the data will fail. See this post for more information:  https://community.playfab.com/hc/en-us/community/posts/205469488-How-to-upload-files-to-PlayFab-s-Content-Service.  Also, please be aware that the Content service is specifically PlayFab's CDN offering, for which standard CDN rates apply.
-        /// </summary>
-        injectionBinder.Bind<GetContentDownloadUrlSignal>();
-        injectionBinder.Bind<GetContentDownloadUrlResponseSignal>();
-        commandBinder.Bind<GetContentDownloadUrlSignal>().To<GetContentDownloadUrlCommand>();
-        commandBinder.Bind<GetContentDownloadUrlResponseSignal>(); //Create empty overrideable binding.
-
-        #endregion
-
-        #region Characters
-        /// <summary>
-        /// Deletes the specific character ID from the specified user.
-        /// </summary>
-        injectionBinder.Bind<DeleteCharacterFromUserSignal>();
-        injectionBinder.Bind<DeleteCharacterFromUserResponseSignal>();
-        commandBinder.Bind<DeleteCharacterFromUserSignal>().To<DeleteCharacterFromUserCommand>();
-        commandBinder.Bind<DeleteCharacterFromUserResponseSignal>(); //Create empty overrideable binding.
+        injectionBinder.Bind<GetCatalogItemsSignal>();
+        injectionBinder.Bind<GetCatalogItemsResponseSignal>();
+        commandBinder.Bind<GetCatalogItemsSignal>().To<GetCatalogItemsCommand>();
+        commandBinder.Bind<GetCatalogItemsResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Lists all of the characters that belong to a specific user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
+        /// Retrieves the key-value store of custom publisher settings
         /// </summary>
-        injectionBinder.Bind<GetAllUsersCharactersSignal>();
-        injectionBinder.Bind<GetAllUsersCharactersResponseSignal>();
-        commandBinder.Bind<GetAllUsersCharactersSignal>().To<GetAllUsersCharactersCommand>();
-        commandBinder.Bind<GetAllUsersCharactersResponseSignal>(); //Create empty overrideable binding.
+        injectionBinder.Bind<GetPublisherDataSignal>();
+        injectionBinder.Bind<GetPublisherDataResponseSignal>();
+        commandBinder.Bind<GetPublisherDataSignal>().To<GetPublisherDataCommand>();
+        commandBinder.Bind<GetPublisherDataResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Retrieves a list of ranked characters for the given statistic, starting from the indicated point in the leaderboard
+        /// Retrieves the current server time
         /// </summary>
-        injectionBinder.Bind<GetCharacterLeaderboardSignal>();
-        injectionBinder.Bind<GetCharacterLeaderboardResponseSignal>();
-        commandBinder.Bind<GetCharacterLeaderboardSignal>().To<GetCharacterLeaderboardCommand>();
-        commandBinder.Bind<GetCharacterLeaderboardResponseSignal>(); //Create empty overrideable binding.
+        injectionBinder.Bind<GetTimeSignal>();
+        injectionBinder.Bind<GetTimeResponseSignal>();
+        commandBinder.Bind<GetTimeSignal>().To<GetTimeCommand>();
+        commandBinder.Bind<GetTimeResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Retrieves the details of all title-specific statistics for the specific character
+        /// Retrieves the key-value store of custom title settings
         /// </summary>
-        injectionBinder.Bind<GetCharacterStatisticsSignal>();
-        injectionBinder.Bind<GetCharacterStatisticsResponseSignal>();
-        commandBinder.Bind<GetCharacterStatisticsSignal>().To<GetCharacterStatisticsCommand>();
-        commandBinder.Bind<GetCharacterStatisticsResponseSignal>(); //Create empty overrideable binding.
+        injectionBinder.Bind<GetTitleDataSignal>();
+        injectionBinder.Bind<GetTitleDataResponseSignal>();
+        commandBinder.Bind<GetTitleDataSignal>().To<GetTitleDataCommand>();
+        commandBinder.Bind<GetTitleDataResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Retrieves a list of ranked characters for the given statistic, centered on the requested user
+        /// Retrieves the key-value store of custom internal title settings
         /// </summary>
-        injectionBinder.Bind<GetLeaderboardAroundCharacterSignal>();
-        injectionBinder.Bind<GetLeaderboardAroundCharacterResponseSignal>();
-        commandBinder.Bind<GetLeaderboardAroundCharacterSignal>().To<GetLeaderboardAroundCharacterCommand>();
-        commandBinder.Bind<GetLeaderboardAroundCharacterResponseSignal>(); //Create empty overrideable binding.
+        injectionBinder.Bind<GetTitleInternalDataSignal>();
+        injectionBinder.Bind<GetTitleInternalDataResponseSignal>();
+        commandBinder.Bind<GetTitleInternalDataSignal>().To<GetTitleInternalDataCommand>();
+        commandBinder.Bind<GetTitleInternalDataResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Retrieves a list of all of the user's characters for the given statistic.
+        /// Retrieves the title news feed, as configured in the developer portal
         /// </summary>
-        injectionBinder.Bind<GetLeaderboardForUserCharactersSignal>();
-        injectionBinder.Bind<GetLeaderboardForUserCharactersResponseSignal>();
-        commandBinder.Bind<GetLeaderboardForUserCharactersSignal>().To<GetLeaderboardForUserCharactersCommand>();
-        commandBinder.Bind<GetLeaderboardForUserCharactersResponseSignal>(); //Create empty overrideable binding.
+        injectionBinder.Bind<GetTitleNewsSignal>();
+        injectionBinder.Bind<GetTitleNewsResponseSignal>();
+        commandBinder.Bind<GetTitleNewsSignal>().To<GetTitleNewsCommand>();
+        commandBinder.Bind<GetTitleNewsResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Grants the specified character type to the user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
+        /// Updates the key-value store of custom publisher settings
         /// </summary>
-        injectionBinder.Bind<GrantCharacterToUserSignal>();
-        injectionBinder.Bind<GrantCharacterToUserResponseSignal>();
-        commandBinder.Bind<GrantCharacterToUserSignal>().To<GrantCharacterToUserCommand>();
-        commandBinder.Bind<GrantCharacterToUserResponseSignal>(); //Create empty overrideable binding.
+        injectionBinder.Bind<SetPublisherDataSignal>();
+        injectionBinder.Bind<SetPublisherDataResponseSignal>();
+        commandBinder.Bind<SetPublisherDataSignal>().To<SetPublisherDataCommand>();
+        commandBinder.Bind<SetPublisherDataResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Updates the values of the specified title-specific statistics for the specific character
+        /// Updates the key-value store of custom title settings
         /// </summary>
-        injectionBinder.Bind<UpdateCharacterStatisticsSignal>();
-        injectionBinder.Bind<UpdateCharacterStatisticsResponseSignal>();
-        commandBinder.Bind<UpdateCharacterStatisticsSignal>().To<UpdateCharacterStatisticsCommand>();
-        commandBinder.Bind<UpdateCharacterStatisticsResponseSignal>(); //Create empty overrideable binding.
-
-        #endregion
-
-        #region Character Data
-        /// <summary>
-        /// Retrieves the title-specific custom data for the user which is readable and writable by the client
-        /// </summary>
-        injectionBinder.Bind<GetCharacterDataSignal>();
-        injectionBinder.Bind<GetCharacterDataResponseSignal>();
-        commandBinder.Bind<GetCharacterDataSignal>().To<GetCharacterDataCommand>();
-        commandBinder.Bind<GetCharacterDataResponseSignal>(); //Create empty overrideable binding.
+        injectionBinder.Bind<SetTitleDataSignal>();
+        injectionBinder.Bind<SetTitleDataResponseSignal>();
+        commandBinder.Bind<SetTitleDataSignal>().To<SetTitleDataCommand>();
+        commandBinder.Bind<SetTitleDataResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
-        /// Retrieves the title-specific custom data for the user's character which cannot be accessed by the client
+        /// Updates the key-value store of custom title settings
         /// </summary>
-        injectionBinder.Bind<GetCharacterInternalDataSignal>();
-        injectionBinder.Bind<GetCharacterInternalDataResponseSignal>();
-        commandBinder.Bind<GetCharacterInternalDataSignal>().To<GetCharacterInternalDataCommand>();
-        commandBinder.Bind<GetCharacterInternalDataResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Retrieves the title-specific custom data for the user's character which can only be read by the client
-        /// </summary>
-        injectionBinder.Bind<GetCharacterReadOnlyDataSignal>();
-        injectionBinder.Bind<GetCharacterReadOnlyDataResponseSignal>();
-        commandBinder.Bind<GetCharacterReadOnlyDataSignal>().To<GetCharacterReadOnlyDataCommand>();
-        commandBinder.Bind<GetCharacterReadOnlyDataResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Updates the title-specific custom data for the user's character which is readable and writable by the client
-        /// </summary>
-        injectionBinder.Bind<UpdateCharacterDataSignal>();
-        injectionBinder.Bind<UpdateCharacterDataResponseSignal>();
-        commandBinder.Bind<UpdateCharacterDataSignal>().To<UpdateCharacterDataCommand>();
-        commandBinder.Bind<UpdateCharacterDataResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Updates the title-specific custom data for the user's character which cannot  be accessed by the client
-        /// </summary>
-        injectionBinder.Bind<UpdateCharacterInternalDataSignal>();
-        injectionBinder.Bind<UpdateCharacterInternalDataResponseSignal>();
-        commandBinder.Bind<UpdateCharacterInternalDataSignal>().To<UpdateCharacterInternalDataCommand>();
-        commandBinder.Bind<UpdateCharacterInternalDataResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Updates the title-specific custom data for the user's character which can only be read by the client
-        /// </summary>
-        injectionBinder.Bind<UpdateCharacterReadOnlyDataSignal>();
-        injectionBinder.Bind<UpdateCharacterReadOnlyDataResponseSignal>();
-        commandBinder.Bind<UpdateCharacterReadOnlyDataSignal>().To<UpdateCharacterReadOnlyDataCommand>();
-        commandBinder.Bind<UpdateCharacterReadOnlyDataResponseSignal>(); //Create empty overrideable binding.
-
-        #endregion
-
-        #region Guilds
-        #endregion
-
-        #region PlayStream
-        /// <summary>
-        /// Adds a given tag to a player profile. The tag's namespace is automatically generated based on the source of the tag.
-        /// </summary>
-        injectionBinder.Bind<AddPlayerTagSignal>();
-        injectionBinder.Bind<AddPlayerTagResponseSignal>();
-        commandBinder.Bind<AddPlayerTagSignal>().To<AddPlayerTagCommand>();
-        commandBinder.Bind<AddPlayerTagResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
-        /// </summary>
-        injectionBinder.Bind<GetAllSegmentsSignal>();
-        injectionBinder.Bind<GetAllSegmentsResponseSignal>();
-        commandBinder.Bind<GetAllSegmentsSignal>().To<GetAllSegmentsCommand>();
-        commandBinder.Bind<GetAllSegmentsResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// List all segments that a player currently belongs to at this moment in time.
-        /// </summary>
-        injectionBinder.Bind<GetPlayerSegmentsSignal>();
-        injectionBinder.Bind<GetPlayerSegmentsResponseSignal>();
-        commandBinder.Bind<GetPlayerSegmentsSignal>().To<GetPlayerSegmentsCommand>();
-        commandBinder.Bind<GetPlayerSegmentsResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Allows for paging through all players in a given segment. This API creates a snapshot of all player profiles that match the segment definition at the time of its creation and lives through the Total Seconds to Live, refreshing its life span on each subsequent use of the Continuation Token. Profiles that change during the course of paging will not be reflected in the results. AB Test segments are currently not supported by this operation.
-        /// </summary>
-        injectionBinder.Bind<GetPlayersInSegmentSignal>();
-        injectionBinder.Bind<GetPlayersInSegmentResponseSignal>();
-        commandBinder.Bind<GetPlayersInSegmentSignal>().To<GetPlayersInSegmentCommand>();
-        commandBinder.Bind<GetPlayersInSegmentResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Get all tags with a given Namespace (optional) from a player profile.
-        /// </summary>
-        injectionBinder.Bind<GetPlayerTagsSignal>();
-        injectionBinder.Bind<GetPlayerTagsResponseSignal>();
-        commandBinder.Bind<GetPlayerTagsSignal>().To<GetPlayerTagsCommand>();
-        commandBinder.Bind<GetPlayerTagsResponseSignal>(); //Create empty overrideable binding.
-
-        /// <summary>
-        /// Remove a given tag from a player profile. The tag's namespace is automatically generated based on the source of the tag.
-        /// </summary>
-        injectionBinder.Bind<RemovePlayerTagSignal>();
-        injectionBinder.Bind<RemovePlayerTagResponseSignal>();
-        commandBinder.Bind<RemovePlayerTagSignal>().To<RemovePlayerTagCommand>();
-        commandBinder.Bind<RemovePlayerTagResponseSignal>(); //Create empty overrideable binding.
-
-        #endregion
-
-        #region Platform Specific Methods
-        /// <summary>
-        /// Awards the specified users the specified Steam achievements
-        /// </summary>
-        injectionBinder.Bind<AwardSteamAchievementSignal>();
-        injectionBinder.Bind<AwardSteamAchievementResponseSignal>();
-        commandBinder.Bind<AwardSteamAchievementSignal>().To<AwardSteamAchievementCommand>();
-        commandBinder.Bind<AwardSteamAchievementResponseSignal>(); //Create empty overrideable binding.
+        injectionBinder.Bind<SetTitleInternalDataSignal>();
+        injectionBinder.Bind<SetTitleInternalDataResponseSignal>();
+        commandBinder.Bind<SetTitleInternalDataSignal>().To<SetTitleInternalDataCommand>();
+        commandBinder.Bind<SetTitleInternalDataResponseSignal>(); //Create empty overrideable binding.
 
         #endregion
     }

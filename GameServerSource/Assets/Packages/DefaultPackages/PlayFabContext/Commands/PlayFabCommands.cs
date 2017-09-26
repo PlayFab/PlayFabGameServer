@@ -94,45 +94,6 @@ public class UserInfoCommand : Command
 }
 #endregion
 
-#region Authentication
-
-/// <summary>
-/// Validated a client's session ticket, and if successful, returns details for that user
-/// </summary>
-public class AuthenticateSessionTicketCommand : Command
-{
-    [Inject] public AuthenticateSessionTicketResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.AuthenticateSessionTicketRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.AuthenticateSessionTicket(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Sets the player's secret if it is not already set. Player secrets are used to sign API requests. To reset a player's secret use the Admin or Server API method SetPlayerSecret.
-/// </summary>
-public class SetPlayerSecretCommand : Command
-{
-    [Inject] public SetPlayerSecretResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.SetPlayerSecretRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.SetPlayerSecret(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-#endregion
-
 #region Account Management
 
 /// <summary>
@@ -326,6 +287,627 @@ public class UpdateBansCommand : Command
     {
         Retain();
         PlayFabServerAPI.UpdateBans(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+#endregion
+
+#region Analytics
+
+/// <summary>
+/// Writes a character-based event into PlayStream.
+/// </summary>
+public class WriteCharacterEventCommand : Command
+{
+    [Inject] public WriteCharacterEventResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.WriteServerCharacterEventRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.WriteCharacterEvent(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Writes a player-based event into PlayStream.
+/// </summary>
+public class WritePlayerEventCommand : Command
+{
+    [Inject] public WritePlayerEventResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.WriteServerPlayerEventRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.WritePlayerEvent(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Writes a title-based event into PlayStream.
+/// </summary>
+public class WriteTitleEventCommand : Command
+{
+    [Inject] public WriteTitleEventResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.WriteTitleEventRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.WriteTitleEvent(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+#endregion
+
+#region Authentication
+
+/// <summary>
+/// Validated a client's session ticket, and if successful, returns details for that user
+/// </summary>
+public class AuthenticateSessionTicketCommand : Command
+{
+    [Inject] public AuthenticateSessionTicketResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.AuthenticateSessionTicketRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.AuthenticateSessionTicket(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Sets the player's secret if it is not already set. Player secrets are used to sign API requests. To reset a player's secret use the Admin or Server API method SetPlayerSecret.
+/// </summary>
+public class SetPlayerSecretCommand : Command
+{
+    [Inject] public SetPlayerSecretResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.SetPlayerSecretRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.SetPlayerSecret(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+#endregion
+
+#region Character Data
+
+/// <summary>
+/// Retrieves the title-specific custom data for the user which is readable and writable by the client
+/// </summary>
+public class GetCharacterDataCommand : Command
+{
+    [Inject] public GetCharacterDataResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetCharacterDataRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.GetCharacterData(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Retrieves the title-specific custom data for the user's character which cannot be accessed by the client
+/// </summary>
+public class GetCharacterInternalDataCommand : Command
+{
+    [Inject] public GetCharacterInternalDataResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetCharacterDataRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.GetCharacterInternalData(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Retrieves the title-specific custom data for the user's character which can only be read by the client
+/// </summary>
+public class GetCharacterReadOnlyDataCommand : Command
+{
+    [Inject] public GetCharacterReadOnlyDataResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetCharacterDataRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.GetCharacterReadOnlyData(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Updates the title-specific custom data for the user's character which is readable and writable by the client
+/// </summary>
+public class UpdateCharacterDataCommand : Command
+{
+    [Inject] public UpdateCharacterDataResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.UpdateCharacterDataRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.UpdateCharacterData(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Updates the title-specific custom data for the user's character which cannot  be accessed by the client
+/// </summary>
+public class UpdateCharacterInternalDataCommand : Command
+{
+    [Inject] public UpdateCharacterInternalDataResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.UpdateCharacterDataRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.UpdateCharacterInternalData(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Updates the title-specific custom data for the user's character which can only be read by the client
+/// </summary>
+public class UpdateCharacterReadOnlyDataCommand : Command
+{
+    [Inject] public UpdateCharacterReadOnlyDataResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.UpdateCharacterDataRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.UpdateCharacterReadOnlyData(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+#endregion
+
+#region Characters
+
+/// <summary>
+/// Deletes the specific character ID from the specified user.
+/// </summary>
+public class DeleteCharacterFromUserCommand : Command
+{
+    [Inject] public DeleteCharacterFromUserResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.DeleteCharacterFromUserRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.DeleteCharacterFromUser(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Lists all of the characters that belong to a specific user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
+/// </summary>
+public class GetAllUsersCharactersCommand : Command
+{
+    [Inject] public GetAllUsersCharactersResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.ListUsersCharactersRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.GetAllUsersCharacters(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Retrieves a list of ranked characters for the given statistic, starting from the indicated point in the leaderboard
+/// </summary>
+public class GetCharacterLeaderboardCommand : Command
+{
+    [Inject] public GetCharacterLeaderboardResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetCharacterLeaderboardRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.GetCharacterLeaderboard(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Retrieves the details of all title-specific statistics for the specific character
+/// </summary>
+public class GetCharacterStatisticsCommand : Command
+{
+    [Inject] public GetCharacterStatisticsResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetCharacterStatisticsRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.GetCharacterStatistics(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Retrieves a list of ranked characters for the given statistic, centered on the requested user
+/// </summary>
+public class GetLeaderboardAroundCharacterCommand : Command
+{
+    [Inject] public GetLeaderboardAroundCharacterResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetLeaderboardAroundCharacterRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.GetLeaderboardAroundCharacter(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Retrieves a list of all of the user's characters for the given statistic.
+/// </summary>
+public class GetLeaderboardForUserCharactersCommand : Command
+{
+    [Inject] public GetLeaderboardForUserCharactersResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetLeaderboardForUsersCharactersRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.GetLeaderboardForUserCharacters(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Grants the specified character type to the user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
+/// </summary>
+public class GrantCharacterToUserCommand : Command
+{
+    [Inject] public GrantCharacterToUserResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GrantCharacterToUserRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.GrantCharacterToUser(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Updates the values of the specified title-specific statistics for the specific character
+/// </summary>
+public class UpdateCharacterStatisticsCommand : Command
+{
+    [Inject] public UpdateCharacterStatisticsResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.UpdateCharacterStatisticsRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.UpdateCharacterStatistics(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+#endregion
+
+#region Content
+
+/// <summary>
+/// This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded, the query to retrieve the data will fail. See this post for more information:  https://community.playfab.com/hc/en-us/community/posts/205469488-How-to-upload-files-to-PlayFab-s-Content-Service.  Also, please be aware that the Content service is specifically PlayFab's CDN offering, for which standard CDN rates apply.
+/// </summary>
+public class GetContentDownloadUrlCommand : Command
+{
+    [Inject] public GetContentDownloadUrlResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetContentDownloadUrlRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.GetContentDownloadUrl(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+#endregion
+
+#region Friend List Management
+
+/// <summary>
+/// Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+/// </summary>
+public class AddFriendCommand : Command
+{
+    [Inject] public AddFriendResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.AddFriendRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.AddFriend(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+/// </summary>
+public class GetFriendsListCommand : Command
+{
+    [Inject] public GetFriendsListResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetFriendsListRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.GetFriendsList(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Removes the specified friend from the the user's friend list
+/// </summary>
+public class RemoveFriendCommand : Command
+{
+    [Inject] public RemoveFriendResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.RemoveFriendRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.RemoveFriend(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Updates the tag list for a specified user in the friend list of another user
+/// </summary>
+public class SetFriendTagsCommand : Command
+{
+    [Inject] public SetFriendTagsResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.SetFriendTagsRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.SetFriendTags(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+#endregion
+
+#region Guilds
+#endregion
+
+#region Matchmaking
+
+/// <summary>
+/// Inform the matchmaker that a Game Server Instance is removed.
+/// </summary>
+public class DeregisterGameCommand : Command
+{
+    [Inject] public DeregisterGameResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.DeregisterGameRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.DeregisterGame(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Informs the PlayFab match-making service that the user specified has left the Game Server Instance
+/// </summary>
+public class NotifyMatchmakerPlayerLeftCommand : Command
+{
+    [Inject] public NotifyMatchmakerPlayerLeftResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.NotifyMatchmakerPlayerLeftRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.NotifyMatchmakerPlayerLeft(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Validates a Game Server session ticket and returns details about the user
+/// </summary>
+public class RedeemMatchmakerTicketCommand : Command
+{
+    [Inject] public RedeemMatchmakerTicketResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.RedeemMatchmakerTicketRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.RedeemMatchmakerTicket(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Set the state of the indicated Game Server Instance. Also update the heartbeat for the instance.
+/// </summary>
+public class RefreshGameServerInstanceHeartbeatCommand : Command
+{
+    [Inject] public RefreshGameServerInstanceHeartbeatResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.RefreshGameServerInstanceHeartbeatRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.RefreshGameServerInstanceHeartbeat(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Inform the matchmaker that a new Game Server Instance is added.
+/// </summary>
+public class RegisterGameCommand : Command
+{
+    [Inject] public RegisterGameResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.RegisterGameRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.RegisterGame(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Sets the custom data of the indicated Game Server Instance
+/// </summary>
+public class SetGameServerInstanceDataCommand : Command
+{
+    [Inject] public SetGameServerInstanceDataResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.SetGameServerInstanceDataRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.SetGameServerInstanceData(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Set the state of the indicated Game Server Instance.
+/// </summary>
+public class SetGameServerInstanceStateCommand : Command
+{
+    [Inject] public SetGameServerInstanceStateResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.SetGameServerInstanceStateRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.SetGameServerInstanceState(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
+/// Set custom tags for the specified Game Server Instance
+/// </summary>
+public class SetGameServerInstanceTagsCommand : Command
+{
+    [Inject] public SetGameServerInstanceTagsResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.SetGameServerInstanceTagsRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.SetGameServerInstanceTags(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+#endregion
+
+#region Platform Specific Methods
+
+/// <summary>
+/// Awards the specified users the specified Steam achievements
+/// </summary>
+public class AwardSteamAchievementCommand : Command
+{
+    [Inject] public AwardSteamAchievementResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.AwardSteamAchievementRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.AwardSteamAchievement(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
@@ -689,171 +1271,6 @@ public class UpdateUserReadOnlyDataCommand : Command
     {
         Retain();
         PlayFabServerAPI.UpdateUserReadOnlyData(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-#endregion
-
-#region Title-Wide Data Management
-
-/// <summary>
-/// Retrieves the specified version of the title's catalog of virtual goods, including all defined properties
-/// </summary>
-public class GetCatalogItemsCommand : Command
-{
-    [Inject] public GetCatalogItemsResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetCatalogItemsRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.GetCatalogItems(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Retrieves the key-value store of custom publisher settings
-/// </summary>
-public class GetPublisherDataCommand : Command
-{
-    [Inject] public GetPublisherDataResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetPublisherDataRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.GetPublisherData(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Retrieves the current server time
-/// </summary>
-public class GetTimeCommand : Command
-{
-    [Inject] public GetTimeResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetTimeRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.GetTime(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Retrieves the key-value store of custom title settings
-/// </summary>
-public class GetTitleDataCommand : Command
-{
-    [Inject] public GetTitleDataResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetTitleDataRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.GetTitleData(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Retrieves the key-value store of custom internal title settings
-/// </summary>
-public class GetTitleInternalDataCommand : Command
-{
-    [Inject] public GetTitleInternalDataResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetTitleDataRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.GetTitleInternalData(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Retrieves the title news feed, as configured in the developer portal
-/// </summary>
-public class GetTitleNewsCommand : Command
-{
-    [Inject] public GetTitleNewsResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetTitleNewsRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.GetTitleNews(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Updates the key-value store of custom publisher settings
-/// </summary>
-public class SetPublisherDataCommand : Command
-{
-    [Inject] public SetPublisherDataResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.SetPublisherDataRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.SetPublisherData(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Updates the key-value store of custom title settings
-/// </summary>
-public class SetTitleDataCommand : Command
-{
-    [Inject] public SetTitleDataResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.SetTitleDataRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.SetTitleData(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Updates the key-value store of custom title settings
-/// </summary>
-public class SetTitleInternalDataCommand : Command
-{
-    [Inject] public SetTitleInternalDataResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.SetTitleDataRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.SetTitleInternalData(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
@@ -1261,19 +1678,19 @@ public class UpdateUserInventoryItemCustomDataCommand : Command
 }
 #endregion
 
-#region Friend List Management
+#region PlayStream
 
 /// <summary>
-/// Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+/// Adds a given tag to a player profile. The tag's namespace is automatically generated based on the source of the tag.
 /// </summary>
-public class AddFriendCommand : Command
+public class AddPlayerTagCommand : Command
 {
-    [Inject] public AddFriendResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.AddFriendRequest Request { get; set; }
+    [Inject] public AddPlayerTagResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.AddPlayerTagRequest Request { get; set; }
     public override void Execute()
     {
         Retain();
-        PlayFabServerAPI.AddFriend(Request, (result) =>
+        PlayFabServerAPI.AddPlayerTag(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
@@ -1282,16 +1699,16 @@ public class AddFriendCommand : Command
 }
 
 /// <summary>
-/// Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+/// Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
 /// </summary>
-public class GetFriendsListCommand : Command
+public class GetAllSegmentsCommand : Command
 {
-    [Inject] public GetFriendsListResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetFriendsListRequest Request { get; set; }
+    [Inject] public GetAllSegmentsResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetAllSegmentsRequest Request { get; set; }
     public override void Execute()
     {
         Retain();
-        PlayFabServerAPI.GetFriendsList(Request, (result) =>
+        PlayFabServerAPI.GetAllSegments(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
@@ -1300,16 +1717,16 @@ public class GetFriendsListCommand : Command
 }
 
 /// <summary>
-/// Removes the specified friend from the the user's friend list
+/// List all segments that a player currently belongs to at this moment in time.
 /// </summary>
-public class RemoveFriendCommand : Command
+public class GetPlayerSegmentsCommand : Command
 {
-    [Inject] public RemoveFriendResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.RemoveFriendRequest Request { get; set; }
+    [Inject] public GetPlayerSegmentsResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetPlayersSegmentsRequest Request { get; set; }
     public override void Execute()
     {
         Retain();
-        PlayFabServerAPI.RemoveFriend(Request, (result) =>
+        PlayFabServerAPI.GetPlayerSegments(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
@@ -1318,37 +1735,16 @@ public class RemoveFriendCommand : Command
 }
 
 /// <summary>
-/// Updates the tag list for a specified user in the friend list of another user
+/// Allows for paging through all players in a given segment. This API creates a snapshot of all player profiles that match the segment definition at the time of its creation and lives through the Total Seconds to Live, refreshing its life span on each subsequent use of the Continuation Token. Profiles that change during the course of paging will not be reflected in the results. AB Test segments are currently not supported by this operation.
 /// </summary>
-public class SetFriendTagsCommand : Command
+public class GetPlayersInSegmentCommand : Command
 {
-    [Inject] public SetFriendTagsResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.SetFriendTagsRequest Request { get; set; }
+    [Inject] public GetPlayersInSegmentResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetPlayersInSegmentRequest Request { get; set; }
     public override void Execute()
     {
         Retain();
-        PlayFabServerAPI.SetFriendTags(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-#endregion
-
-#region Matchmaking
-
-/// <summary>
-/// Inform the matchmaker that a Game Server Instance is removed.
-/// </summary>
-public class DeregisterGameCommand : Command
-{
-    [Inject] public DeregisterGameResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.DeregisterGameRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.DeregisterGame(Request, (result) =>
+        PlayFabServerAPI.GetPlayersInSegment(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
@@ -1357,16 +1753,16 @@ public class DeregisterGameCommand : Command
 }
 
 /// <summary>
-/// Informs the PlayFab match-making service that the user specified has left the Game Server Instance
+/// Get all tags with a given Namespace (optional) from a player profile.
 /// </summary>
-public class NotifyMatchmakerPlayerLeftCommand : Command
+public class GetPlayerTagsCommand : Command
 {
-    [Inject] public NotifyMatchmakerPlayerLeftResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.NotifyMatchmakerPlayerLeftRequest Request { get; set; }
+    [Inject] public GetPlayerTagsResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetPlayerTagsRequest Request { get; set; }
     public override void Execute()
     {
         Retain();
-        PlayFabServerAPI.NotifyMatchmakerPlayerLeft(Request, (result) =>
+        PlayFabServerAPI.GetPlayerTags(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
@@ -1375,106 +1771,16 @@ public class NotifyMatchmakerPlayerLeftCommand : Command
 }
 
 /// <summary>
-/// Validates a Game Server session ticket and returns details about the user
+/// Remove a given tag from a player profile. The tag's namespace is automatically generated based on the source of the tag.
 /// </summary>
-public class RedeemMatchmakerTicketCommand : Command
+public class RemovePlayerTagCommand : Command
 {
-    [Inject] public RedeemMatchmakerTicketResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.RedeemMatchmakerTicketRequest Request { get; set; }
+    [Inject] public RemovePlayerTagResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.RemovePlayerTagRequest Request { get; set; }
     public override void Execute()
     {
         Retain();
-        PlayFabServerAPI.RedeemMatchmakerTicket(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Set the state of the indicated Game Server Instance. Also update the heartbeat for the instance.
-/// </summary>
-public class RefreshGameServerInstanceHeartbeatCommand : Command
-{
-    [Inject] public RefreshGameServerInstanceHeartbeatResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.RefreshGameServerInstanceHeartbeatRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.RefreshGameServerInstanceHeartbeat(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Inform the matchmaker that a new Game Server Instance is added.
-/// </summary>
-public class RegisterGameCommand : Command
-{
-    [Inject] public RegisterGameResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.RegisterGameRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.RegisterGame(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Sets the custom data of the indicated Game Server Instance
-/// </summary>
-public class SetGameServerInstanceDataCommand : Command
-{
-    [Inject] public SetGameServerInstanceDataResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.SetGameServerInstanceDataRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.SetGameServerInstanceData(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Set the state of the indicated Game Server Instance.
-/// </summary>
-public class SetGameServerInstanceStateCommand : Command
-{
-    [Inject] public SetGameServerInstanceStateResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.SetGameServerInstanceStateRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.SetGameServerInstanceState(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Set custom tags for the specified Game Server Instance
-/// </summary>
-public class SetGameServerInstanceTagsCommand : Command
-{
-    [Inject] public SetGameServerInstanceTagsResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.SetGameServerInstanceTagsRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.SetGameServerInstanceTags(Request, (result) =>
+        PlayFabServerAPI.RemovePlayerTag(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
@@ -1483,55 +1789,19 @@ public class SetGameServerInstanceTagsCommand : Command
 }
 #endregion
 
-#region Analytics
+#region Server-Side Cloud Script
 
 /// <summary>
-/// Writes a character-based event into PlayStream.
+/// Executes a CloudScript function, with the 'currentPlayerId' variable set to the specified PlayFabId parameter value.
 /// </summary>
-public class WriteCharacterEventCommand : Command
+public class ExecuteCloudScriptCommand : Command
 {
-    [Inject] public WriteCharacterEventResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.WriteServerCharacterEventRequest Request { get; set; }
+    [Inject] public ExecuteCloudScriptResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.ExecuteCloudScriptServerRequest Request { get; set; }
     public override void Execute()
     {
         Retain();
-        PlayFabServerAPI.WriteCharacterEvent(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Writes a player-based event into PlayStream.
-/// </summary>
-public class WritePlayerEventCommand : Command
-{
-    [Inject] public WritePlayerEventResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.WriteServerPlayerEventRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.WritePlayerEvent(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Writes a title-based event into PlayStream.
-/// </summary>
-public class WriteTitleEventCommand : Command
-{
-    [Inject] public WriteTitleEventResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.WriteTitleEventRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.WriteTitleEvent(Request, (result) =>
+        PlayFabServerAPI.ExecuteCloudScript(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
@@ -1651,61 +1921,19 @@ public class UpdateSharedGroupDataCommand : Command
 }
 #endregion
 
-#region Server-Side Cloud Script
+#region Title-Wide Data Management
 
 /// <summary>
-/// Executes a CloudScript function, with the 'currentPlayerId' variable set to the specified PlayFabId parameter value.
+/// Retrieves the specified version of the title's catalog of virtual goods, including all defined properties
 /// </summary>
-public class ExecuteCloudScriptCommand : Command
+public class GetCatalogItemsCommand : Command
 {
-    [Inject] public ExecuteCloudScriptResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.ExecuteCloudScriptServerRequest Request { get; set; }
+    [Inject] public GetCatalogItemsResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetCatalogItemsRequest Request { get; set; }
     public override void Execute()
     {
         Retain();
-        PlayFabServerAPI.ExecuteCloudScript(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-#endregion
-
-#region Content
-
-/// <summary>
-/// This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded, the query to retrieve the data will fail. See this post for more information:  https://community.playfab.com/hc/en-us/community/posts/205469488-How-to-upload-files-to-PlayFab-s-Content-Service.  Also, please be aware that the Content service is specifically PlayFab's CDN offering, for which standard CDN rates apply.
-/// </summary>
-public class GetContentDownloadUrlCommand : Command
-{
-    [Inject] public GetContentDownloadUrlResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetContentDownloadUrlRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.GetContentDownloadUrl(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-#endregion
-
-#region Characters
-
-/// <summary>
-/// Deletes the specific character ID from the specified user.
-/// </summary>
-public class DeleteCharacterFromUserCommand : Command
-{
-    [Inject] public DeleteCharacterFromUserResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.DeleteCharacterFromUserRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.DeleteCharacterFromUser(Request, (result) =>
+        PlayFabServerAPI.GetCatalogItems(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
@@ -1714,16 +1942,16 @@ public class DeleteCharacterFromUserCommand : Command
 }
 
 /// <summary>
-/// Lists all of the characters that belong to a specific user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
+/// Retrieves the key-value store of custom publisher settings
 /// </summary>
-public class GetAllUsersCharactersCommand : Command
+public class GetPublisherDataCommand : Command
 {
-    [Inject] public GetAllUsersCharactersResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.ListUsersCharactersRequest Request { get; set; }
+    [Inject] public GetPublisherDataResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetPublisherDataRequest Request { get; set; }
     public override void Execute()
     {
         Retain();
-        PlayFabServerAPI.GetAllUsersCharacters(Request, (result) =>
+        PlayFabServerAPI.GetPublisherData(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
@@ -1732,16 +1960,16 @@ public class GetAllUsersCharactersCommand : Command
 }
 
 /// <summary>
-/// Retrieves a list of ranked characters for the given statistic, starting from the indicated point in the leaderboard
+/// Retrieves the current server time
 /// </summary>
-public class GetCharacterLeaderboardCommand : Command
+public class GetTimeCommand : Command
 {
-    [Inject] public GetCharacterLeaderboardResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetCharacterLeaderboardRequest Request { get; set; }
+    [Inject] public GetTimeResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetTimeRequest Request { get; set; }
     public override void Execute()
     {
         Retain();
-        PlayFabServerAPI.GetCharacterLeaderboard(Request, (result) =>
+        PlayFabServerAPI.GetTime(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
@@ -1750,16 +1978,16 @@ public class GetCharacterLeaderboardCommand : Command
 }
 
 /// <summary>
-/// Retrieves the details of all title-specific statistics for the specific character
+/// Retrieves the key-value store of custom title settings
 /// </summary>
-public class GetCharacterStatisticsCommand : Command
+public class GetTitleDataCommand : Command
 {
-    [Inject] public GetCharacterStatisticsResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetCharacterStatisticsRequest Request { get; set; }
+    [Inject] public GetTitleDataResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetTitleDataRequest Request { get; set; }
     public override void Execute()
     {
         Retain();
-        PlayFabServerAPI.GetCharacterStatistics(Request, (result) =>
+        PlayFabServerAPI.GetTitleData(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
@@ -1768,16 +1996,16 @@ public class GetCharacterStatisticsCommand : Command
 }
 
 /// <summary>
-/// Retrieves a list of ranked characters for the given statistic, centered on the requested user
+/// Retrieves the key-value store of custom internal title settings
 /// </summary>
-public class GetLeaderboardAroundCharacterCommand : Command
+public class GetTitleInternalDataCommand : Command
 {
-    [Inject] public GetLeaderboardAroundCharacterResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetLeaderboardAroundCharacterRequest Request { get; set; }
+    [Inject] public GetTitleInternalDataResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetTitleDataRequest Request { get; set; }
     public override void Execute()
     {
         Retain();
-        PlayFabServerAPI.GetLeaderboardAroundCharacter(Request, (result) =>
+        PlayFabServerAPI.GetTitleInternalData(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
@@ -1786,16 +2014,16 @@ public class GetLeaderboardAroundCharacterCommand : Command
 }
 
 /// <summary>
-/// Retrieves a list of all of the user's characters for the given statistic.
+/// Retrieves the title news feed, as configured in the developer portal
 /// </summary>
-public class GetLeaderboardForUserCharactersCommand : Command
+public class GetTitleNewsCommand : Command
 {
-    [Inject] public GetLeaderboardForUserCharactersResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetLeaderboardForUsersCharactersRequest Request { get; set; }
+    [Inject] public GetTitleNewsResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.GetTitleNewsRequest Request { get; set; }
     public override void Execute()
     {
         Retain();
-        PlayFabServerAPI.GetLeaderboardForUserCharacters(Request, (result) =>
+        PlayFabServerAPI.GetTitleNews(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
@@ -1804,16 +2032,16 @@ public class GetLeaderboardForUserCharactersCommand : Command
 }
 
 /// <summary>
-/// Grants the specified character type to the user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
+/// Updates the key-value store of custom publisher settings
 /// </summary>
-public class GrantCharacterToUserCommand : Command
+public class SetPublisherDataCommand : Command
 {
-    [Inject] public GrantCharacterToUserResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GrantCharacterToUserRequest Request { get; set; }
+    [Inject] public SetPublisherDataResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.SetPublisherDataRequest Request { get; set; }
     public override void Execute()
     {
         Retain();
-        PlayFabServerAPI.GrantCharacterToUser(Request, (result) =>
+        PlayFabServerAPI.SetPublisherData(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
@@ -1822,37 +2050,16 @@ public class GrantCharacterToUserCommand : Command
 }
 
 /// <summary>
-/// Updates the values of the specified title-specific statistics for the specific character
+/// Updates the key-value store of custom title settings
 /// </summary>
-public class UpdateCharacterStatisticsCommand : Command
+public class SetTitleDataCommand : Command
 {
-    [Inject] public UpdateCharacterStatisticsResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.UpdateCharacterStatisticsRequest Request { get; set; }
+    [Inject] public SetTitleDataResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.SetTitleDataRequest Request { get; set; }
     public override void Execute()
     {
         Retain();
-        PlayFabServerAPI.UpdateCharacterStatistics(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-#endregion
-
-#region Character Data
-
-/// <summary>
-/// Retrieves the title-specific custom data for the user which is readable and writable by the client
-/// </summary>
-public class GetCharacterDataCommand : Command
-{
-    [Inject] public GetCharacterDataResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetCharacterDataRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.GetCharacterData(Request, (result) =>
+        PlayFabServerAPI.SetTitleData(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
@@ -1861,223 +2068,16 @@ public class GetCharacterDataCommand : Command
 }
 
 /// <summary>
-/// Retrieves the title-specific custom data for the user's character which cannot be accessed by the client
+/// Updates the key-value store of custom title settings
 /// </summary>
-public class GetCharacterInternalDataCommand : Command
+public class SetTitleInternalDataCommand : Command
 {
-    [Inject] public GetCharacterInternalDataResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetCharacterDataRequest Request { get; set; }
+    [Inject] public SetTitleInternalDataResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.SetTitleDataRequest Request { get; set; }
     public override void Execute()
     {
         Retain();
-        PlayFabServerAPI.GetCharacterInternalData(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Retrieves the title-specific custom data for the user's character which can only be read by the client
-/// </summary>
-public class GetCharacterReadOnlyDataCommand : Command
-{
-    [Inject] public GetCharacterReadOnlyDataResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetCharacterDataRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.GetCharacterReadOnlyData(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Updates the title-specific custom data for the user's character which is readable and writable by the client
-/// </summary>
-public class UpdateCharacterDataCommand : Command
-{
-    [Inject] public UpdateCharacterDataResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.UpdateCharacterDataRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.UpdateCharacterData(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Updates the title-specific custom data for the user's character which cannot  be accessed by the client
-/// </summary>
-public class UpdateCharacterInternalDataCommand : Command
-{
-    [Inject] public UpdateCharacterInternalDataResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.UpdateCharacterDataRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.UpdateCharacterInternalData(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Updates the title-specific custom data for the user's character which can only be read by the client
-/// </summary>
-public class UpdateCharacterReadOnlyDataCommand : Command
-{
-    [Inject] public UpdateCharacterReadOnlyDataResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.UpdateCharacterDataRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.UpdateCharacterReadOnlyData(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-#endregion
-
-#region Guilds
-#endregion
-
-#region PlayStream
-
-/// <summary>
-/// Adds a given tag to a player profile. The tag's namespace is automatically generated based on the source of the tag.
-/// </summary>
-public class AddPlayerTagCommand : Command
-{
-    [Inject] public AddPlayerTagResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.AddPlayerTagRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.AddPlayerTag(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
-/// </summary>
-public class GetAllSegmentsCommand : Command
-{
-    [Inject] public GetAllSegmentsResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetAllSegmentsRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.GetAllSegments(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// List all segments that a player currently belongs to at this moment in time.
-/// </summary>
-public class GetPlayerSegmentsCommand : Command
-{
-    [Inject] public GetPlayerSegmentsResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetPlayersSegmentsRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.GetPlayerSegments(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Allows for paging through all players in a given segment. This API creates a snapshot of all player profiles that match the segment definition at the time of its creation and lives through the Total Seconds to Live, refreshing its life span on each subsequent use of the Continuation Token. Profiles that change during the course of paging will not be reflected in the results. AB Test segments are currently not supported by this operation.
-/// </summary>
-public class GetPlayersInSegmentCommand : Command
-{
-    [Inject] public GetPlayersInSegmentResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetPlayersInSegmentRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.GetPlayersInSegment(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Get all tags with a given Namespace (optional) from a player profile.
-/// </summary>
-public class GetPlayerTagsCommand : Command
-{
-    [Inject] public GetPlayerTagsResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.GetPlayerTagsRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.GetPlayerTags(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-
-/// <summary>
-/// Remove a given tag from a player profile. The tag's namespace is automatically generated based on the source of the tag.
-/// </summary>
-public class RemovePlayerTagCommand : Command
-{
-    [Inject] public RemovePlayerTagResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.RemovePlayerTagRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.RemovePlayerTag(Request, (result) =>
-        {
-            Release();
-            ResponseSignal.Dispatch(result);
-        }, PlayFabErrorHandler.HandlePlayFabError);
-    }
-}
-#endregion
-
-#region Platform Specific Methods
-
-/// <summary>
-/// Awards the specified users the specified Steam achievements
-/// </summary>
-public class AwardSteamAchievementCommand : Command
-{
-    [Inject] public AwardSteamAchievementResponseSignal ResponseSignal { get; set; }
-    [Inject] public PlayFab.ServerModels.AwardSteamAchievementRequest Request { get; set; }
-    public override void Execute()
-    {
-        Retain();
-        PlayFabServerAPI.AwardSteamAchievement(Request, (result) =>
+        PlayFabServerAPI.SetTitleInternalData(Request, (result) =>
         {
             Release();
             ResponseSignal.Dispatch(result);
