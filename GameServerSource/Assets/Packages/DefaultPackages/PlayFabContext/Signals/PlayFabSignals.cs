@@ -517,11 +517,6 @@ public class UpdateUserInventoryItemCustomDataSignal : Signal<PlayFab.ServerMode
 public class AddPlayerTagSignal : Signal<PlayFab.ServerModels.AddPlayerTagRequest> { }
 
 /// <summary>
-/// Retrieve a list of all PlayStream actions groups.
-/// </summary>
-public class GetAllActionGroupsSignal : Signal<PlayFab.ServerModels.GetAllActionGroupsRequest> { }
-
-/// <summary>
 /// Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
 /// </summary>
 public class GetAllSegmentsSignal : Signal<PlayFab.ServerModels.GetAllSegmentsRequest> { }
@@ -1157,11 +1152,6 @@ public class UpdateUserInventoryItemCustomDataResponseSignal : Signal<PlayFab.Se
 /// Adds a given tag to a player profile. The tag's namespace is automatically generated based on the source of the tag.
 /// </summary>
 public class AddPlayerTagResponseSignal : Signal<PlayFab.ServerModels.AddPlayerTagResult> { }
-
-/// <summary>
-/// Retrieve a list of all PlayStream actions groups.
-/// </summary>
-public class GetAllActionGroupsResponseSignal : Signal<PlayFab.ServerModels.GetAllActionGroupsResult> { }
 
 /// <summary>
 /// Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
