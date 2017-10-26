@@ -25,7 +25,8 @@ public class PlayerLeftSignal : Signal<PlayFab.MatchmakerModels.PlayerLeftReques
 public class StartGameSignal : Signal<PlayFab.MatchmakerModels.StartGameRequest> { }
 
 /// <summary>
-/// Retrieves the relevant details for a specified user, which the external match-making service can then use to compute effective matches
+/// Retrieves the relevant details for a specified user, which the external match-making service can then use to compute
+/// effective matches
 /// </summary>
 public class UserInfoSignal : Signal<PlayFab.MatchmakerModels.UserInfoRequest> { }
 
@@ -49,7 +50,8 @@ public class GetPlayerProfileSignal : Signal<PlayFab.ServerModels.GetPlayerProfi
 public class GetPlayFabIDsFromFacebookIDsSignal : Signal<PlayFab.ServerModels.GetPlayFabIDsFromFacebookIDsRequest> { }
 
 /// <summary>
-/// Retrieves the unique PlayFab identifiers for the given set of Steam identifiers. The Steam identifiers  are the profile IDs for the user accounts, available as SteamId in the Steamworks Community API calls.
+/// Retrieves the unique PlayFab identifiers for the given set of Steam identifiers. The Steam identifiers  are the profile
+/// IDs for the user accounts, available as SteamId in the Steamworks Community API calls.
 /// </summary>
 public class GetPlayFabIDsFromSteamIDsSignal : Signal<PlayFab.ServerModels.GetPlayFabIDsFromSteamIDsRequest> { }
 
@@ -74,7 +76,8 @@ public class RevokeAllBansForUserSignal : Signal<PlayFab.ServerModels.RevokeAllB
 public class RevokeBansSignal : Signal<PlayFab.ServerModels.RevokeBansRequest> { }
 
 /// <summary>
-/// Sends an iOS/Android Push Notification to a specific user, if that user's device has been configured for Push Notifications in PlayFab. If a user has linked both Android and iOS devices, both will be notified.
+/// Sends an iOS/Android Push Notification to a specific user, if that user's device has been configured for Push
+/// Notifications in PlayFab. If a user has linked both Android and iOS devices, both will be notified.
 /// </summary>
 public class SendPushNotificationSignal : Signal<PlayFab.ServerModels.SendPushNotificationRequest> { }
 
@@ -117,7 +120,8 @@ public class WriteTitleEventSignal : Signal<PlayFab.ServerModels.WriteTitleEvent
 public class AuthenticateSessionTicketSignal : Signal<PlayFab.ServerModels.AuthenticateSessionTicketRequest> { }
 
 /// <summary>
-/// Sets the player's secret if it is not already set. Player secrets are used to sign API requests. To reset a player's secret use the Admin or Server API method SetPlayerSecret.
+/// Sets the player's secret if it is not already set. Player secrets are used to sign API requests. To reset a player's
+/// secret use the Admin or Server API method SetPlayerSecret.
 /// </summary>
 public class SetPlayerSecretSignal : Signal<PlayFab.ServerModels.SetPlayerSecretRequest> { }
 
@@ -165,7 +169,8 @@ public class UpdateCharacterReadOnlyDataSignal : Signal<PlayFab.ServerModels.Upd
 public class DeleteCharacterFromUserSignal : Signal<PlayFab.ServerModels.DeleteCharacterFromUserRequest> { }
 
 /// <summary>
-/// Lists all of the characters that belong to a specific user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
+/// Lists all of the characters that belong to a specific user. CharacterIds are not globally unique; characterId must be
+/// evaluated with the parent PlayFabId to guarantee uniqueness.
 /// </summary>
 public class GetAllUsersCharactersSignal : Signal<PlayFab.ServerModels.ListUsersCharactersRequest> { }
 
@@ -190,7 +195,8 @@ public class GetLeaderboardAroundCharacterSignal : Signal<PlayFab.ServerModels.G
 public class GetLeaderboardForUserCharactersSignal : Signal<PlayFab.ServerModels.GetLeaderboardForUsersCharactersRequest> { }
 
 /// <summary>
-/// Grants the specified character type to the user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
+/// Grants the specified character type to the user. CharacterIds are not globally unique; characterId must be evaluated
+/// with the parent PlayFabId to guarantee uniqueness.
 /// </summary>
 public class GrantCharacterToUserSignal : Signal<PlayFab.ServerModels.GrantCharacterToUserRequest> { }
 
@@ -204,7 +210,13 @@ public class UpdateCharacterStatisticsSignal : Signal<PlayFab.ServerModels.Updat
 #region Content
 
 /// <summary>
-/// This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded, the query to retrieve the data will fail. See this post for more information:  https://community.playfab.com/hc/en-us/community/posts/205469488-How-to-upload-files-to-PlayFab-s-Content-Service.  Also, please be aware that the Content service is specifically PlayFab's CDN offering, for which standard CDN rates apply.
+/// This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned
+/// URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the
+/// content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded,
+/// the query to retrieve the data will fail. See this post for more information:
+/// https://community.playfab.com/hc/en-us/community/posts/205469488-How-to-upload-files-to-PlayFab-s-Content-Service.
+/// Also, please be aware that the Content service is specifically PlayFab's CDN offering, for which standard CDN rates
+/// apply.
 /// </summary>
 public class GetContentDownloadUrlSignal : Signal<PlayFab.ServerModels.GetContentDownloadUrlRequest> { }
 
@@ -213,12 +225,14 @@ public class GetContentDownloadUrlSignal : Signal<PlayFab.ServerModels.GetConten
 #region Friend List Management
 
 /// <summary>
-/// Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+/// Adds the Friend user to the friendlist of the user with PlayFabId. At least one of
+/// FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
 /// </summary>
 public class AddFriendSignal : Signal<PlayFab.ServerModels.AddFriendRequest> { }
 
 /// <summary>
-/// Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+/// Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from
+/// linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
 /// </summary>
 public class GetFriendsListSignal : Signal<PlayFab.ServerModels.GetFriendsListRequest> { }
 
@@ -299,7 +313,8 @@ public class AwardSteamAchievementSignal : Signal<PlayFab.ServerModels.AwardStea
 public class DeleteUsersSignal : Signal<PlayFab.ServerModels.DeleteUsersRequest> { }
 
 /// <summary>
-/// Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the leaderboard
+/// Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the
+/// leaderboard
 /// </summary>
 public class GetFriendLeaderboardSignal : Signal<PlayFab.ServerModels.GetFriendLeaderboardRequest> { }
 
@@ -314,7 +329,8 @@ public class GetLeaderboardSignal : Signal<PlayFab.ServerModels.GetLeaderboardRe
 public class GetLeaderboardAroundUserSignal : Signal<PlayFab.ServerModels.GetLeaderboardAroundUserRequest> { }
 
 /// <summary>
-/// Returns whatever info is requested in the response for the user. Note that PII (like email address, facebook id)             may be returned. All parameters default to false.
+/// Returns whatever info is requested in the response for the user. Note that PII (like email address, facebook id)
+/// may be returned. All parameters default to false.
 /// </summary>
 public class GetPlayerCombinedInfoSignal : Signal<PlayFab.ServerModels.GetPlayerCombinedInfoRequest> { }
 
@@ -413,7 +429,8 @@ public class AddUserVirtualCurrencySignal : Signal<PlayFab.ServerModels.AddUserV
 public class ConsumeItemSignal : Signal<PlayFab.ServerModels.ConsumeItemRequest> { }
 
 /// <summary>
-/// Returns the result of an evaluation of a Random Result Table - the ItemId from the game Catalog which would have been added to the player inventory, if the Random Result Table were added via a Bundle or a call to UnlockContainer.
+/// Returns the result of an evaluation of a Random Result Table - the ItemId from the game Catalog which would have been
+/// added to the player inventory, if the Random Result Table were added via a Bundle or a call to UnlockContainer.
 /// </summary>
 public class EvaluateRandomResultTableSignal : Signal<PlayFab.ServerModels.EvaluateRandomResultTableRequest> { }
 
@@ -423,7 +440,8 @@ public class EvaluateRandomResultTableSignal : Signal<PlayFab.ServerModels.Evalu
 public class GetCharacterInventorySignal : Signal<PlayFab.ServerModels.GetCharacterInventoryRequest> { }
 
 /// <summary>
-/// Retrieves the configuration information for the specified random results tables for the title, including all ItemId values and weights
+/// Retrieves the configuration information for the specified random results tables for the title, including all ItemId
+/// values and weights
 /// </summary>
 public class GetRandomResultTablesSignal : Signal<PlayFab.ServerModels.GetRandomResultTablesRequest> { }
 
@@ -468,12 +486,14 @@ public class MoveItemToCharacterFromUserSignal : Signal<PlayFab.ServerModels.Mov
 public class MoveItemToUserFromCharacterSignal : Signal<PlayFab.ServerModels.MoveItemToUserFromCharacterRequest> { }
 
 /// <summary>
-/// Adds the virtual goods associated with the coupon to the user's inventory. Coupons can be generated  via the Economy->Catalogs tab in the PlayFab Game Manager.
+/// Adds the virtual goods associated with the coupon to the user's inventory. Coupons can be generated  via the
+/// Economy->Catalogs tab in the PlayFab Game Manager.
 /// </summary>
 public class RedeemCouponSignal : Signal<PlayFab.ServerModels.RedeemCouponRequest> { }
 
 /// <summary>
-/// Submit a report about a player (due to bad bahavior, etc.) on behalf of another player, so that customer service representatives for the title can take action concerning potentially toxic players.
+/// Submit a report about a player (due to bad bahavior, etc.) on behalf of another player, so that customer service
+/// representatives for the title can take action concerning potentially toxic players.
 /// </summary>
 public class ReportPlayerSignal : Signal<PlayFab.ServerModels.ReportPlayerServerRequest> { }
 
@@ -483,22 +503,29 @@ public class ReportPlayerSignal : Signal<PlayFab.ServerModels.ReportPlayerServer
 public class RevokeInventoryItemSignal : Signal<PlayFab.ServerModels.RevokeInventoryItemRequest> { }
 
 /// <summary>
-/// Decrements the character's balance of the specified virtual currency by the stated amount
+/// Decrements the character's balance of the specified virtual currency by the stated amount. It is possible to make a VC
+/// balance negative with this API.
 /// </summary>
 public class SubtractCharacterVirtualCurrencySignal : Signal<PlayFab.ServerModels.SubtractCharacterVirtualCurrencyRequest> { }
 
 /// <summary>
-/// Decrements the user's balance of the specified virtual currency by the stated amount
+/// Decrements the user's balance of the specified virtual currency by the stated amount. It is possible to make a VC
+/// balance negative with this API.
 /// </summary>
 public class SubtractUserVirtualCurrencySignal : Signal<PlayFab.ServerModels.SubtractUserVirtualCurrencyRequest> { }
 
 /// <summary>
-/// Opens a specific container (ContainerItemInstanceId), with a specific key (KeyItemInstanceId, when required), and returns the contents of the opened container. If the container (and key when relevant) are consumable (RemainingUses > 0), their RemainingUses will be decremented, consistent with the operation of ConsumeItem.
+/// Opens a specific container (ContainerItemInstanceId), with a specific key (KeyItemInstanceId, when required), and
+/// returns the contents of the opened container. If the container (and key when relevant) are consumable (RemainingUses >
+/// 0), their RemainingUses will be decremented, consistent with the operation of ConsumeItem.
 /// </summary>
 public class UnlockContainerInstanceSignal : Signal<PlayFab.ServerModels.UnlockContainerInstanceRequest> { }
 
 /// <summary>
-/// Searches Player or Character inventory for any ItemInstance matching the given CatalogItemId, if necessary unlocks it using any appropriate key, and returns the contents of the opened container. If the container (and key when relevant) are consumable (RemainingUses > 0), their RemainingUses will be decremented, consistent with the operation of ConsumeItem.
+/// Searches Player or Character inventory for any ItemInstance matching the given CatalogItemId, if necessary unlocks it
+/// using any appropriate key, and returns the contents of the opened container. If the container (and key when relevant)
+/// are consumable (RemainingUses > 0), their RemainingUses will be decremented, consistent with the operation of
+/// ConsumeItem.
 /// </summary>
 public class UnlockContainerItemSignal : Signal<PlayFab.ServerModels.UnlockContainerItemRequest> { }
 
@@ -517,7 +544,8 @@ public class UpdateUserInventoryItemCustomDataSignal : Signal<PlayFab.ServerMode
 public class AddPlayerTagSignal : Signal<PlayFab.ServerModels.AddPlayerTagRequest> { }
 
 /// <summary>
-/// Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
+/// Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as
+/// GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
 /// </summary>
 public class GetAllSegmentsSignal : Signal<PlayFab.ServerModels.GetAllSegmentsRequest> { }
 
@@ -527,7 +555,10 @@ public class GetAllSegmentsSignal : Signal<PlayFab.ServerModels.GetAllSegmentsRe
 public class GetPlayerSegmentsSignal : Signal<PlayFab.ServerModels.GetPlayersSegmentsRequest> { }
 
 /// <summary>
-/// Allows for paging through all players in a given segment. This API creates a snapshot of all player profiles that match the segment definition at the time of its creation and lives through the Total Seconds to Live, refreshing its life span on each subsequent use of the Continuation Token. Profiles that change during the course of paging will not be reflected in the results. AB Test segments are currently not supported by this operation.
+/// Allows for paging through all players in a given segment. This API creates a snapshot of all player profiles that match
+/// the segment definition at the time of its creation and lives through the Total Seconds to Live, refreshing its life span
+/// on each subsequent use of the Continuation Token. Profiles that change during the course of paging will not be reflected
+/// in the results. AB Test segments are currently not supported by this operation.
 /// </summary>
 public class GetPlayersInSegmentSignal : Signal<PlayFab.ServerModels.GetPlayersInSegmentRequest> { }
 
@@ -555,32 +586,48 @@ public class ExecuteCloudScriptSignal : Signal<PlayFab.ServerModels.ExecuteCloud
 #region Shared Group Data
 
 /// <summary>
-/// Adds users to the set of those able to update both the shared data, as well as the set of users  in the group. Only users in the group (and the server) can add new members. Shared Groups are designed for sharing data  between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// Adds users to the set of those able to update both the shared data, as well as the set of users  in the group. Only
+/// users in the group (and the server) can add new members. Shared Groups are designed for sharing data  between a very
+/// small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class AddSharedGroupMembersSignal : Signal<PlayFab.ServerModels.AddSharedGroupMembersRequest> { }
 
 /// <summary>
-/// Requests the creation of a shared group object, containing key/value pairs which may  be updated by all members of the group. When created by a server, the group will initially have no members.  Shared Groups are designed for sharing data between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// Requests the creation of a shared group object, containing key/value pairs which may  be updated by all members of the
+/// group. When created by a server, the group will initially have no members.  Shared Groups are designed for sharing data
+/// between a very small number of players, please see our guide:
+/// https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class CreateSharedGroupSignal : Signal<PlayFab.ServerModels.CreateSharedGroupRequest> { }
 
 /// <summary>
-/// Deletes a shared group, freeing up the shared group ID to be reused for a new group.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// Deletes a shared group, freeing up the shared group ID to be reused for a new group.  Shared Groups are designed for
+/// sharing data between a very small number of players, please see our guide:
+/// https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class DeleteSharedGroupSignal : Signal<PlayFab.ServerModels.DeleteSharedGroupRequest> { }
 
 /// <summary>
-/// Retrieves data stored in a shared group object, as well as the list of members in the group.  The server can access all public and private group data. Shared Groups are designed for sharing data between a very  small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// Retrieves data stored in a shared group object, as well as the list of members in the group.  The server can access all
+/// public and private group data. Shared Groups are designed for sharing data between a very  small number of players,
+/// please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class GetSharedGroupDataSignal : Signal<PlayFab.ServerModels.GetSharedGroupDataRequest> { }
 
 /// <summary>
-/// Removes users from the set of those able to update the shared data and the set of users in the group. Only users in the group can remove members. If as a result of the call, zero users remain with access, the group and its associated data will be deleted. Shared Groups are designed for sharing data between a very small number of players,  please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// Removes users from the set of those able to update the shared data and the set of users in the group. Only users in the
+/// group can remove members. If as a result of the call, zero users remain with access, the group and its associated data
+/// will be deleted. Shared Groups are designed for sharing data between a very small number of players,  please see our
+/// guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class RemoveSharedGroupMembersSignal : Signal<PlayFab.ServerModels.RemoveSharedGroupMembersRequest> { }
 
 /// <summary>
-/// Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated or added in this call will be readable by users not in the group. By default, data permissions are set to Private. Regardless of the permission setting, only members of the group (and the server) can update the data.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated
+/// or added in this call will be readable by users not in the group. By default, data permissions are set to Private.
+/// Regardless of the permission setting, only members of the group (and the server) can update the data.  Shared Groups are
+/// designed for sharing data between a very small number of players, please see our guide:
+/// https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class UpdateSharedGroupDataSignal : Signal<PlayFab.ServerModels.UpdateSharedGroupDataRequest> { }
 
@@ -662,7 +709,8 @@ public class PlayerLeftResponseSignal : Signal<PlayFab.MatchmakerModels.PlayerLe
 public class StartGameResponseSignal : Signal<PlayFab.MatchmakerModels.StartGameResponse> { }
 
 /// <summary>
-/// Retrieves the relevant details for a specified user, which the external match-making service can then use to compute effective matches
+/// Retrieves the relevant details for a specified user, which the external match-making service can then use to compute
+/// effective matches
 /// </summary>
 public class UserInfoResponseSignal : Signal<PlayFab.MatchmakerModels.UserInfoResponse> { }
 
@@ -686,7 +734,8 @@ public class GetPlayerProfileResponseSignal : Signal<PlayFab.ServerModels.GetPla
 public class GetPlayFabIDsFromFacebookIDsResponseSignal : Signal<PlayFab.ServerModels.GetPlayFabIDsFromFacebookIDsResult> { }
 
 /// <summary>
-/// Retrieves the unique PlayFab identifiers for the given set of Steam identifiers. The Steam identifiers  are the profile IDs for the user accounts, available as SteamId in the Steamworks Community API calls.
+/// Retrieves the unique PlayFab identifiers for the given set of Steam identifiers. The Steam identifiers  are the profile
+/// IDs for the user accounts, available as SteamId in the Steamworks Community API calls.
 /// </summary>
 public class GetPlayFabIDsFromSteamIDsResponseSignal : Signal<PlayFab.ServerModels.GetPlayFabIDsFromSteamIDsResult> { }
 
@@ -711,7 +760,8 @@ public class RevokeAllBansForUserResponseSignal : Signal<PlayFab.ServerModels.Re
 public class RevokeBansResponseSignal : Signal<PlayFab.ServerModels.RevokeBansResult> { }
 
 /// <summary>
-/// Sends an iOS/Android Push Notification to a specific user, if that user's device has been configured for Push Notifications in PlayFab. If a user has linked both Android and iOS devices, both will be notified.
+/// Sends an iOS/Android Push Notification to a specific user, if that user's device has been configured for Push
+/// Notifications in PlayFab. If a user has linked both Android and iOS devices, both will be notified.
 /// </summary>
 public class SendPushNotificationResponseSignal : Signal<PlayFab.ServerModels.SendPushNotificationResult> { }
 
@@ -754,7 +804,8 @@ public class WriteTitleEventResponseSignal : Signal<PlayFab.ServerModels.WriteEv
 public class AuthenticateSessionTicketResponseSignal : Signal<PlayFab.ServerModels.AuthenticateSessionTicketResult> { }
 
 /// <summary>
-/// Sets the player's secret if it is not already set. Player secrets are used to sign API requests. To reset a player's secret use the Admin or Server API method SetPlayerSecret.
+/// Sets the player's secret if it is not already set. Player secrets are used to sign API requests. To reset a player's
+/// secret use the Admin or Server API method SetPlayerSecret.
 /// </summary>
 public class SetPlayerSecretResponseSignal : Signal<PlayFab.ServerModels.SetPlayerSecretResult> { }
 
@@ -802,7 +853,8 @@ public class UpdateCharacterReadOnlyDataResponseSignal : Signal<PlayFab.ServerMo
 public class DeleteCharacterFromUserResponseSignal : Signal<PlayFab.ServerModels.DeleteCharacterFromUserResult> { }
 
 /// <summary>
-/// Lists all of the characters that belong to a specific user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
+/// Lists all of the characters that belong to a specific user. CharacterIds are not globally unique; characterId must be
+/// evaluated with the parent PlayFabId to guarantee uniqueness.
 /// </summary>
 public class GetAllUsersCharactersResponseSignal : Signal<PlayFab.ServerModels.ListUsersCharactersResult> { }
 
@@ -827,7 +879,8 @@ public class GetLeaderboardAroundCharacterResponseSignal : Signal<PlayFab.Server
 public class GetLeaderboardForUserCharactersResponseSignal : Signal<PlayFab.ServerModels.GetLeaderboardForUsersCharactersResult> { }
 
 /// <summary>
-/// Grants the specified character type to the user. CharacterIds are not globally unique; characterId must be evaluated with the parent PlayFabId to guarantee uniqueness.
+/// Grants the specified character type to the user. CharacterIds are not globally unique; characterId must be evaluated
+/// with the parent PlayFabId to guarantee uniqueness.
 /// </summary>
 public class GrantCharacterToUserResponseSignal : Signal<PlayFab.ServerModels.GrantCharacterToUserResult> { }
 
@@ -841,7 +894,13 @@ public class UpdateCharacterStatisticsResponseSignal : Signal<PlayFab.ServerMode
 #region Content
 
 /// <summary>
-/// This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded, the query to retrieve the data will fail. See this post for more information:  https://community.playfab.com/hc/en-us/community/posts/205469488-How-to-upload-files-to-PlayFab-s-Content-Service.  Also, please be aware that the Content service is specifically PlayFab's CDN offering, for which standard CDN rates apply.
+/// This API retrieves a pre-signed URL for accessing a content file for the title. A subsequent  HTTP GET to the returned
+/// URL will attempt to download the content. A HEAD query to the returned URL will attempt to  retrieve the metadata of the
+/// content. Note that a successful result does not guarantee the existence of this content -  if it has not been uploaded,
+/// the query to retrieve the data will fail. See this post for more information:
+/// https://community.playfab.com/hc/en-us/community/posts/205469488-How-to-upload-files-to-PlayFab-s-Content-Service.
+/// Also, please be aware that the Content service is specifically PlayFab's CDN offering, for which standard CDN rates
+/// apply.
 /// </summary>
 public class GetContentDownloadUrlResponseSignal : Signal<PlayFab.ServerModels.GetContentDownloadUrlResult> { }
 
@@ -850,12 +909,14 @@ public class GetContentDownloadUrlResponseSignal : Signal<PlayFab.ServerModels.G
 #region Friend List Management
 
 /// <summary>
-/// Adds the Friend user to the friendlist of the user with PlayFabId. At least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
+/// Adds the Friend user to the friendlist of the user with PlayFabId. At least one of
+/// FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
 /// </summary>
 public class AddFriendResponseSignal : Signal<PlayFab.ServerModels.EmptyResult> { }
 
 /// <summary>
-/// Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
+/// Retrieves the current friends for the user with PlayFabId, constrained to users who have PlayFab accounts. Friends from
+/// linked accounts (Facebook, Steam) are also included. You may optionally exclude some linked services' friends.
 /// </summary>
 public class GetFriendsListResponseSignal : Signal<PlayFab.ServerModels.GetFriendsListResult> { }
 
@@ -936,7 +997,8 @@ public class AwardSteamAchievementResponseSignal : Signal<PlayFab.ServerModels.A
 public class DeleteUsersResponseSignal : Signal<PlayFab.ServerModels.DeleteUsersResult> { }
 
 /// <summary>
-/// Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the leaderboard
+/// Retrieves a list of ranked friends of the given player for the given statistic, starting from the indicated point in the
+/// leaderboard
 /// </summary>
 public class GetFriendLeaderboardResponseSignal : Signal<PlayFab.ServerModels.GetLeaderboardResult> { }
 
@@ -951,7 +1013,8 @@ public class GetLeaderboardResponseSignal : Signal<PlayFab.ServerModels.GetLeade
 public class GetLeaderboardAroundUserResponseSignal : Signal<PlayFab.ServerModels.GetLeaderboardAroundUserResult> { }
 
 /// <summary>
-/// Returns whatever info is requested in the response for the user. Note that PII (like email address, facebook id)             may be returned. All parameters default to false.
+/// Returns whatever info is requested in the response for the user. Note that PII (like email address, facebook id)
+/// may be returned. All parameters default to false.
 /// </summary>
 public class GetPlayerCombinedInfoResponseSignal : Signal<PlayFab.ServerModels.GetPlayerCombinedInfoResult> { }
 
@@ -1050,7 +1113,8 @@ public class AddUserVirtualCurrencyResponseSignal : Signal<PlayFab.ServerModels.
 public class ConsumeItemResponseSignal : Signal<PlayFab.ServerModels.ConsumeItemResult> { }
 
 /// <summary>
-/// Returns the result of an evaluation of a Random Result Table - the ItemId from the game Catalog which would have been added to the player inventory, if the Random Result Table were added via a Bundle or a call to UnlockContainer.
+/// Returns the result of an evaluation of a Random Result Table - the ItemId from the game Catalog which would have been
+/// added to the player inventory, if the Random Result Table were added via a Bundle or a call to UnlockContainer.
 /// </summary>
 public class EvaluateRandomResultTableResponseSignal : Signal<PlayFab.ServerModels.EvaluateRandomResultTableResult> { }
 
@@ -1060,7 +1124,8 @@ public class EvaluateRandomResultTableResponseSignal : Signal<PlayFab.ServerMode
 public class GetCharacterInventoryResponseSignal : Signal<PlayFab.ServerModels.GetCharacterInventoryResult> { }
 
 /// <summary>
-/// Retrieves the configuration information for the specified random results tables for the title, including all ItemId values and weights
+/// Retrieves the configuration information for the specified random results tables for the title, including all ItemId
+/// values and weights
 /// </summary>
 public class GetRandomResultTablesResponseSignal : Signal<PlayFab.ServerModels.GetRandomResultTablesResult> { }
 
@@ -1105,12 +1170,14 @@ public class MoveItemToCharacterFromUserResponseSignal : Signal<PlayFab.ServerMo
 public class MoveItemToUserFromCharacterResponseSignal : Signal<PlayFab.ServerModels.MoveItemToUserFromCharacterResult> { }
 
 /// <summary>
-/// Adds the virtual goods associated with the coupon to the user's inventory. Coupons can be generated  via the Economy->Catalogs tab in the PlayFab Game Manager.
+/// Adds the virtual goods associated with the coupon to the user's inventory. Coupons can be generated  via the
+/// Economy->Catalogs tab in the PlayFab Game Manager.
 /// </summary>
 public class RedeemCouponResponseSignal : Signal<PlayFab.ServerModels.RedeemCouponResult> { }
 
 /// <summary>
-/// Submit a report about a player (due to bad bahavior, etc.) on behalf of another player, so that customer service representatives for the title can take action concerning potentially toxic players.
+/// Submit a report about a player (due to bad bahavior, etc.) on behalf of another player, so that customer service
+/// representatives for the title can take action concerning potentially toxic players.
 /// </summary>
 public class ReportPlayerResponseSignal : Signal<PlayFab.ServerModels.ReportPlayerServerResult> { }
 
@@ -1120,22 +1187,29 @@ public class ReportPlayerResponseSignal : Signal<PlayFab.ServerModels.ReportPlay
 public class RevokeInventoryItemResponseSignal : Signal<PlayFab.ServerModels.RevokeInventoryResult> { }
 
 /// <summary>
-/// Decrements the character's balance of the specified virtual currency by the stated amount
+/// Decrements the character's balance of the specified virtual currency by the stated amount. It is possible to make a VC
+/// balance negative with this API.
 /// </summary>
 public class SubtractCharacterVirtualCurrencyResponseSignal : Signal<PlayFab.ServerModels.ModifyCharacterVirtualCurrencyResult> { }
 
 /// <summary>
-/// Decrements the user's balance of the specified virtual currency by the stated amount
+/// Decrements the user's balance of the specified virtual currency by the stated amount. It is possible to make a VC
+/// balance negative with this API.
 /// </summary>
 public class SubtractUserVirtualCurrencyResponseSignal : Signal<PlayFab.ServerModels.ModifyUserVirtualCurrencyResult> { }
 
 /// <summary>
-/// Opens a specific container (ContainerItemInstanceId), with a specific key (KeyItemInstanceId, when required), and returns the contents of the opened container. If the container (and key when relevant) are consumable (RemainingUses > 0), their RemainingUses will be decremented, consistent with the operation of ConsumeItem.
+/// Opens a specific container (ContainerItemInstanceId), with a specific key (KeyItemInstanceId, when required), and
+/// returns the contents of the opened container. If the container (and key when relevant) are consumable (RemainingUses >
+/// 0), their RemainingUses will be decremented, consistent with the operation of ConsumeItem.
 /// </summary>
 public class UnlockContainerInstanceResponseSignal : Signal<PlayFab.ServerModels.UnlockContainerItemResult> { }
 
 /// <summary>
-/// Searches Player or Character inventory for any ItemInstance matching the given CatalogItemId, if necessary unlocks it using any appropriate key, and returns the contents of the opened container. If the container (and key when relevant) are consumable (RemainingUses > 0), their RemainingUses will be decremented, consistent with the operation of ConsumeItem.
+/// Searches Player or Character inventory for any ItemInstance matching the given CatalogItemId, if necessary unlocks it
+/// using any appropriate key, and returns the contents of the opened container. If the container (and key when relevant)
+/// are consumable (RemainingUses > 0), their RemainingUses will be decremented, consistent with the operation of
+/// ConsumeItem.
 /// </summary>
 public class UnlockContainerItemResponseSignal : Signal<PlayFab.ServerModels.UnlockContainerItemResult> { }
 
@@ -1154,7 +1228,8 @@ public class UpdateUserInventoryItemCustomDataResponseSignal : Signal<PlayFab.Se
 public class AddPlayerTagResponseSignal : Signal<PlayFab.ServerModels.AddPlayerTagResult> { }
 
 /// <summary>
-/// Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
+/// Retrieves an array of player segment definitions. Results from this can be used in subsequent API calls such as
+/// GetPlayersInSegment which requires a Segment ID. While segment names can change the ID for that segment will not change.
 /// </summary>
 public class GetAllSegmentsResponseSignal : Signal<PlayFab.ServerModels.GetAllSegmentsResult> { }
 
@@ -1164,7 +1239,10 @@ public class GetAllSegmentsResponseSignal : Signal<PlayFab.ServerModels.GetAllSe
 public class GetPlayerSegmentsResponseSignal : Signal<PlayFab.ServerModels.GetPlayerSegmentsResult> { }
 
 /// <summary>
-/// Allows for paging through all players in a given segment. This API creates a snapshot of all player profiles that match the segment definition at the time of its creation and lives through the Total Seconds to Live, refreshing its life span on each subsequent use of the Continuation Token. Profiles that change during the course of paging will not be reflected in the results. AB Test segments are currently not supported by this operation.
+/// Allows for paging through all players in a given segment. This API creates a snapshot of all player profiles that match
+/// the segment definition at the time of its creation and lives through the Total Seconds to Live, refreshing its life span
+/// on each subsequent use of the Continuation Token. Profiles that change during the course of paging will not be reflected
+/// in the results. AB Test segments are currently not supported by this operation.
 /// </summary>
 public class GetPlayersInSegmentResponseSignal : Signal<PlayFab.ServerModels.GetPlayersInSegmentResult> { }
 
@@ -1192,32 +1270,48 @@ public class ExecuteCloudScriptResponseSignal : Signal<PlayFab.ServerModels.Exec
 #region Shared Group Data
 
 /// <summary>
-/// Adds users to the set of those able to update both the shared data, as well as the set of users  in the group. Only users in the group (and the server) can add new members. Shared Groups are designed for sharing data  between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// Adds users to the set of those able to update both the shared data, as well as the set of users  in the group. Only
+/// users in the group (and the server) can add new members. Shared Groups are designed for sharing data  between a very
+/// small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class AddSharedGroupMembersResponseSignal : Signal<PlayFab.ServerModels.AddSharedGroupMembersResult> { }
 
 /// <summary>
-/// Requests the creation of a shared group object, containing key/value pairs which may  be updated by all members of the group. When created by a server, the group will initially have no members.  Shared Groups are designed for sharing data between a very small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// Requests the creation of a shared group object, containing key/value pairs which may  be updated by all members of the
+/// group. When created by a server, the group will initially have no members.  Shared Groups are designed for sharing data
+/// between a very small number of players, please see our guide:
+/// https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class CreateSharedGroupResponseSignal : Signal<PlayFab.ServerModels.CreateSharedGroupResult> { }
 
 /// <summary>
-/// Deletes a shared group, freeing up the shared group ID to be reused for a new group.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// Deletes a shared group, freeing up the shared group ID to be reused for a new group.  Shared Groups are designed for
+/// sharing data between a very small number of players, please see our guide:
+/// https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class DeleteSharedGroupResponseSignal : Signal<PlayFab.ServerModels.EmptyResult> { }
 
 /// <summary>
-/// Retrieves data stored in a shared group object, as well as the list of members in the group.  The server can access all public and private group data. Shared Groups are designed for sharing data between a very  small number of players, please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// Retrieves data stored in a shared group object, as well as the list of members in the group.  The server can access all
+/// public and private group data. Shared Groups are designed for sharing data between a very  small number of players,
+/// please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class GetSharedGroupDataResponseSignal : Signal<PlayFab.ServerModels.GetSharedGroupDataResult> { }
 
 /// <summary>
-/// Removes users from the set of those able to update the shared data and the set of users in the group. Only users in the group can remove members. If as a result of the call, zero users remain with access, the group and its associated data will be deleted. Shared Groups are designed for sharing data between a very small number of players,  please see our guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// Removes users from the set of those able to update the shared data and the set of users in the group. Only users in the
+/// group can remove members. If as a result of the call, zero users remain with access, the group and its associated data
+/// will be deleted. Shared Groups are designed for sharing data between a very small number of players,  please see our
+/// guide: https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class RemoveSharedGroupMembersResponseSignal : Signal<PlayFab.ServerModels.RemoveSharedGroupMembersResult> { }
 
 /// <summary>
-/// Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated or added in this call will be readable by users not in the group. By default, data permissions are set to Private. Regardless of the permission setting, only members of the group (and the server) can update the data.  Shared Groups are designed for sharing data between a very small number of players, please see our guide:  https://api.playfab.com/docs/tutorials/landing-players/shared-groups
+/// Adds, updates, and removes data keys for a shared group object. If the permission is set to Public, all fields updated
+/// or added in this call will be readable by users not in the group. By default, data permissions are set to Private.
+/// Regardless of the permission setting, only members of the group (and the server) can update the data.  Shared Groups are
+/// designed for sharing data between a very small number of players, please see our guide:
+/// https://api.playfab.com/docs/tutorials/landing-players/shared-groups
 /// </summary>
 public class UpdateSharedGroupDataResponseSignal : Signal<PlayFab.ServerModels.UpdateSharedGroupDataResult> { }
 
