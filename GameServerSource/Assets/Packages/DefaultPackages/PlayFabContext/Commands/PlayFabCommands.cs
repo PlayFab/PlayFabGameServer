@@ -243,6 +243,25 @@ public class RevokeBansCommand : Command
 }
 
 /// <summary>
+/// Forces an email to be sent to the registered contact email address for the user's account based on an account recovery
+/// email template
+/// </summary>
+public class SendCustomAccountRecoveryEmailCommand : Command
+{
+    [Inject] public SendCustomAccountRecoveryEmailResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.SendCustomAccountRecoveryEmailRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.SendCustomAccountRecoveryEmail(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
 /// Sends an iOS/Android Push Notification to a specific user, if that user's device has been configured for Push
 /// Notifications in PlayFab. If a user has linked both Android and iOS devices, both will be notified.
 /// </summary>

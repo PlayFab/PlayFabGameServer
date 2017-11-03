@@ -52,7 +52,7 @@ namespace PlayFab
         } 
 
 
-#if ENABLE_PLAYFABSERVER_API || ENABLE_PLAYFABADMIN_API
+#if ENABLE_PLAYFABSERVER_API || ENABLE_PLAYFABADMIN_API || UNITY_EDITOR
         public static string DeveloperSecretKey
         {
             set { PlayFabSharedPrivate.DeveloperSecretKey = value;}
