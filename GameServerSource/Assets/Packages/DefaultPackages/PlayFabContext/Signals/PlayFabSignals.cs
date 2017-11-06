@@ -82,6 +82,11 @@ public class RevokeBansSignal : Signal<PlayFab.ServerModels.RevokeBansRequest> {
 public class SendCustomAccountRecoveryEmailSignal : Signal<PlayFab.ServerModels.SendCustomAccountRecoveryEmailRequest> { }
 
 /// <summary>
+/// Sends an email based on an email template to a player's contact email
+/// </summary>
+public class SendEmailFromTemplateSignal : Signal<PlayFab.ServerModels.SendEmailFromTemplateRequest> { }
+
+/// <summary>
 /// Sends an iOS/Android Push Notification to a specific user, if that user's device has been configured for Push
 /// Notifications in PlayFab. If a user has linked both Android and iOS devices, both will be notified.
 /// </summary>
@@ -770,6 +775,11 @@ public class RevokeBansResponseSignal : Signal<PlayFab.ServerModels.RevokeBansRe
 /// email template
 /// </summary>
 public class SendCustomAccountRecoveryEmailResponseSignal : Signal<PlayFab.ServerModels.SendCustomAccountRecoveryEmailResult> { }
+
+/// <summary>
+/// Sends an email based on an email template to a player's contact email
+/// </summary>
+public class SendEmailFromTemplateResponseSignal : Signal<PlayFab.ServerModels.SendEmailFromTemplateResult> { }
 
 /// <summary>
 /// Sends an iOS/Android Push Notification to a specific user, if that user's device has been configured for Push

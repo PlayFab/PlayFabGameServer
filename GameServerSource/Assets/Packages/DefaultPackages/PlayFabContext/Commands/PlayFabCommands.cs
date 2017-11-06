@@ -262,6 +262,24 @@ public class SendCustomAccountRecoveryEmailCommand : Command
 }
 
 /// <summary>
+/// Sends an email based on an email template to a player's contact email
+/// </summary>
+public class SendEmailFromTemplateCommand : Command
+{
+    [Inject] public SendEmailFromTemplateResponseSignal ResponseSignal { get; set; }
+    [Inject] public PlayFab.ServerModels.SendEmailFromTemplateRequest Request { get; set; }
+    public override void Execute()
+    {
+        Retain();
+        PlayFabServerAPI.SendEmailFromTemplate(Request, (result) =>
+        {
+            Release();
+            ResponseSignal.Dispatch(result);
+        }, PlayFabErrorHandler.HandlePlayFabError);
+    }
+}
+
+/// <summary>
 /// Sends an iOS/Android Push Notification to a specific user, if that user's device has been configured for Push
 /// Notifications in PlayFab. If a user has linked both Android and iOS devices, both will be notified.
 /// </summary>

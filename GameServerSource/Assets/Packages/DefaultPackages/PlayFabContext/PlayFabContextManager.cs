@@ -130,6 +130,14 @@ public class PlayFabContextManager : StrangePackage
         commandBinder.Bind<SendCustomAccountRecoveryEmailResponseSignal>(); //Create empty overrideable binding.
 
         /// <summary>
+        /// Sends an email based on an email template to a player's contact email
+        /// </summary>
+        injectionBinder.Bind<SendEmailFromTemplateSignal>();
+        injectionBinder.Bind<SendEmailFromTemplateResponseSignal>();
+        commandBinder.Bind<SendEmailFromTemplateSignal>().To<SendEmailFromTemplateCommand>();
+        commandBinder.Bind<SendEmailFromTemplateResponseSignal>(); //Create empty overrideable binding.
+
+        /// <summary>
         /// Sends an iOS/Android Push Notification to a specific user, if that user's device has been configured for Push
         /// Notifications in PlayFab. If a user has linked both Android and iOS devices, both will be notified.
         /// </summary>
