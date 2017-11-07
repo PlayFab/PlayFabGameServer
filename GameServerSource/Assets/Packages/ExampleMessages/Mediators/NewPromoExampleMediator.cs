@@ -13,9 +13,6 @@ public class NewPromoExampleMediator : Mediator {
     [Inject] public UnityNetworkingData UnityNetworkingData { get; set; }
     [Inject] public LogSignal Logger { get; set; }
 
-    [Inject] public GetTitleNewsSignal GetTitleNewsSignal { get; set; }
-    [Inject] public GetTitleNewsResponseSignal GetTitleNewsResponse { get; set; }
-
     private List<TitleNewsItem> _titleNews = new List<TitleNewsItem>();
     private float _time;
     private bool firstTimeCheck = true;
@@ -28,7 +25,7 @@ public class NewPromoExampleMediator : Mediator {
         public string Body;
         public override void Serialize(NetworkWriter writer)
         {
-            var json = PlayFab.Json.JsonWrapper.SerializeObject(Timestamp, PlayFabUtil.ApiSerializerStrategy);
+            var json = PlayFab.Json.JsonWrapper.SerializeObject(Timestamp, PlayFab.Json.SimpleJsonInstance.ApiSerializerStrategy);
             writer.Write(json);
             writer.Write(NewsId);
             writer.Write(Title);
@@ -53,7 +50,7 @@ public class NewPromoExampleMediator : Mediator {
 
     private void CheckForPromo()
     {
-        GetTitleNewsResponse.AddOnce((result) =>
+        PlayFab.PlayFabServerAPI.GetTitleNews(new GetTitleNewsRequest() { Count = 10 }, (result) =>
         {
             if (firstTimeCheck)
             {
@@ -73,12 +70,8 @@ public class NewPromoExampleMediator : Mediator {
                 _titleNews.Add(newsItem);
             }
 
+        }, null);
 
-        });
-        GetTitleNewsSignal.Dispatch(new GetTitleNewsRequest()
-        {
-            Count = 10
-        });
         firstTimeCheck = false;
     }
 

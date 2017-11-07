@@ -24,5 +24,4 @@ public class UnityNetworkingData : View
     public CustomNetworkManager Manager;
     public NetworkClient Client;
     public List<UnityNetworkConnection> Connections;
-    public SyncListString Players;
 }

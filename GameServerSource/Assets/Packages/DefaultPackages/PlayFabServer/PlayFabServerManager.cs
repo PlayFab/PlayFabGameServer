@@ -7,11 +7,17 @@ using strange.extensions.mediation.api;
 
 public class PlayFabServerManager : StrangePackage
 {
+    public ServerSettingsData Settings;
+
+    private PlayFabServerEvents _events = new PlayFabServerEvents();
+    private PlayFabServerService _service = new PlayFabServerService();
+
     public override void MapBindings(ICommandBinder commandBinder, ICrossContextInjectionBinder injectionBinder,
         IMediationBinder mediationBinder)
     {
-        var settings = Object.FindObjectOfType<ServerSettingsData>();
-        injectionBinder.Bind<ServerSettingsData>().To(settings).ToSingleton().CrossContext();
+        injectionBinder.Bind<ServerSettingsData>().ToValue(Settings).ToSingleton().CrossContext();
+        injectionBinder.Bind<PlayFabServerEvents>().ToValue(_events).ToSingleton().CrossContext();
+        injectionBinder.Bind<PlayFabServerService>().ToValue(_service).ToSingleton().CrossContext();
 
         injectionBinder.Bind<PlayFabServerStartupSignal>();
         injectionBinder.Bind<PlayFabServerStartupCompleteSignal>();

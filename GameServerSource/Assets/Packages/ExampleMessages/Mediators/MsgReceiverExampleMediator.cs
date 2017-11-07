@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using PlayFab;
 using PlayFab.ServerModels;
 using strange.extensions.mediation.impl;
 using UnityEngine.Networking;
@@ -8,8 +9,6 @@ using UnityEngine.Networking.NetworkSystem;
 public class MsgReceiverExampleMediator : Mediator {
     [Inject] public MsgReceiverExampleView View { get; set; }
     [Inject] public UnityNetworkingData UnityNetworkingData { get; set; }
-    [Inject] public GetTitleDataSignal GetTitleDataSignal { get; set; }
-    [Inject] public GetTitleDataResponseSignal GetTitleDataResponseSignal { get; set; }
     [Inject] public LogSignal Logger { get; set; }
 
     public override void OnRegister()
@@ -27,11 +26,12 @@ public class MsgReceiverExampleMediator : Mediator {
         {
             return;
         }
-        GetTitleDataResponseSignal.AddOnce((result) =>
+
+        PlayFabServerAPI.GetTitleData(new GetTitleDataRequest(), (result) =>
         {
             OnGetTitleData(uconn.Connection,result);
-        });
-        GetTitleDataSignal.Dispatch(new GetTitleDataRequest());
+        }, null);
+        
     }
 
     private void OnGetTitleData(NetworkConnection connection, GetTitleDataResult result)

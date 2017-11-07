@@ -5,6 +5,7 @@ using strange.extensions.mediation.impl;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Networking.NetworkSystem;
+using PlayFab;
 
 public class UnityNetworkManagerMediator : EventMediator {
     [Inject] public UnityNetworkManagerView View { get; set; }
@@ -12,12 +13,6 @@ public class UnityNetworkManagerMediator : EventMediator {
     [Inject] public ServerSettingsData ServerSettingsData { get; set; }
     [Inject] public LogSignal Logger { get; set; }
     [Inject] public PlayFabServerShutdownSignal ShutDownSignal { get; set; }
-    [Inject] public AuthenticateSessionTicketSignal AuthenticateSessionTicketSignal { get; set; }
-    [Inject] public AuthenticateSessionTicketResponseSignal AuthenticateSessionTicketResponseSignal { get; set; }
-    [Inject] public RedeemMatchmakerTicketSignal RedeemMatchmakerTicketSignal { get; set; }
-    [Inject] public RedeemMatchmakerTicketResponseSignal RedeemMatchmakerTicketResponseSignal { get; set; }
-    [Inject] public NotifyMatchmakerPlayerLeftSignal PlayerLeftSignal { get; set; }
-    [Inject] public NotifyMatchmakerPlayerLeftResponseSignal PlayerLeftResponse { get; set; }
     [Inject] public ClientDisconnectedSignal ClientDisconnectedSignal { get; set; }
 
     public class AuthTicketMessage : MessageBase
@@ -70,20 +65,16 @@ public class UnityNetworkManagerMediator : EventMediator {
 
             if (!message.IsLocal)
             {
-                RedeemMatchmakerTicketResponseSignal.AddOnce(OnAuthUserResponse);
-                RedeemMatchmakerTicketSignal.Dispatch(new RedeemMatchmakerTicketRequest()
-                {
+                PlayFabServerAPI.RedeemMatchmakerTicket(new RedeemMatchmakerTicketRequest(){
                     Ticket = message.AuthTicket,
                     LobbyId = ServerSettingsData.GameId.ToString()
-                });
+                }, OnAuthUserResponse, null);
             }
             else
             {
-                AuthenticateSessionTicketResponseSignal.AddOnce(OnAuthLocalUserResponse);
-                AuthenticateSessionTicketSignal.Dispatch(new AuthenticateSessionTicketRequest()
-                {
+                PlayFabServerAPI.AuthenticateSessionTicket(new AuthenticateSessionTicketRequest(){
                     SessionTicket = message.AuthTicket
-                });
+                }, OnAuthLocalUserResponse, null);
             }
         }
     }
@@ -154,18 +145,15 @@ public class UnityNetworkManagerMediator : EventMediator {
         {
             if (connection.IsAuthenticated && ServerSettingsData.GameId > 0)
             {
-                PlayerLeftResponse.AddOnce((playerLeftResponse) =>
+                PlayFabServerAPI.NotifyMatchmakerPlayerLeft(new NotifyMatchmakerPlayerLeftRequest(){
+                    PlayFabId = connection.PlayFabId,
+                    LobbyId = ServerSettingsData.GameId.ToString() 
+                }, (playerLeftResponse) =>
                 {
                     ClientDisconnectedSignal.Dispatch(connection.ConnectionId, connection.PlayFabId);
                     Logger.Dispatch(LoggerTypes.Info,string.Format("Player Has Left:{0}",connection.PlayFabId));
                     UnityNetworkingData.Connections.Remove(connection);
-                });
-
-                PlayerLeftSignal.Dispatch(new NotifyMatchmakerPlayerLeftRequest()
-                {
-                    PlayFabId = connection.PlayFabId,
-                    LobbyId = ServerSettingsData.GameId.ToString() 
-                });   
+                }, null);
             }
             else
             {

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using strange.extensions.mediation.impl;
 
-public class ServerSettingsData : View
+[Serializable]
+public class ServerSettingsData
 {
     public string TitleId;
     public ulong GameId;
