@@ -65,7 +65,6 @@ Packages are a great way to modularize your code and make it re-usable.  While t
 
 - GameServerContext
 	- PlayFabServerManager
-	- PlayFabContextManager
 	- UnityNetworkingContext
 	- ChatServerManager
 
