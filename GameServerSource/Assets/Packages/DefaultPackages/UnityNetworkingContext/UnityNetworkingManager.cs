@@ -1,26 +1,26 @@
-﻿using UnityEngine;
-using strange.extensions.command.api;
-using strange.extensions.command.impl;
-using strange.extensions.context.impl;
+﻿using strange.extensions.command.api;
 using strange.extensions.injector.api;
 using strange.extensions.mediation.api;
 
 public class UnityNetworkingManager : StrangePackage
 {
+    public UnityNetworkingData Settings;
+    private UnityNetworkingService _networkService;
+    private UnityNetworkingEvents _networkEvents;
+
     public override void MapBindings(ICommandBinder commandBinder, ICrossContextInjectionBinder injectionBinder,
         IMediationBinder mediationBinder)
     {
+        _networkService = new UnityNetworkingService();
+        _networkEvents = new UnityNetworkingEvents();
+
         //Bind Settings Object
-        var settings = Object.FindObjectOfType<UnityNetworkingData>();
-        injectionBinder.Bind<UnityNetworkingData>().To(settings).ToSingleton().CrossContext();
+        injectionBinder.Bind<UnityNetworkingData>().ToValue(Settings).ToSingleton().CrossContext();
+        injectionBinder.Bind<UnityNetworkingService>().ToValue(_networkService).ToSingleton().CrossContext();
+        injectionBinder.Bind<UnityNetworkingEvents>().ToValue(_networkEvents).ToSingleton().CrossContext();
 
         //Bind Mediators to Views
         mediationBinder.Bind<UnityNetworkManagerView>().To<UnityNetworkManagerMediator>();
-
-        //Bind Commands and Signals
-        commandBinder.Bind<SetupUnityNetworkingSignal>().To<SetupUnityNetworkingCommand>();
-        commandBinder.Bind<SetupUnityNetworkingCompleteSignal>();
-        commandBinder.Bind<ClientDisconnectedSignal>();
     }
 
     public override void PostBindings(ICommandBinder commandBinder, ICrossContextInjectionBinder injectionBinder,

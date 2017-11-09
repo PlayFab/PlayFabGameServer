@@ -9,8 +9,8 @@ using System.Linq;
 public class MainContext : MVCSContext
 {
     public MainContextView MainCtx;
-    private PlayFabServerStartupCompleteSignal _loadPlayFabDataCompleteSignal;
     private LogSignal _logger;
+    private PlayFabServerService _serverService;
 
     public MainContext(MonoBehaviour ctxView, bool autoMap)
         : base(ctxView, autoMap)
@@ -30,9 +30,6 @@ public class MainContext : MVCSContext
 
     protected override void mapBindings()
     {
-        //Bind start Game Singal that dispatches at launch.
-        commandBinder.Bind<StartGameServerSignal>();
-
         foreach (var pack in MainCtx.Packages)
         {
             pack.MapBindings(commandBinder, injectionBinder, mediationBinder);
@@ -56,30 +53,26 @@ public class MainContext : MVCSContext
         {
             pack.Launch(injectionBinder);
         }
-        //Bind to onComplete.
-        _loadPlayFabDataCompleteSignal = injectionBinder.GetInstance<PlayFabServerStartupCompleteSignal>();
-        _loadPlayFabDataCompleteSignal.AddListener(OnPlayFabServerStartup);
 
-        //Dispatch Signal to startup
-        var loadPlayFabDataSignal = injectionBinder.GetInstance<PlayFabServerStartupSignal>();
-        loadPlayFabDataSignal.Dispatch();
+        PlayFabServerEvents.OnServerStartupComplete += OnPlayFabServerStartup;
 
+        //startup server
+        _serverService = injectionBinder.GetInstance<PlayFabServerService>();
+        _serverService.PlayFabServerStartup();
     }
-
+    
     private void OnPlayFabServerStartup(ServerSettingsData settings)
     {
-        //TODO: If your using Unity Networking then keep the line below, otherwise comment it out.
-        var setupUnityNetworkingSignal = injectionBinder.GetInstance<SetupUnityNetworkingSignal>();
-        setupUnityNetworkingSignal.Dispatch();
+        //TODO: Support other networking packages such as Photon, DarkRift, MQTT
+        if (settings.NetworkType == NetworkingType.UnityNetworking)
+        {
+            var networkingService = injectionBinder.GetInstance<UnityNetworkingService>();
+            networkingService.SetupNetworking();
+        }
 
-        //TODO: If your using Photon Networking then keep the line below, otherwise comment it out.
-        /* 
-        var setupPhotonNetworkingSignal = injectionBinder.GetInstance<SetupPhotonNetworkingSignal>();
-        setupPhotonNetworkingSignal.Dispatch();
-        */
-        injectionBinder.GetInstance<StartGameServerSignal>().Dispatch();
+        injectionBinder.GetInstance<PlayFabServerEvents>().GameServerStarted();
     }
 }
-public class StartGameServerSignal : Signal { }
+
 
 

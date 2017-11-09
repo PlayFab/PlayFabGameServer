@@ -13,7 +13,6 @@ public class ChatServerListener : Mediator {
     [Inject] public LeaveChannelSignal LeaveChannelSignal { get; set; }
     [Inject] public JoinChannelSignal JoinChannelSignal { get; set; }
     [Inject] public UnityNetworkingData UnityNetworkingData { get; set; }
-    [Inject] public ClientDisconnectedSignal ClientDisconnectedSignal { get; set; }
     
     public override void OnRegister()
     {
@@ -22,7 +21,7 @@ public class ChatServerListener : Mediator {
         NetworkServer.RegisterHandler(ChatServerMessageTypes.LeaveChannel, OnLeaveChannel);
         NetworkServer.RegisterHandler(ChatServerMessageTypes.ChannelMessage, OnChannelMessage);
         //NetworkServer.RegisterHandler(ChatServerMessageTypes.PrivateMessage, OnPrivateMessage);
-        ClientDisconnectedSignal.AddListener(OnUserDisconnected);
+        UnityNetworkingEvents.OnClientDisconnected += OnUserDisconnected;
     }
 
     /*

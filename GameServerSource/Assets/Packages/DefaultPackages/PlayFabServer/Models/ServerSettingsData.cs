@@ -5,6 +5,7 @@ using strange.extensions.mediation.impl;
 [Serializable]
 public class ServerSettingsData
 {
+    public NetworkingType NetworkType;
     public string TitleId;
     public ulong GameId;
     public string GameBuildVersion;
@@ -21,4 +22,11 @@ public class ServerSettingsData
     public string BatchMode;
     public List<string> LogEntries;
     public bool CopyLogFiles;
+}
+
+public enum NetworkingType
+{
+    UnityNetworking
+    //Photon,
+    //Darkrift
 }

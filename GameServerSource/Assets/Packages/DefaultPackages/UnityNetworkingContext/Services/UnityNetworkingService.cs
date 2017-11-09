@@ -1,24 +1,18 @@
-﻿using System;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using strange.extensions.command.impl;
-using strange.extensions.signal.impl;
 using UnityEngine.Networking;
-using Object = UnityEngine.Object;
 
-public class SetupUnityNetworkingSignal : Signal { }
-public class SetupUnityNetworkingCompleteSignal : Signal { }
-public class ClientDisconnectedSignal : Signal<int,string> { }
-public class SetupUnityNetworkingCommand : Command
+public class UnityNetworkingService
 {
     [Inject] public UnityNetworkingData UnityNetworkingData { get; set; }
     [Inject] public ServerSettingsData ServerSettingsData { get; set; }
     [Inject] public LogSignal Logger { get; set; }
 
-    public override void Execute()
+    public void SetupNetworking()
     {
         Logger.Dispatch(LoggerTypes.Info, "Setting Up Unity Networking Server");
 
-        //TODO: Create Network Manager, if it is not already in the scene.
         var networkManager = Object.FindObjectOfType<CustomNetworkManager>();
         if (networkManager == null)
         {
@@ -37,12 +31,11 @@ public class SetupUnityNetworkingCommand : Command
         else
         {
             networkManager.StartServer();
-            
+
         }
 
         UnityNetworkingData.Manager = networkManager;
         UnityNetworkingData.Client = networkManager.client;
     }
+
 }
-
-

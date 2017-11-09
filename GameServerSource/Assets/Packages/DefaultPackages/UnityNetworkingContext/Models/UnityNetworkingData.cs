@@ -1,11 +1,9 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using strange.extensions.mediation.impl;
 using UnityEngine.Networking;
 
-public class UnityNetworkingData : View
+[Serializable]
+public class UnityNetworkingData
 {
     [Serializable]
     public class UnityNetworkConnection
