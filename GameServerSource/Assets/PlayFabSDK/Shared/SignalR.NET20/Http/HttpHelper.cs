@@ -210,7 +210,7 @@ namespace SignalR.Client._20.Http
             }
             catch (Exception ex)
             {
-                UnityEngine.Debug.LogFormat("Some exception occured: {0}", ex.Message);
+                UnityEngine.Debug.LogException(ex);
                 _requestState.Response.OnFinish(new CallbackDetail<HttpWebResponse> { IsFaulted = true, Exception = ex });
             }
         }

@@ -25,7 +25,7 @@ public class NewPromoExampleMediator : Mediator {
         public string Body;
         public override void Serialize(NetworkWriter writer)
         {
-            var json = PlayFab.Json.JsonWrapper.SerializeObject(Timestamp, PlayFab.Json.SimpleJsonInstance.ApiSerializerStrategy);
+            var json = PlayFab.Json.JsonWrapper.SerializeObject(Timestamp);
             writer.Write(json);
             writer.Write(NewsId);
             writer.Write(Title);
@@ -70,7 +70,9 @@ public class NewPromoExampleMediator : Mediator {
                 _titleNews.Add(newsItem);
             }
 
-        }, null);
+        }, (error) => {
+            Debug.LogError(error.GenerateErrorReport());
+        });
 
         firstTimeCheck = false;
     }

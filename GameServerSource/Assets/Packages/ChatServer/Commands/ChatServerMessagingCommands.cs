@@ -49,7 +49,9 @@ public class CreateChannelCommand : Command
                     {"GameId", ServerSettings.GameId},
                     {"CreatedBy", Message.MemberId }
                 }
-            }, null, null);
+            }, null, (error)=> {
+                Debug.LogError(error.GenerateErrorReport());
+            });
 
             PlayFabServerAPI.WritePlayerEvent(new WriteServerPlayerEventRequest()
             {
@@ -59,7 +61,9 @@ public class CreateChannelCommand : Command
                 {
                     {"ChannelId",  newChannel.ChannelId },
                 }
-            }, null, null);
+            }, null, (error) => {
+                Debug.LogError(error.GenerateErrorReport());
+            });
 
             return;
         }
@@ -95,7 +99,9 @@ public class CreateChannelCommand : Command
                 {
                     {"ChannelId",  channel.ChannelId },
                 }
-            }, null, null);
+            }, null, (error) => {
+                Debug.LogError(error.GenerateErrorReport());
+            });
            
         }
 
@@ -134,7 +140,9 @@ public class JoinChannelCommand : Command
                 {
                     {"ChannelId",  channel.ChannelId },
                 }
-            }, null, null);
+            }, null, (error) => {
+                Debug.LogError(error.GenerateErrorReport());
+            });
         }
         else
         {
@@ -172,7 +180,9 @@ public class LeaveChannelCommand : Command
                     {
                         {"ChannelId", channel.ChannelId}
                     }
-                }, null, null);
+                }, null, (error) => {
+                    Debug.LogError(error.GenerateErrorReport());
+                });
             }
 
             if (channel.Members.Count == 0 && channel.IsInviteOnly)
@@ -186,7 +196,9 @@ public class LeaveChannelCommand : Command
                         {"GameId", ServerSettings.GameId},
                         {"LastPlayer", Message.MemberId}
                     }
-                }, null, null);
+                }, null, (error) => {
+                    Debug.LogError(error.GenerateErrorReport());
+                });
 
             }
 
@@ -225,7 +237,9 @@ public class SendMessageCommand : Command
                         {"ChannelId", channel.ChannelId},
                         {"MessageSent",Message.Message }
                     }
-                }, null, null);
+                }, null, (error) => {
+                    Debug.LogError(error.GenerateErrorReport());
+                });
                
             }
         }
