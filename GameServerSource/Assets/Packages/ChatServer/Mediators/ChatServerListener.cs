@@ -109,7 +109,9 @@ public class ChatServerListener : Mediator {
                     {
                         {"ChannelId", channel.ChannelId}
                     }
-                }, null, null);
+                }, null, (error) => {
+                    Debug.Log(error.GenerateErrorReport());
+                });
             }
 
             if (channel.Members.Count == 0 && channel.IsInviteOnly)

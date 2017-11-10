@@ -69,13 +69,17 @@ public class UnityNetworkManagerMediator : EventMediator {
                 PlayFabServerAPI.RedeemMatchmakerTicket(new RedeemMatchmakerTicketRequest(){
                     Ticket = message.AuthTicket,
                     LobbyId = ServerSettingsData.GameId.ToString()
-                }, OnAuthUserResponse, null);
+                }, OnAuthUserResponse, (error)=> {
+                    Debug.Log(error.GenerateErrorReport());
+                });
             }
             else
             {
                 PlayFabServerAPI.AuthenticateSessionTicket(new AuthenticateSessionTicketRequest(){
                     SessionTicket = message.AuthTicket
-                }, OnAuthLocalUserResponse, null);
+                }, OnAuthLocalUserResponse, (error) => {
+                    Debug.Log(error.GenerateErrorReport());
+                });
             }
         }
     }
@@ -158,7 +162,9 @@ public class UnityNetworkManagerMediator : EventMediator {
                     UnityNetworkingEvents.ClientDisconnected(connection.ConnectionId, connection.PlayFabId);
                     Logger.Dispatch(LoggerTypes.Info,string.Format("Player Has Left:{0}",connection.PlayFabId));
                     UnityNetworkingData.Connections.Remove(connection);
-                }, null);
+                }, (error) => {
+                    Debug.Log(error.GenerateErrorReport());
+                });
             }
             else
             {
