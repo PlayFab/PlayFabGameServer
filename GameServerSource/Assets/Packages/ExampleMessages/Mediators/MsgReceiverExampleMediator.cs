@@ -30,7 +30,9 @@ public class MsgReceiverExampleMediator : Mediator {
         PlayFabServerAPI.GetTitleData(new GetTitleDataRequest(), (result) =>
         {
             OnGetTitleData(uconn.Connection,result);
-        }, null);
+        }, (error)=> {
+            Debug.LogError(error.GenerateErrorReport());
+        });
         
     }
 
