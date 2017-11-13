@@ -37,7 +37,7 @@ public class PlayStreamMediator : Mediator
 
         PlayFabPlayStreamAPI.OnSubscribed += () =>
         {
-            Debug.Log("connected to playstream");
+            Debug.Log("Connected to playstream");
         };
         PlayFabPlayStreamAPI.OnFailed += error =>
         {

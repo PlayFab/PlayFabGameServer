@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using strange.extensions.mediation.impl;
 
-public class ServerSettingsData : View
+[Serializable]
+public class ServerSettingsData
 {
+    public NetworkingType NetworkType;
     public string TitleId;
     public ulong GameId;
     public string GameBuildVersion;
@@ -19,4 +22,11 @@ public class ServerSettingsData : View
     public string BatchMode;
     public List<string> LogEntries;
     public bool CopyLogFiles;
+}
+
+public enum NetworkingType
+{
+    UnityNetworking
+    //Photon,
+    //Darkrift
 }

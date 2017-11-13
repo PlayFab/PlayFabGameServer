@@ -5,20 +5,15 @@ using strange.extensions.mediation.impl;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Networking.NetworkSystem;
+using PlayFab;
 
 public class UnityNetworkManagerMediator : EventMediator {
     [Inject] public UnityNetworkManagerView View { get; set; }
     [Inject] public UnityNetworkingData UnityNetworkingData { get; set; }
+    [Inject] public UnityNetworkingEvents UnityNetworkingEvents { get; set; }
     [Inject] public ServerSettingsData ServerSettingsData { get; set; }
+    [Inject] public PlayFabServerService ServerService { get; set; }
     [Inject] public LogSignal Logger { get; set; }
-    [Inject] public PlayFabServerShutdownSignal ShutDownSignal { get; set; }
-    [Inject] public AuthenticateSessionTicketSignal AuthenticateSessionTicketSignal { get; set; }
-    [Inject] public AuthenticateSessionTicketResponseSignal AuthenticateSessionTicketResponseSignal { get; set; }
-    [Inject] public RedeemMatchmakerTicketSignal RedeemMatchmakerTicketSignal { get; set; }
-    [Inject] public RedeemMatchmakerTicketResponseSignal RedeemMatchmakerTicketResponseSignal { get; set; }
-    [Inject] public NotifyMatchmakerPlayerLeftSignal PlayerLeftSignal { get; set; }
-    [Inject] public NotifyMatchmakerPlayerLeftResponseSignal PlayerLeftResponse { get; set; }
-    [Inject] public ClientDisconnectedSignal ClientDisconnectedSignal { get; set; }
 
     public class AuthTicketMessage : MessageBase
     {
@@ -42,7 +37,7 @@ public class UnityNetworkManagerMediator : EventMediator {
         if (UnityNetworkingData.ConnectedClients == 0)
         {
             Logger.Dispatch(LoggerTypes.Info, "No Connections were made, shutting down.");
-            ShutDownSignal.Dispatch();
+            ServerService.PlayFabServerStop();
         }
     }
 
@@ -66,23 +61,24 @@ public class UnityNetworkManagerMediator : EventMediator {
         {
             var message = netMsg.ReadMessage<AuthTicketMessage>();
             uconn.PlayFabId = message.PlayFabId;
+            UnityNetworkingEvents.ClientAuthenticated(ClientAuthEventType.TicketReceived, netMsg, message.PlayFabId);
             Logger.Dispatch(LoggerTypes.Info, string.Format("Auth Received: PlayFabId:{0} AuthTicket:{1}", message.PlayFabId,message.AuthTicket));
 
             if (!message.IsLocal)
             {
-                RedeemMatchmakerTicketResponseSignal.AddOnce(OnAuthUserResponse);
-                RedeemMatchmakerTicketSignal.Dispatch(new RedeemMatchmakerTicketRequest()
-                {
+                PlayFabServerAPI.RedeemMatchmakerTicket(new RedeemMatchmakerTicketRequest(){
                     Ticket = message.AuthTicket,
                     LobbyId = ServerSettingsData.GameId.ToString()
+                }, OnAuthUserResponse, (error)=> {
+                    Debug.Log(error.GenerateErrorReport());
                 });
             }
             else
             {
-                AuthenticateSessionTicketResponseSignal.AddOnce(OnAuthLocalUserResponse);
-                AuthenticateSessionTicketSignal.Dispatch(new AuthenticateSessionTicketRequest()
-                {
+                PlayFabServerAPI.AuthenticateSessionTicket(new AuthenticateSessionTicketRequest(){
                     SessionTicket = message.AuthTicket
+                }, OnAuthLocalUserResponse, (error) => {
+                    Debug.Log(error.GenerateErrorReport());
                 });
             }
         }
@@ -99,6 +95,7 @@ public class UnityNetworkManagerMediator : EventMediator {
             {
                 value = "Client Authenticated Successfully"
             });
+            UnityNetworkingEvents.ClientAuthenticated(ClientAuthEventType.Validated, null, response.UserInfo.PlayFabId);
         }
     }
 
@@ -113,6 +110,7 @@ public class UnityNetworkManagerMediator : EventMediator {
             {
                 value = "Client Authenticated Successfully"
             });
+            UnityNetworkingEvents.ClientAuthenticated(ClientAuthEventType.Validated, null, response.UserInfo.PlayFabId);
         }
     }
 
@@ -132,6 +130,8 @@ public class UnityNetworkManagerMediator : EventMediator {
         //Security:
         //Give them 30 seconds to authenticate or close the connection.
         StartCoroutine(CheckForUnauthenticatedClients(netMsg.conn.connectionId));
+
+        UnityNetworkingEvents.ClientConnected(netMsg);
 
         Logger.Dispatch(LoggerTypes.Info, "A Unity Client Connected");
     }
@@ -154,24 +154,27 @@ public class UnityNetworkManagerMediator : EventMediator {
         {
             if (connection.IsAuthenticated && ServerSettingsData.GameId > 0)
             {
-                PlayerLeftResponse.AddOnce((playerLeftResponse) =>
-                {
-                    ClientDisconnectedSignal.Dispatch(connection.ConnectionId, connection.PlayFabId);
-                    Logger.Dispatch(LoggerTypes.Info,string.Format("Player Has Left:{0}",connection.PlayFabId));
-                    UnityNetworkingData.Connections.Remove(connection);
-                });
-
-                PlayerLeftSignal.Dispatch(new NotifyMatchmakerPlayerLeftRequest()
-                {
+                PlayFabServerAPI.NotifyMatchmakerPlayerLeft(new NotifyMatchmakerPlayerLeftRequest(){
                     PlayFabId = connection.PlayFabId,
                     LobbyId = ServerSettingsData.GameId.ToString() 
-                });   
+                }, (playerLeftResponse) =>
+                {
+                    UnityNetworkingEvents.ClientDisconnected(connection.ConnectionId, connection.PlayFabId);
+                    Logger.Dispatch(LoggerTypes.Info,string.Format("Player Has Left:{0}",connection.PlayFabId));
+                    UnityNetworkingData.Connections.Remove(connection);
+                }, (error) => {
+                    Debug.Log(error.GenerateErrorReport());
+                });
             }
             else
             {
-                ClientDisconnectedSignal.Dispatch(connection.ConnectionId,connection.PlayFabId);
+                UnityNetworkingEvents.ClientDisconnected(connection.ConnectionId, connection.PlayFabId);
                 UnityNetworkingData.Connections.Remove(connection);
             }
+        }
+        else
+        {
+            UnityNetworkingEvents.ClientDisconnected(netMsg.conn.connectionId, null);
         }
 
         Logger.Dispatch(LoggerTypes.Info, "A Unity Client Disconnected");
@@ -193,7 +196,9 @@ public class UnityNetworkManagerMediator : EventMediator {
         {
             Logger.Dispatch(LoggerTypes.Info,"Unity Network Connection Status, but we could not get the reason, check the Unity Logs for more info.");
         }
-        ShutDownSignal.Dispatch();
+        
+        //TODO: Figure out why we would want to terminate the server if there was a network error
+        //ServerService.PlayFabServerStop();
     }
 
 

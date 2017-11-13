@@ -14,8 +14,6 @@ public class CreateChannelCommand : Command
     [Inject] public CreateChannelMessage Message { get; set; }
     [Inject] public ChatServerData ChatServerData { get; set; }
     [Inject] public SendCreateChannelReponseSignal Signal { get; set; }
-    [Inject] public WriteTitleEventSignal WriteTitleEventSignal { get; set; }
-    [Inject] public WritePlayerEventSignal WritePlayerEventSignal { get; set; }
     [Inject] public ServerSettingsData ServerSettings { get; set; }
 
     public override void Execute()
@@ -41,7 +39,8 @@ public class CreateChannelCommand : Command
                 ChannelId = newChannel.ChannelId,
                 Created =  true
             });
-            WriteTitleEventSignal.Dispatch(new WriteTitleEventRequest()
+
+            PlayFabServerAPI.WriteTitleEvent(new WriteTitleEventRequest()
             {
                 EventName = "NewChatChannelCreated",
                 Body = new Dictionary<string, object>()
@@ -50,8 +49,11 @@ public class CreateChannelCommand : Command
                     {"GameId", ServerSettings.GameId},
                     {"CreatedBy", Message.MemberId }
                 }
+            }, null, (error)=> {
+                Debug.LogError(error.GenerateErrorReport());
             });
-            WritePlayerEventSignal.Dispatch(new WriteServerPlayerEventRequest()
+
+            PlayFabServerAPI.WritePlayerEvent(new WriteServerPlayerEventRequest()
             {
                 EventName = "PlayerJoinedChat",
                 PlayFabId = Message.MemberId,
@@ -59,7 +61,10 @@ public class CreateChannelCommand : Command
                 {
                     {"ChannelId",  newChannel.ChannelId },
                 }
+            }, null, (error) => {
+                Debug.LogError(error.GenerateErrorReport());
             });
+
             return;
         }
         else if (channel.IsInviteOnly)
@@ -85,7 +90,8 @@ public class CreateChannelCommand : Command
                 ChannelId = channel.ChannelId,
                 Created = true
             });
-            WritePlayerEventSignal.Dispatch(new WriteServerPlayerEventRequest()
+
+            PlayFabServerAPI.WritePlayerEvent(new WriteServerPlayerEventRequest()
             {
                 EventName = "PlayerJoinedChat",
                 PlayFabId = Message.MemberId,
@@ -93,7 +99,10 @@ public class CreateChannelCommand : Command
                 {
                     {"ChannelId",  channel.ChannelId },
                 }
+            }, null, (error) => {
+                Debug.LogError(error.GenerateErrorReport());
             });
+           
         }
 
     }
@@ -106,7 +115,6 @@ public class JoinChannelCommand : Command
     [Inject] public JoinChannelMessage Message { get; set; }
     [Inject] public SendJoinedReponseSignal Signal { get; set; }
     [Inject] public ChatServerData ChatServerData { get; set; }
-    [Inject] public WritePlayerEventSignal WritePlayerEventSignal { get; set; }
 
     public override void Execute()
     {
@@ -123,7 +131,8 @@ public class JoinChannelCommand : Command
                 ChannelId = Message.ChannelId,
                 Joined = true
             });
-            WritePlayerEventSignal.Dispatch(new WriteServerPlayerEventRequest()
+
+            PlayFabServerAPI.WritePlayerEvent(new WriteServerPlayerEventRequest()
             {
                 EventName = "PlayerJoinedChat",
                 PlayFabId = Message.MemberId,
@@ -131,6 +140,8 @@ public class JoinChannelCommand : Command
                 {
                     {"ChannelId",  channel.ChannelId },
                 }
+            }, null, (error) => {
+                Debug.LogError(error.GenerateErrorReport());
             });
         }
         else
@@ -151,8 +162,6 @@ public class LeaveChannelCommand : Command
 {
     [Inject] public LeaveChannelMessage Message { get; set; }
     [Inject] public ChatServerData ChatServerData { get; set; }
-    [Inject] public WritePlayerEventSignal WritePlayerEventSignal { get; set; }
-    [Inject] public WriteTitleEventSignal WriteTitleEventSignal { get; set; }
     [Inject] public ServerSettingsData ServerSettings { get; set; }
 
     public override void Execute()
@@ -164,23 +173,22 @@ public class LeaveChannelCommand : Command
             if (member != null)
             {
                 channel.Members.Remove(member);
-                WritePlayerEventSignal.Dispatch(new WriteServerPlayerEventRequest()
-                {
+                PlayFabServerAPI.WritePlayerEvent(new WriteServerPlayerEventRequest(){
                     EventName = "PlayerLeftChat",
                     PlayFabId = Message.MemberId,
                     Body = new Dictionary<string, object>()
                     {
                         {"ChannelId", channel.ChannelId}
                     }
+                }, null, (error) => {
+                    Debug.LogError(error.GenerateErrorReport());
                 });
-
             }
 
             if (channel.Members.Count == 0 && channel.IsInviteOnly)
             {
                 ChatServerData.ServerChannels.Remove(channel);
-                WriteTitleEventSignal.Dispatch(new WriteTitleEventRequest()
-                {
+                PlayFabServerAPI.WriteTitleEvent(new WriteTitleEventRequest(){
                     EventName = "ChatChannelRemoved",
                     Body = new Dictionary<string, object>()
                     {
@@ -188,6 +196,8 @@ public class LeaveChannelCommand : Command
                         {"GameId", ServerSettings.GameId},
                         {"LastPlayer", Message.MemberId}
                     }
+                }, null, (error) => {
+                    Debug.LogError(error.GenerateErrorReport());
                 });
 
             }
@@ -203,7 +213,6 @@ public class SendMessageCommand : Command
     [Inject] public ChatMessage Message { get; set; }
     [Inject] public ChatServerData ChatServerData { get; set; }
     [Inject] public UnityNetworkingData UnityNetworkingData { get; set; }
-    [Inject] public WritePlayerEventSignal WritePlayerEventSignal { get; set; }
 
     public override void Execute()
     {
@@ -219,8 +228,8 @@ public class SendMessageCommand : Command
             {
                 memberConn.Connection.Send(ChatServerMessageTypes.ChannelMessage, Message);
                 Debug.Log("Message Sent to " + Message.SenderUserId);
-                WritePlayerEventSignal.Dispatch(new WriteServerPlayerEventRequest()
-                {
+
+                PlayFabServerAPI.WritePlayerEvent(new WriteServerPlayerEventRequest(){
                     EventName = "PlayerSentMessage",
                     PlayFabId = Message.SenderUserId,
                     Body = new Dictionary<string, object>()
@@ -228,7 +237,10 @@ public class SendMessageCommand : Command
                         {"ChannelId", channel.ChannelId},
                         {"MessageSent",Message.Message }
                     }
+                }, null, (error) => {
+                    Debug.LogError(error.GenerateErrorReport());
                 });
+               
             }
         }
     }

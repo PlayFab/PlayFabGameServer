@@ -1,24 +1,23 @@
-﻿using System;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using System.Collections;
 using PlayFab;
-using strange.extensions.command.impl;
-using strange.extensions.signal.impl;
 
-public class PlayFabServerStartupSignal : Signal { }
-public class PlayFabServerStartupCompleteSignal : Signal<ServerSettingsData> { }
-
-/// <summary>
-/// This command, parses the command line args that are passed to the gameserver EXE file from PlayFab 
-/// </summary>
-public class PlayFabServerStartupCommand : Command {
+public class PlayFabServerService {
     [Inject] public ServerSettingsData ServerSettingsData { get; set; }
-    [Inject] public PlayFabServerStartupCompleteSignal OnCompleteSignal { get; set; }
+    [Inject] public PlayFabServerEvents ServerEvents { get; set; }
     [Inject] public LogSignal Logger { get; set; }
 
-    public override void Execute()
+    public PlayFabServerService(LogSignal logger, PlayFabServerEvents serverEvents, ServerSettingsData settings)
     {
-        Logger.Dispatch(LoggerTypes.Info,"PlayFab Server Startup Command");
+        ServerSettingsData = settings;
+        ServerEvents = serverEvents;
+        Logger = logger;
+    }
+
+    public void PlayFabServerStartup()
+    {
+        Logger.Dispatch(LoggerTypes.Info, "PlayFab Server Startup Command");
 
         var commandLineArgs = System.Environment.GetCommandLineArgs();
 
@@ -27,16 +26,16 @@ public class PlayFabServerStartupCommand : Command {
             var argArray = arg.Split('=');
             if (argArray.Length < 2)
             {
-                continue; 
+                continue;
             }
-            var key = argArray[0].Contains("-") ? argArray[0].Replace("-","").Trim() : argArray[0].Trim();
+            var key = argArray[0].Contains("-") ? argArray[0].Replace("-", "").Trim() : argArray[0].Trim();
             var value = argArray[1].Trim();
 
             switch (key.ToLower())
             {
                 case "game_id":
                     ulong gameId;
-                    ulong.TryParse(value,out gameId);
+                    ulong.TryParse(value, out gameId);
                     ServerSettingsData.GameId = gameId;
                     break;
                 case "game_build_version":
@@ -52,7 +51,7 @@ public class PlayFabServerStartupCommand : Command {
                     var hostPort = 0;//this is unity networkings default port.
                     int.TryParse(value, out hostPort);
                     hostPort = hostPort > 0 ? hostPort : 7777;
-                    ServerSettingsData.ServerHostPort = hostPort; 
+                    ServerSettingsData.ServerHostPort = hostPort;
                     break;
                 case "server_host_region":
                     ServerSettingsData.ServerHostRegion = value;
@@ -76,23 +75,29 @@ public class PlayFabServerStartupCommand : Command {
                     ServerSettingsData.TitleId = value;
                     break;
             }
-        }
 
-        Logger.Dispatch(LoggerTypes.Info,string.Format("GameId:{0} game_build_version:{1} server:{2} port:{3} endoint:{4}",
+            Logger.Dispatch(LoggerTypes.Info, string.Format("GameId:{0} game_build_version:{1} server:{2} port:{3} endoint:{4}",
             ServerSettingsData.GameId, ServerSettingsData.GameBuildVersion, ServerSettingsData.ServerHostDomain,
             ServerSettingsData.ServerHostPort, ServerSettingsData.PlayFabApiEndpoint));
 
-        if(!string.IsNullOrEmpty(ServerSettingsData.TitleSecretKey))
-        {
-            PlayFabSettings.DeveloperSecretKey = ServerSettingsData.TitleSecretKey;
+            if (!string.IsNullOrEmpty(ServerSettingsData.TitleSecretKey))
+            {
+                PlayFabSettings.DeveloperSecretKey = ServerSettingsData.TitleSecretKey;
+            }
+
+            if (!string.IsNullOrEmpty(ServerSettingsData.TitleId))
+            {
+                PlayFabSettings.TitleId = ServerSettingsData.TitleId;
+            }
+
+            ServerEvents.ServerStartupComplete(ServerSettingsData);
         }
 
-        if (!string.IsNullOrEmpty(ServerSettingsData.TitleId))
-        {
-            PlayFabSettings.TitleId = ServerSettingsData.TitleId;
-        }
+    }
 
-        //Dispatch that the server settings have been completed.
-        OnCompleteSignal.Dispatch(ServerSettingsData);
+    public void PlayFabServerStop()
+    {
+        Logger.Dispatch(LoggerTypes.Info, "Application.Quit Called Immediately After this message.");
+        Application.Quit();
     }
 }
