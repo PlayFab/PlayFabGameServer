@@ -62,15 +62,6 @@ namespace PlayFab.Internal
             // These are performance Optimizations for HttpWebRequests.
             ServicePointManager.DefaultConnectionLimit = 10;
             ServicePointManager.Expect100Continue = false;
-
-            //Support for SSL
-            var rcvc = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications); //(sender, cert, chain, ssl) => true
-            ServicePointManager.ServerCertificateValidationCallback = rcvc;
-        }
-
-        private static bool AcceptAllCertifications(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certificate, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
-        {
-            return true;
         }
 
         public void MakeApiCall(CallRequestContainer reqContainer)
@@ -262,7 +253,7 @@ namespace PlayFab.Internal
         /// </summary>
         private static void QueueRequestError(CallRequestContainer reqContainer)
         {
-            reqContainer.Error = PlayFabHttp.GeneratePlayFabError(reqContainer.JsonResponse, reqContainer.CustomData); // Decode the server-json error
+            reqContainer.Error = PlayFabHttp.GeneratePlayFabError(reqContainer.ApiEndpoint, reqContainer.JsonResponse, reqContainer.CustomData); // Decode the server-json error
             reqContainer.HttpState = HttpRequestState.Error;
             lock (ResultQueue)
             {
