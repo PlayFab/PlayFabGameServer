@@ -10,11 +10,11 @@ Out of the Box Game Server for PlayFab.com
 #### Prerequisites 
 * General Understanding of Unity
 * Understanding of C#
-* Understanding of StrangeIoC ( not required, but a bonus )
-* Understanding of Dependancy Injection ( not required, but a bonus )
+* Understanding of StrangeIoC (not required, but a bonus)
+* Understanding of Dependency Injection (not required, but a bonus)
 
 #### Overview
- This repository contains the source code for a Customizable Game Server made with Unity3D.  It runs in server mode (headless) and it's purpose is to provide server authoritive logic and / or Multiplayer networking functionality that can be uploaded to the PlayFab Game Servers tab.  This is an Out of the Box solution, that is super easy to customize.
+ This repository contains the source code for a Customizable Game Server made with Unity3D.  It runs in server mode (headless) and its purpose is to provide server authoritative logic and / or Multiplayer networking functionality that can be uploaded to the PlayFab Game Servers tab.  This is an Out of the Box solution, that is super easy to customize.
  
 #### Features
 * Accepts and stores configuration params that are passed into the commandline of the server
@@ -39,7 +39,7 @@ StrangeIoC has an MVC (ish) style to it.  There are Views, and Controllers.  Con
 
 Once you've downloaded the project and opened up the code editor (whether it be Monodevelop or Visual Studio) you'll see some folders and I want to take a moment to review those with you.
 
-* **StrangeIoC** - This folder contains the current version of StrangeIoC  (which is open source and free)
+* **StrangeIoC** - This folder contains the current version of StrangeIoC (which is open source and free).
 
 * **PlayFabSDK** - This is a version of our SDK that was generated for use in this project.
 
@@ -47,19 +47,19 @@ Once you've downloaded the project and opened up the code editor (whether it be 
  
 * **GameServerContext** - This has been updates,  it use to be called MainGameServerContext and use to be the main context.  StrangeIoC has this notion of contexts which act as modules. We now call these packages.  This MainContext now auto-detects all packages and therefore you should not need to directly modify this.   
  
-* **packages/DefaultPackages/PlayFabServer** - This context has one functionality and one only,  it parses the command line arugments sent in from the PlayFab Instance Generator and stores them for use in ServerSettingsData.  Which you can Inject into your mediators and have instant access to it.
+* **packages/DefaultPackages/PlayFabServer** - This context has one functionality and one only,  it parses the command line arguments sent in from the PlayFab Instance Generator and stores them for use in ServerSettingsData.  Which you can Inject into your mediators and have instant access to it.
 
 * **packages/DefaultPackages/UnityNetworkingContext** - This context sets up a Unity Networking Server and listens on the port that is passed into the PlayFab Server when the instance is generated.  This all happens at startup of the server.  It then stores the NetworkManager & the NetworkClient along with other important information about who is connected to the server.  It stores all its data in UnityNetworkingData object that you also Inject into your mediators.  We will get more into the details of this later.  
 
 #### A quick setup step before I forget to tell you!
-Because the server needs to authenticate your users, it needs to know what Title to do this against. The server won't know this so you will need to set this manually.  To do this, open up the StartUp scene in the StartUpScene folder.  This is the main scene for the application and the only scene needed.  There are some advanced features of unity networking, which we won't cover in this documentation that allows scene switching and sync that to all clients. But for now lets keep things simple.   
+Because the server needs to authenticate your users, it needs to know what Title to do this against. The server won't know this so you will need to set this manually.  To do this, open up the StartUp scene in the StartUpScene folder.  This is the main scene for the application and the only scene needed.  There are some advanced features of unity networking, which we won't cover in this documentation that allows scene switching and sync that to all clients. But for now let's keep things simple.   
 
 Now that you have the scene open,  Locate the GameServerContext and expand it down.  Then Click on PlayFabServerManager.  You'll notice in the inspector that there is a ServerSettingsData component.  Put your TitleId in the Title Id meta field.
 
 Now your ready to proceed! Don't forget to save your scene!
 
 ##### Creating a package
-Packages are a great way to modularize your code and make it re-usable.  While this is a great feature, it also serves as a simple way to setup your custom code and get the game server working for you. When you setup a package,  the GameServerContext auto-detects these packages in the Hierarchy and loads them in the order that it finds them.
+Packages are a great way to modularize your code and make it reusable.  While this is a great feature, it also serves as a simple way to setup your custom code and get the game server working for you. When you setup a package,  the GameServerContext auto-detects these packages in the Hierarchy and loads them in the order that it finds them.
 
 **Example:**
 
@@ -103,7 +103,7 @@ In the example above we have declared a MapBindings, PostBindings and a Launch. 
 
 Next create a GameObject under the GameServerContext and call it MySampleManager.  Add the MySampleManager script to it. Now it will be auto-detected.
 
-One thing to note about launch is that our GameServerContext has a signal that you can subscribe to that notifys all modules that the server has completely loaded.  From launch you can bind directly to it.  All launch methods are called prior to this signal event firing. 
+One thing to note about launch is that our GameServerContext has a signal that you can subscribe to that notifies all modules that the server has completely loaded.  From launch you can bind directly to it.  All launch methods are called prior to this signal event firing. 
 
 ##### New Mediator and View
 To create a new Mediator you will need to do a few steps. 
@@ -118,7 +118,7 @@ public class NewExampleMediator : Mediator {
 }
 ```
 
-* You also want to create a View file in the Views folder.  Not much goes into the view unless you want to put meta data that you would like to reference from inside the editor. (handy for debugging *winks*)
+* You also want to create a View file in the Views folder.  Not much goes into the view unless you want to put metadata that you would like to reference from inside the editor. (handy for debugging *winks*)
 
 ```
 public class NewExampleView : View
@@ -169,7 +169,7 @@ public void OnGetTitleData(GetTitleDataResult result){
 
 
 #### Using Unity Networking to send to clients.
-There is a lot of documentation on how the Unity Networking client works,  so I'll let you read up there beacuse they tell that story the best.  But I'll give you a bit of code that makes it super easy.
+There is a lot of documentation on how the Unity Networking client works,  so I'll let you read up there because they tell that story the best.  But I'll give you a bit of code that makes it super easy.
 
 First thing is first, whenever want to send to a client from a mediator, you will need to inject the UnityNetworkingData object.
 ```
