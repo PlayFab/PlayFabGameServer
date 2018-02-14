@@ -796,9 +796,6 @@ public class SetFriendTagsCommand : Command
 }
 #endregion
 
-#region Guilds
-#endregion
-
 #region Matchmaking
 
 /// <summary>

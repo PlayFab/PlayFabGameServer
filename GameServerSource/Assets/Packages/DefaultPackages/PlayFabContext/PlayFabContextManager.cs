@@ -385,9 +385,6 @@ public class PlayFabContextManager : StrangePackage
 
         #endregion
 
-        #region Guilds
-        #endregion
-
         #region Matchmaking
         /// <summary>
         /// Inform the matchmaker that a Game Server Instance is removed.

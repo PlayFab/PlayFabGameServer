@@ -259,10 +259,6 @@ public class SetFriendTagsSignal : Signal<PlayFab.ServerModels.SetFriendTagsRequ
 
 #endregion
 
-#region Guilds
-
-#endregion
-
 #region Matchmaking
 
 /// <summary>
@@ -951,10 +947,6 @@ public class RemoveFriendResponseSignal : Signal<PlayFab.ServerModels.EmptyResul
 /// Updates the tag list for a specified user in the friend list of another user
 /// </summary>
 public class SetFriendTagsResponseSignal : Signal<PlayFab.ServerModels.EmptyResult> { }
-
-#endregion
-
-#region Guilds
 
 #endregion
 

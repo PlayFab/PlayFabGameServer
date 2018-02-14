@@ -7,7 +7,7 @@ namespace PlayFab
     {
         UnityWww, // High compatability Unity api calls
         HttpWebRequest, // High performance multi-threaded api calls
-#if UNITY_2017_1_OR_NEWER
+#if UNITY_2017_2_OR_NEWER
         UnityWebRequest, // Modern unity HTTP component
 #endif
         CustomHttp //If this is used, you must set the Http to an IPlayFabHttp object.
