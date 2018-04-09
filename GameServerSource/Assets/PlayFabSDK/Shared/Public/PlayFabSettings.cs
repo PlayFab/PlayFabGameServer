@@ -54,8 +54,7 @@ namespace PlayFab
             return GetSharedSettingsObjectPrivate();
         }
 
-
-#if ENABLE_PLAYFABSERVER_API || ENABLE_PLAYFABADMIN_API || UNITY_EDITOR
+#if ENABLE_PLAYFABSERVER_API || ENABLE_PLAYFABADMIN_API || ENABLE_PLAYFABMATCHMAKER_API || UNITY_EDITOR
         public static string DeveloperSecretKey
         {
             set { PlayFabSharedPrivate.DeveloperSecretKey = value;}
