@@ -8,6 +8,7 @@ public class PlayFabServerService {
     [Inject] public PlayFabServerEvents ServerEvents { get; set; }
     [Inject] public LogSignal Logger { get; set; }
 
+
     public PlayFabServerService(LogSignal logger, PlayFabServerEvents serverEvents, ServerSettingsData settings)
     {
         ServerSettingsData = settings;
@@ -76,22 +77,24 @@ public class PlayFabServerService {
                     break;
             }
 
-            Logger.Dispatch(LoggerTypes.Info, string.Format("GameId:{0} game_build_version:{1} server:{2} port:{3} endoint:{4}",
-            ServerSettingsData.GameId, ServerSettingsData.GameBuildVersion, ServerSettingsData.ServerHostDomain,
-            ServerSettingsData.ServerHostPort, ServerSettingsData.PlayFabApiEndpoint));
-
-            if (!string.IsNullOrEmpty(ServerSettingsData.TitleSecretKey))
-            {
-                PlayFabSettings.DeveloperSecretKey = ServerSettingsData.TitleSecretKey;
-            }
-
-            if (!string.IsNullOrEmpty(ServerSettingsData.TitleId))
-            {
-                PlayFabSettings.TitleId = ServerSettingsData.TitleId;
-            }
-
-            ServerEvents.ServerStartupComplete(ServerSettingsData);
         }
+
+        Logger.Dispatch(LoggerTypes.Info, string.Format("GameId:{0} game_build_version:{1} server:{2} port:{3} endoint:{4}",
+        ServerSettingsData.GameId, ServerSettingsData.GameBuildVersion, ServerSettingsData.ServerHostDomain,
+        ServerSettingsData.ServerHostPort, ServerSettingsData.PlayFabApiEndpoint));
+
+        if (!string.IsNullOrEmpty(ServerSettingsData.TitleSecretKey))
+        {
+            PlayFabSettings.DeveloperSecretKey = ServerSettingsData.TitleSecretKey;
+        }
+
+        if (!string.IsNullOrEmpty(ServerSettingsData.TitleId))
+        {
+            PlayFabSettings.TitleId = ServerSettingsData.TitleId;
+        }
+
+        ServerEvents.ServerStartupComplete(ServerSettingsData);
+
 
     }
 

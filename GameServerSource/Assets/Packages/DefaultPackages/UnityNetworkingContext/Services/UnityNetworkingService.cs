@@ -9,9 +9,17 @@ public class UnityNetworkingService
     [Inject] public ServerSettingsData ServerSettingsData { get; set; }
     [Inject] public LogSignal Logger { get; set; }
 
+    public UnityNetworkingService(UnityNetworkingData data, ServerSettingsData serverSettings, LogSignal logger)
+    {
+        UnityNetworkingData = data;
+        ServerSettingsData = serverSettings;
+        Logger = logger;
+    }
+
     public void SetupNetworking()
     {
-        Logger.Dispatch(LoggerTypes.Info, "Setting Up Unity Networking Server");
+        //Logger.Dispatch(LoggerTypes.Info, "Setting Up Unity Networking Server");
+        Debug.Log("Setting Up Unity Networking Server");
 
         var networkManager = Object.FindObjectOfType<CustomNetworkManager>();
         if (networkManager == null)

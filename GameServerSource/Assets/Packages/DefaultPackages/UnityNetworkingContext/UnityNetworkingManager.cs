@@ -11,7 +11,11 @@ public class UnityNetworkingManager : StrangePackage
     public override void MapBindings(ICommandBinder commandBinder, ICrossContextInjectionBinder injectionBinder,
         IMediationBinder mediationBinder)
     {
-        _networkService = new UnityNetworkingService();
+
+        var _logger = injectionBinder.GetInstance<LogSignal>();
+        var _serverSettings = injectionBinder.GetInstance<ServerSettingsData>();
+
+        _networkService = new UnityNetworkingService(Settings, _serverSettings, _logger);
         _networkEvents = new UnityNetworkingEvents();
 
         //Bind Settings Object
