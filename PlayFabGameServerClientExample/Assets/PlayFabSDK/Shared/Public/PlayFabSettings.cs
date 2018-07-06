@@ -86,12 +86,6 @@ namespace PlayFab
             get { return !string.IsNullOrEmpty(PlayFabSharedPrivate.ProductionEnvironmentUrl) ? PlayFabSharedPrivate.ProductionEnvironmentUrl : DefaultPlayFabApiUrlPrivate; }
             set { PlayFabSharedPrivate.ProductionEnvironmentUrl = value; }
         }
-        [Obsolete("This field will become private after Mar 1, 2017", false)]
-        public static string ProductionEnvironmentUrl
-        {
-            get { return ProductionEnvironmentUrlPrivate; }
-            set { ProductionEnvironmentUrlPrivate = value; }
-        }
 
         // You must set this value for PlayFabSdk to work properly (Found in the Game Manager for your title, at the PlayFab Website)
         public static string TitleId
