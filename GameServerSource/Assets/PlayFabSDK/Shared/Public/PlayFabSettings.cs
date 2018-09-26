@@ -30,8 +30,6 @@ namespace PlayFab
 
         private static PlayFabSharedSettings _playFabShared = null;
         private static PlayFabSharedSettings PlayFabSharedPrivate { get { if (_playFabShared == null) _playFabShared = GetSharedSettingsObjectPrivate(); return _playFabShared; } }
-        [Obsolete("This field will become private after Mar 1, 2017", false)]
-        public static PlayFabSharedSettings PlayFabShared { get { if (_playFabShared == null) _playFabShared = GetSharedSettingsObjectPrivate(); return _playFabShared; } }
         public const string SdkVersion = "";
         public const string BuildIdentifier = "";
         public const string VersionString = "UnitySDK-";
@@ -41,8 +39,6 @@ namespace PlayFab
         };
 
         private const string DefaultPlayFabApiUrlPrivate = ".playfabapi.com";
-        [Obsolete("This field will become private after Mar 1, 2017", false)]
-        public static string DefaultPlayFabApiUrl { get { return DefaultPlayFabApiUrlPrivate; } }
 
         private static PlayFabSharedSettings GetSharedSettingsObjectPrivate()
         {
@@ -53,13 +49,8 @@ namespace PlayFab
             }
             return settingsList[0];
         }
-        [Obsolete("This field will become private after Mar 1, 2017", false)]
-        public static PlayFabSharedSettings GetSharedSettingsObject()
-        {
-            return GetSharedSettingsObjectPrivate();
-        }
 
-#if ENABLE_PLAYFABSERVER_API || ENABLE_PLAYFABADMIN_API || ENABLE_PLAYFABMATCHMAKER_API || UNITY_EDITOR
+#if ENABLE_PLAYFABSERVER_API || ENABLE_PLAYFABADMIN_API || UNITY_EDITOR
         public static string DeveloperSecretKey
         {
             set { PlayFabSharedPrivate.DeveloperSecretKey = value;}
@@ -97,6 +88,12 @@ namespace PlayFab
         {
             get { return PlayFabSharedPrivate.TitleId; }
             set { PlayFabSharedPrivate.TitleId = value; }
+        }
+        
+        public static string VerticalName
+        {
+            get { return PlayFabSharedPrivate.VerticalName; }
+            set { PlayFabSharedPrivate.VerticalName = value; }
         }
 
         public static PlayFabLogLevel LogLevel
@@ -161,7 +158,16 @@ namespace PlayFab
         
             var baseUrl = ProductionEnvironmentUrlPrivate;
             if (!baseUrl.StartsWith("http"))
-                sb.Append("https://").Append(TitleId);
+            {
+                if (!string.IsNullOrEmpty(VerticalName))
+                {
+                    sb.Append("https://").Append(VerticalName);
+                }
+                else
+                {
+                    sb.Append("https://").Append(TitleId);
+                }
+            }
         
             sb.Append(baseUrl).Append(apiCall);
         
