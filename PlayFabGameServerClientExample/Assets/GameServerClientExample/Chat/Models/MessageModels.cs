@@ -1,4 +1,5 @@
 using System;
+using PlayFab;
 using PlayFab.Json;
 using UnityEngine.Networking;
 
@@ -16,7 +17,7 @@ public class ChatMessage : MessageBase
         writer.Write(SenderUserId);
         writer.Write(SenderUserName);
         writer.Write(Message);
-        var json = JsonWrapper.SerializeObject(Timestamp);
+        var json = PluginManager.GetPlugin<ISerializerPlugin>(PluginContract.PlayFab_Serializer).SerializeObject(Timestamp);
         writer.Write(json);
     }
 
@@ -26,7 +27,7 @@ public class ChatMessage : MessageBase
         SenderUserId = reader.ReadString();
         SenderUserName = reader.ReadString();
         Message = reader.ReadString();
-        Timestamp = JsonWrapper.DeserializeObject<DateTime>(reader.ReadString());
+        Timestamp = PluginManager.GetPlugin<ISerializerPlugin>(PluginContract.PlayFab_Serializer).DeserializeObject<DateTime>(reader.ReadString());
     }
 }
 
