@@ -30,9 +30,9 @@ namespace PlayFab
 
         private static PlayFabSharedSettings _playFabShared = null;
         private static PlayFabSharedSettings PlayFabSharedPrivate { get { if (_playFabShared == null) _playFabShared = GetSharedSettingsObjectPrivate(); return _playFabShared; } }
-        public const string SdkVersion = "";
-        public const string BuildIdentifier = "";
-        public const string VersionString = "UnitySDK-";
+        public const string SdkVersion = "0.0.181001";
+        public const string BuildIdentifier = "jbuild_playfabgameserver__sdk-unity-1-slave_0";
+        public const string VersionString = "UnitySDK-0.0.181001";
 
         public static readonly Dictionary<string, string> RequestGetParams = new Dictionary<string, string> {
             { "sdk", VersionString }

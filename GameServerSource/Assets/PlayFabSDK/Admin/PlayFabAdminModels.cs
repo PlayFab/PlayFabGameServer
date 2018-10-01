@@ -2117,7 +2117,7 @@ namespace PlayFab.AdminModels
         /// <summary>
         /// IPV4 address of the game server instance
         /// </summary>
-        [Obsolete("Use 'ServerIPV4Address' instead", false)]
+        [Obsolete("Use 'ServerIPV4Address' instead", true)]
         public string ServerAddress;
         /// <summary>
         /// IPV4 address of the server
