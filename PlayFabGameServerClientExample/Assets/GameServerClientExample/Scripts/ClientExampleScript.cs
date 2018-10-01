@@ -151,7 +151,7 @@ public class ClientExampleScript : MonoBehaviour
                 {
                     int port = matchMakeResult.ServerPort ?? 7777;
                     GameServerAuthTicket = matchMakeResult.Ticket;
-                    ConnectNetworkClient(matchMakeResult.ServerHostname, port);
+                    ConnectNetworkClient(matchMakeResult.ServerIPV4Address, port);
                 }, PlayFabErrorHandler.HandlePlayFabError);
                         
             }
@@ -187,7 +187,7 @@ public class ClientExampleScript : MonoBehaviour
                 {
                     int port = matchMakeResult.ServerPort ?? 7777;
                     GameServerAuthTicket = matchMakeResult.Ticket;
-                    ConnectNetworkClient(matchMakeResult.ServerHostname, port);
+                    ConnectNetworkClient(matchMakeResult.ServerIPV4Address, port);
                 }, PlayFabErrorHandler.HandlePlayFabError);
 
             }
@@ -302,10 +302,12 @@ public class ClientExampleScript : MonoBehaviour
 
     private void OnReceivedPlayStreamEvent(NetworkMessage netMsg)
     {
+        var serializer = PluginManager.GetPlugin<ISerializerPlugin>(PluginContract.PlayFab_Serializer);
+
         var psEvent = netMsg.ReadMessage<PlayStreamEventMessage>();
         if (psEvent == null) return;
         Debug.Log("there is a event");
-        var nobodycares = JsonWrapper.DeserializeObject<PlayerInventoryItemAddedEventData>(psEvent.EventData);
+        var nobodycares = serializer.DeserializeObject<PlayerInventoryItemAddedEventData>(psEvent.EventData);
         if (nobodycares.EventName == "title_statistic_version_changed")
         {
             StartText.text = "New Tournament Season Begins!";
@@ -319,7 +321,7 @@ public class ClientExampleScript : MonoBehaviour
         }
         else if (nobodycares.EventName == "player_virtual_currency_balance_changed")
         {
-            var vcevent = JsonWrapper.DeserializeObject<PlayerVirtualCurrencyBalanceChangedEventData>(psEvent.EventData);
+            var vcevent = serializer.DeserializeObject<PlayerVirtualCurrencyBalanceChangedEventData>(psEvent.EventData);
             if (vcevent.VirtualCurrencyBalance == 0) return;
             StartText.text = "You Virtual Currency " + vcevent.VirtualCurrencyName + " just changed from " +
                              vcevent.VirtualCurrencyPreviousBalance + " to " + vcevent.VirtualCurrencyBalance;
