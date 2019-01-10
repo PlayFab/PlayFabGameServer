@@ -1988,6 +1988,7 @@ namespace PlayFab.AdminModels
         PushNotificationTemplateMissingDefaultVersion,
         PushNotificationTemplateInvalidSyntax,
         PushNotificationTemplateNoCustomPayloadForV1,
+        NoLeaderboardForStatistic,
         MatchmakingEntityInvalid,
         MatchmakingPlayerAttributesInvalid,
         MatchmakingCreateRequestMissing,
@@ -5219,7 +5220,9 @@ namespace PlayFab.AdminModels
     /// This function performs an additive update of the arbitrary JSON object containing the custom data for the user.
     /// In updating the custom data object, keys which already exist in the object will have their values overwritten, while
     /// keys with null values will
-    /// be removed. No other key-value pairs will be changed apart from those specified in the call.
+    /// be removed. No other key-value pairs will be changed apart from those specified in the call. Note that in the example
+    /// call provided, title-specific
+    /// data is used, as there may be a need to share this across titles (in sequels, for example).
     /// </summary>
     [Serializable]
     public class UpdateUserDataRequest : PlayFabRequestCommon
